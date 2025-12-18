@@ -128,12 +128,12 @@
     <h1>Did this guide help you?</h1>
 
     <div class="faces">
-      <button class="face" data-rating="sad">☹️</button>
-      <button class="face" data-rating="neutral">😐</button>
-      <button class="face" data-rating="happy">🙂</button>
+      <button type="button" class="face" data-rating="sad">☹️</button>
+      <button type="button" class="face" data-rating="neutral">😐</button>
+      <button type="button" class="face" data-rating="happy">🙂</button>
     </div>
 
-    <button class="next" id="nextBtn">Next →</button>
+    <button type="button" class="next" id="nextBtn">Next →</button>
   </div>
 
   <!-- STEP 2 -->
@@ -171,92 +171,88 @@
 </div>
 
 <script>
-  /* ================================
-     Formspree endpoint
-  ================================= */
-  const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
+/* ================================
+   Config
+================================ */
+const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
-  /* ================================
-     Read URL parameters
-  ================================= */
-  const params = new URLSearchParams(window.location.search);
-  const productId = params.get("product_id");
-  const pageId = params.get("page_id");
+/* ================================
+   Read URL parameters
+================================ */
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("product_id");
+const pageId = params.get("page_id");
+const returnUrl = params.get("return_url");
 
-  document.getElementById("product_id").value = productId || "unknown";
-  document.getElementById("page_id").value = pageId || "overall";
+document.getElementById("product_id").value = productId || "unknown";
+document.getElementById("page_id").value = pageId || "overall";
 
-  const returnUrl = params.get("return_url");
+/* ================================
+   UI logic
+================================ */
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const faces = document.querySelectorAll(".face");
+const nextBtn = document.getElementById("nextBtn");
+const ratingInput = document.getElementById("ratingInput");
+const backBtn = document.getElementById("backBtn");
+const form = document.getElementById("feedbackForm");
+const toast = document.getElementById("toast");
 
-  /* ================================
-     UI logic
-  ================================= */
-  const step1 = document.getElementById("step1");
-  const step2 = document.getElementById("step2");
-  const faces = document.querySelectorAll(".face");
-  const nextBtn = document.getElementById("nextBtn");
-  const ratingInput = document.getElementById("ratingInput");
-  const backBtn = document.getElementById("backBtn");
-  const form = document.getElementById("feedbackForm");
-  const toast = document.getElementById("toast");
+let rating = "";
 
-  let rating = "";
+faces.forEach(btn => {
+  btn.addEventListener("click", () => {
+    faces.forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+    rating = btn.dataset.rating;
+    ratingInput.value = rating;
+    nextBtn.classList.add("enabled");
+  });
+});
 
-  faces.forEach(btn=>{
-    btn.onclick = ()=>{
-      faces.forEach(b=>b.classList.remove("selected"));
-      btn.classList.add("selected");
-      rating = btn.dataset.rating;
-      ratingInput.value = rating;
-      nextBtn.classList.add("enabled");
-      nextBtn.disabled = false;
-    };
+nextBtn.addEventListener("click", () => {
+  if (!rating) return;
+  step1.classList.remove("active");
+  step2.classList.add("active");
+});
+
+backBtn.addEventListener("click", () => {
+  step2.classList.remove("active");
+  step1.classList.add("active");
+});
+
+/* ================================
+   Submit + return
+================================ */
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = new FormData(form);
+  const res = await fetch(FORM_ENDPOINT, {
+    method: "POST",
+    body: data,
+    headers: { "Accept": "application/json" }
   });
 
-  nextBtn.onclick = ()=>{
-    if(!rating) return;
-    step1.classList.remove("active");
-    step2.classList.add("active");
-  };
+  if (res.ok) {
+    toast.textContent = "Submitted. Returning to guide…";
+    toast.style.display = "block";
 
-  backBtn.onclick = ()=>{
-    step2.classList.remove("active");
-    step1.classList.add("active");
-  };
+    const backUrl =
+      returnUrl ||
+      document.referrer ||
+      "/";
 
-  /* ================================
-     Submit + return to guide
-  ================================= */
-  form.onsubmit = async (e)=>{
-    e.preventDefault();
+    setTimeout(() => {
+      window.location.href = backUrl;
+    }, 900);
 
-    const data = new FormData(form);
-    const res = await fetch(FORM_ENDPOINT, {
-      method:"POST",
-      body:data,
-      headers:{ "Accept":"application/json" }
-    });
-
-    if(res.ok){
-  toast.textContent = "Submitted. Returning to guide…";
-  toast.style.display = "block";
-
-  const backUrl =
-    returnUrl ||
-    document.referrer ||
-    "/";
-
-  setTimeout(()=>{
-    window.location.href = backUrl;
-  }, 900);
-}
-
-    }else{
-      toast.textContent = "Something went wrong. Please try again.";
-      toast.style.display = "block";
-    }
-  };
+  } else {
+    toast.textContent = "Something went wrong. Please try again.";
+    toast.style.display = "block";
+  }
+});
 </script>
 </body>
 </html>
-
