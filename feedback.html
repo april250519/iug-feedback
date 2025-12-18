@@ -186,6 +186,8 @@
   document.getElementById("product_id").value = productId || "unknown";
   document.getElementById("page_id").value = pageId || "overall";
 
+  const returnUrl = params.get("return_url");
+
   /* ================================
      UI logic
   ================================= */
@@ -236,13 +238,19 @@
     });
 
     if(res.ok){
-      toast.textContent = "Submitted. Returning to guide…";
-      toast.style.display = "block";
+  toast.textContent = "Submitted. Returning to guide…";
+  toast.style.display = "block";
 
-      const backUrl = document.referrer || "/";
-      setTimeout(()=>{
-        window.location.href = backUrl;
-      }, 900);
+  const backUrl =
+    returnUrl ||
+    document.referrer ||
+    "/";
+
+  setTimeout(()=>{
+    window.location.href = backUrl;
+  }, 900);
+}
+
     }else{
       toast.textContent = "Something went wrong. Please try again.";
       toast.style.display = "block";
@@ -251,3 +259,4 @@
 </script>
 </body>
 </html>
+
