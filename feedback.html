@@ -7,25 +7,31 @@
 
 <style>
   /* ================================
-     页面整体基础样式
+     页面整体布局（关键修改点）
+     使用 Flex 让内容在屏幕中间
      ================================ */
   body{
     margin:0;
-    background:#f6f6f6; /* 页面背景色 */
+    min-height:100vh;              /* 占满整个屏幕高度 */
+    background:#f6f6f6;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+    display:flex;                  /* 启用 Flex 布局 */
+    align-items:center;            /* 垂直居中 */
+    justify-content:center;        /* 水平居中 */
   }
 
-  /* 主容器，控制页面宽度和居中 */
+  /* 主容器（卡片） */
   .wrap{
     max-width:680px;
-    margin:40px auto;
+    width:100%;
+    margin:16px;                   /* 防止贴边（移动端） */
     background:#fff;
     border-radius:14px;
     padding:24px 24px 20px;
     box-shadow:0 16px 40px rgba(0,0,0,.12);
   }
 
-  /* 页面主标题 */
   h1{
     font-size:22px;
     margin:0 0 16px;
@@ -38,7 +44,6 @@
     margin-bottom:16px;
   }
 
-  /* 单个表情按钮 */
   .face{
     flex:1;
     height:56px;
@@ -49,258 +54,11 @@
     background:#fff;
   }
 
-  /* 被选中的表情样式 */
   .face.selected{
     border-color:#111;
     outline:2px solid #111;
   }
 
-  /* Step 1 的 Next 按钮（默认不可用） */
+  /* Next 按钮 */
   .next{
-    margin-left:auto;
-    padding:12px 18px;
-    border-radius:10px;
-    border:none;
-    font-weight:700;
-    background:#d9d9d9;
-    color:#666;
-    cursor:not-allowed;
-  }
-
-  /* 选中表情后 Next 按钮启用 */
-  .next.enabled{
-    background:#111;
-    color:#fff;
-    cursor:pointer;
-  }
-
-  /* 两个步骤的基础显示控制 */
-  .step{display:none;}
-  .step.active{display:block;}
-
-  /* 表单 label 样式 */
-  label{
-    font-weight:700;
-    display:block;
-    margin-top:14px;
-  }
-
-  /* 可选字段提示 */
-  .optional{
-    font-weight:400;
-    font-size:12px;
-    opacity:.6;
-    margin-left:6px;
-  }
-
-  /* 输入框和文本域统一样式 */
-  textarea,input{
-    width:100%;
-    box-sizing:border-box;
-    margin-top:6px;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid #ddd;
-    font-size:14px;
-  }
-
-  textarea{
-    min-height:110px;
-    resize:vertical;
-  }
-
-  /* 表单底部按钮区域 */
-  .footer{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:18px;
-  }
-
-  /* 返回上一步按钮 */
-  .back{
-    border:none;
-    background:none;
-    font-weight:600;
-    cursor:pointer;
-    opacity:.7;
-  }
-  .back:hover{opacity:1;}
-
-  /* 提交按钮 */
-  .submit{
-    padding:12px 18px;
-    border-radius:10px;
-    border:none;
-    background:#111;
-    color:#fff;
-    font-weight:800;
-    cursor:pointer;
-  }
-
-  /* 提交后的提示信息 */
-  .toast{
-    display:none;
-    margin-top:14px;
-    padding:10px 12px;
-    background:#f0f0f0;
-    border-radius:8px;
-    font-size:13px;
-  }
-</style>
-</head>
-
-<body>
-<div class="wrap">
-
-  <!-- ================================
-       STEP 1：表情评分
-       ================================ -->
-  <div class="step active" id="step1">
-    <h1>Did this guide help you?</h1>
-
-    <!-- 三个评分选项 -->
-    <div class="faces">
-      <button type="button" class="face" data-rating="sad">☹️</button>
-      <button type="button" class="face" data-rating="neutral">😐</button>
-      <button type="button" class="face" data-rating="happy">🙂</button>
-    </div>
-
-    <!-- 进入下一步 -->
-    <button type="button" class="next" id="nextBtn">Next →</button>
-  </div>
-
-  <!-- ================================
-       STEP 2：补充反馈内容
-       ================================ -->
-  <div class="step" id="step2">
-    <h1>Thanks for your feedback</h1>
-
-    <form id="feedbackForm">
-      <!-- 隐藏字段：用于数据归因，不对用户展示 -->
-      <input type="hidden" name="product_id" id="product_id"> <!-- 产品 ID -->
-      <input type="hidden" name="page_id" id="page_id">       <!-- 页面 ID / overall -->
-      <input type="hidden" name="rating" id="ratingInput">    <!-- 表情评分结果 -->
-      <input type="hidden" name="source" value="iug_feedback"><!-- 来源标识 -->
-
-      <!-- 可选文字反馈 -->
-      <label>
-        Share your thoughts
-        <span class="optional">(optional)</span>
-      </label>
-      <textarea name="message" placeholder="Tell us what could be improved."></textarea>
-
-      <!-- 可选邮箱 -->
-      <label>
-        Your email
-        <span class="optional">(optional)</span>
-      </label>
-      <input type="email" name="email" placeholder="Only used to help you if needed">
-
-      <!-- 操作按钮 -->
-      <div class="footer">
-        <button type="button" class="back" id="backBtn">← Back</button>
-        <button type="submit" class="submit">Submit ✓</button>
-      </div>
-
-      <!-- 提交后的状态提示 -->
-      <div class="toast" id="toast"></div>
-    </form>
-  </div>
-
-</div>
-
-<script>
-/* ================================
-   配置区：Formspree 接口地址
-   ================================ */
-const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
-
-/* ================================
-   读取 URL 参数（上下文来源）
-   ================================ */
-const params = new URLSearchParams(window.location.search);
-const productId = params.get("product_id");   // 产品 ID
-const pageId = params.get("page_id");         // 页面 ID
-const returnUrl = params.get("return_url");   // 提交后返回的 IUG 地址
-
-// 给隐藏字段赋值（兜底防止空值）
-document.getElementById("product_id").value = productId || "unknown";
-document.getElementById("page_id").value = pageId || "overall";
-
-/* ================================
-   UI 元素引用
-   ================================ */
-const step1 = document.getElementById("step1");
-const step2 = document.getElementById("step2");
-const faces = document.querySelectorAll(".face");
-const nextBtn = document.getElementById("nextBtn");
-const ratingInput = document.getElementById("ratingInput");
-const backBtn = document.getElementById("backBtn");
-const form = document.getElementById("feedbackForm");
-const toast = document.getElementById("toast");
-
-let rating = ""; // 当前用户选择的评分结果
-
-/* ================================
-   表情点击逻辑
-   ================================ */
-faces.forEach(btn => {
-  btn.addEventListener("click", () => {
-    faces.forEach(b => b.classList.remove("selected")); // 清除旧选中
-    btn.classList.add("selected");                      // 高亮当前选中
-    rating = btn.dataset.rating;                        // 保存评分值
-    ratingInput.value = rating;                         // 写入隐藏字段
-    nextBtn.classList.add("enabled");                   // 启用 Next
-  });
-});
-
-/* ================================
-   Step 切换逻辑
-   ================================ */
-nextBtn.addEventListener("click", () => {
-  if (!rating) return;          // 未选评分不可进入下一步
-  step1.classList.remove("active");
-  step2.classList.add("active");
-});
-
-backBtn.addEventListener("click", () => {
-  step2.classList.remove("active");
-  step1.classList.add("active");
-});
-
-/* ================================
-   表单提交 + 返回说明书
-   ================================ */
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const data = new FormData(form);
-  const res = await fetch(FORM_ENDPOINT, {
-    method: "POST",
-    body: data,
-    headers: { "Accept": "application/json" }
-  });
-
-  if (res.ok) {
-    toast.textContent = "Submitted. Returning to guide…";
-    toast.style.display = "block";
-
-    // 返回优先级：显式 return_url → referrer → 首页
-    const backUrl =
-      returnUrl ||
-      document.referrer ||
-      "/";
-
-    setTimeout(() => {
-      window.location.href = backUrl;
-    }, 900);
-
-  } else {
-    toast.textContent = "Something went wrong. Please try again.";
-    toast.style.display = "block";
-  }
-});
-</script>
-</body>
-</html>
+    margin-left:au
