@@ -7,37 +7,33 @@
 
 <style>
 /* ================================
-   页面整体背景与布局
-   使用“视觉居中偏上”的方式
+   页面整体布局
 ================================ */
 body{
   margin:0;
   min-height:100vh;
   background:#f6f6f6;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-
   display:flex;
   justify-content:flex-start;
 }
 
-/* 主卡片容器 */
+/* 主卡片 */
 .wrap{
   max-width:680px;
   width:100%;
-  margin:16vh auto 0;          /* 👈 视觉下移一点点 */
+  margin:16vh auto 0;
   background:#fff;
   border-radius:14px;
-  padding:24px 24px 20px;
+  padding:24px;
   box-shadow:0 16px 40px rgba(0,0,0,.12);
 }
 
-/* 标题 */
 h1{
   font-size:22px;
   margin:0 0 12px;
 }
 
-/* 副标题 / 说明文字 */
 .subtext{
   font-size:15px;
   color:#666;
@@ -45,12 +41,17 @@ h1{
 }
 
 /* ================================
-   Step 1：表情评分
+   Step 控制
+================================ */
+.step{display:none;}
+.step.active{display:block;}
+
+/* ================================
+   表情评分
 ================================ */
 .faces{
   display:flex;
   gap:14px;
-  margin-bottom:16px;
 }
 
 .face{
@@ -68,32 +69,8 @@ h1{
   outline:2px solid #111;
 }
 
-/* Next 按钮（已选中才可用） */
-.next{
-  margin-left:auto;
-  padding:12px 18px;
-  border-radius:10px;
-  border:none;
-  font-weight:700;
-  background:#d9d9d9;
-  color:#666;
-  cursor:not-allowed;
-}
-
-.next.enabled{
-  background:#111;
-  color:#fff;
-  cursor:pointer;
-}
-
 /* ================================
-   Step 切换
-================================ */
-.step{display:none;}
-.step.active{display:block;}
-
-/* ================================
-   Step 2：文字反馈
+   表单
 ================================ */
 label{
   font-weight:700;
@@ -121,10 +98,15 @@ input{
 
 textarea{
   min-height:110px;
-  resize:vertical;
 }
 
-/* 底部按钮区 */
+/* placeholder 统一样式（斜体 + 轻颜色） */
+textarea::placeholder,
+input::placeholder{
+  font-style:italic;
+  color:#999;
+}
+
 .footer{
   display:flex;
   justify-content:space-between;
@@ -136,21 +118,20 @@ textarea{
   border:none;
   background:none;
   font-weight:600;
-  cursor:pointer;
   color:#2b7cff;
+  cursor:pointer;
 }
 
 .submit{
   padding:12px 18px;
   border-radius:10px;
   border:none;
-  background:#111;        /* 中性主按钮 */
+  background:#111;
   color:#fff;
   font-weight:800;
   cursor:pointer;
 }
 
-/* 提交提示 */
 .toast{
   display:none;
   margin-top:14px;
@@ -165,9 +146,7 @@ textarea{
 <body>
 <div class="wrap">
 
-  <!-- ================================
-       STEP 1
-  ================================= -->
+  <!-- STEP 1 -->
   <div class="step active" id="step1">
     <h1>Was this guide helpful?</h1>
 
@@ -176,21 +155,15 @@ textarea{
       <button type="button" class="face" data-rating="neutral">😐</button>
       <button type="button" class="face" data-rating="happy">🙂</button>
     </div>
-
-    <button type="button" class="next" id="nextBtn">Next →</button>
   </div>
 
-  <!-- ================================
-       STEP 2
-  ================================= -->
+  <!-- STEP 2 -->
   <div class="step" id="step2">
     <h1>Tell us more <span class="optional">(optional)</span></h1>
-    <div class="subtext">
-      Share anything that could help us improve this guide.
-    </div>
+    <div class="subtext">Help us improve this guide.</div>
 
     <form id="feedbackForm">
-      <!-- 隐藏字段：上下文信息 -->
+      <!-- 隐藏字段 -->
       <input type="hidden" name="product_id" id="product_id">
       <input type="hidden" name="page_id" id="page_id">
       <input type="hidden" name="rating" id="ratingInput">
@@ -202,7 +175,7 @@ textarea{
       </label>
       <textarea
         name="message"
-        placeholder="What was confusing or missing?"
+        placeholder="We read every message you send."
       ></textarea>
 
       <label>
@@ -212,7 +185,7 @@ textarea{
       <input
         type="email"
         name="email"
-        placeholder="Only used if we need to follow up. We respect your privacy."
+        placeholder="Only used for follow-up. We respect your privacy."
       >
 
       <div class="footer">
@@ -233,46 +206,34 @@ textarea{
 const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
 /* ================================
-   读取 URL 参数
+   URL 参数
 ================================ */
 const params = new URLSearchParams(window.location.search);
-const productId = params.get("product_id");
-const pageId = params.get("page_id");
+document.getElementById("product_id").value = params.get("product_id") || "unknown";
+document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
-document.getElementById("product_id").value = productId || "unknown";
-document.getElementById("page_id").value = pageId || "overall";
-
 /* ================================
-   UI 交互逻辑
+   交互逻辑
 ================================ */
 const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
 const faces = document.querySelectorAll(".face");
-const nextBtn = document.getElementById("nextBtn");
 const ratingInput = document.getElementById("ratingInput");
 const backBtn = document.getElementById("backBtn");
 const form = document.getElementById("feedbackForm");
 const toast = document.getElementById("toast");
 
-let rating = "";
-
-// 选择表情
+// 点表情 → 自动进入第二页
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
-    rating = btn.dataset.rating;
-    ratingInput.value = rating;
-    nextBtn.classList.add("enabled");
-  });
-});
+    ratingInput.value = btn.dataset.rating;
 
-// 下一步
-nextBtn.addEventListener("click", () => {
-  if (!rating) return;
-  step1.classList.remove("active");
-  step2.classList.add("active");
+    step1.classList.remove("active");
+    step2.classList.add("active");
+  });
 });
 
 // 返回
@@ -281,16 +242,13 @@ backBtn.addEventListener("click", () => {
   step1.classList.add("active");
 });
 
-/* ================================
-   提交 + 返回说明书
-================================ */
-form.addEventListener("submit", async (e) => {
+// 提交
+form.addEventListener("submit", async e => {
   e.preventDefault();
 
-  const data = new FormData(form);
   const res = await fetch(FORM_ENDPOINT, {
     method: "POST",
-    body: data,
+    body: new FormData(form),
     headers: { "Accept": "application/json" }
   });
 
@@ -298,13 +256,8 @@ form.addEventListener("submit", async (e) => {
     toast.textContent = "Submitted. Returning to guide…";
     toast.style.display = "block";
 
-    const backUrl =
-      returnUrl ||
-      document.referrer ||
-      "/";
-
     setTimeout(() => {
-      window.location.href = backUrl;
+      window.location.href = returnUrl || document.referrer || "/";
     }, 900);
   } else {
     toast.textContent = "Something went wrong. Please try again.";
