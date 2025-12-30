@@ -7,27 +7,29 @@
 
 <style>
 /* ================================
-   页面整体布局（方案 A）
-   顶部不再出现灰色断层
+   页面整体布局（真正居中 + 微调）
 ================================ */
 body{
   margin:0;
   min-height:100vh;
-  background:#ffffff;   /* ✅ 关键：改为纯白 */
+  background:#ffffff;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
   display:flex;
-  justify-content:flex-start;
+  align-items:center;
+  justify-content:center;
 }
 
 /* 主卡片 */
 .wrap{
   max-width:680px;
   width:100%;
-  margin:16vh auto 0;
   background:#ffffff;
   border-radius:14px;
   padding:24px;
   box-shadow:0 16px 40px rgba(0,0,0,.12);
+
+  transform: translateY(-6vh); /* 👈 视觉居中关键 */
 }
 
 /* 标题 */
@@ -36,22 +38,17 @@ h1{
   margin:0 0 12px;
 }
 
-/* 副说明文字 */
 .subtext{
   font-size:15px;
   color:#666;
   margin-bottom:18px;
 }
 
-/* ================================
-   Step 控制
-================================ */
+/* Step 控制 */
 .step{display:none;}
 .step.active{display:block;}
 
-/* ================================
-   表情评分
-================================ */
+/* 表情评分 */
 .faces{
   display:flex;
   gap:14px;
@@ -72,9 +69,7 @@ h1{
   outline:2px solid #111;
 }
 
-/* ================================
-   表单
-================================ */
+/* 表单 */
 label{
   font-weight:700;
   display:block;
@@ -103,14 +98,13 @@ textarea{
   min-height:110px;
 }
 
-/* placeholder：斜体 + 轻颜色 */
 textarea::placeholder,
 input::placeholder{
   font-style:italic;
   color:#999;
 }
 
-/* 底部按钮区 */
+/* 底部按钮 */
 .footer{
   display:flex;
   justify-content:space-between;
@@ -136,7 +130,6 @@ input::placeholder{
   cursor:pointer;
 }
 
-/* 提交提示 */
 .toast{
   display:none;
   margin-top:14px;
@@ -151,9 +144,7 @@ input::placeholder{
 <body>
 <div class="wrap">
 
-  <!-- ================================
-       STEP 1
-  ================================= -->
+  <!-- STEP 1 -->
   <div class="step active" id="step1">
     <h1>Was this guide helpful?</h1>
 
@@ -164,23 +155,19 @@ input::placeholder{
     </div>
   </div>
 
-  <!-- ================================
-       STEP 2
-  ================================= -->
+  <!-- STEP 2 -->
   <div class="step" id="step2">
     <h1>Tell us more <span class="optional">(optional)</span></h1>
     <div class="subtext">Help us improve this guide.</div>
 
     <form id="feedbackForm">
-      <!-- 隐藏字段 -->
       <input type="hidden" name="product_id" id="product_id">
       <input type="hidden" name="page_id" id="page_id">
       <input type="hidden" name="rating" id="ratingInput">
       <input type="hidden" name="source" value="iug_feedback">
 
       <label>
-        Share your thoughts
-        <span class="optional">(optional)</span>
+        Share your thoughts <span class="optional">(optional)</span>
       </label>
       <textarea
         name="message"
@@ -188,8 +175,7 @@ input::placeholder{
       ></textarea>
 
       <label>
-        Your email
-        <span class="optional">(optional)</span>
+        Your email <span class="optional">(optional)</span>
       </label>
       <input
         type="email"
@@ -209,22 +195,13 @@ input::placeholder{
 </div>
 
 <script>
-/* ================================
-   Formspree 配置
-================================ */
 const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
-/* ================================
-   URL 参数
-================================ */
 const params = new URLSearchParams(window.location.search);
 document.getElementById("product_id").value = params.get("product_id") || "unknown";
 document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
-/* ================================
-   交互逻辑
-================================ */
 const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
 const faces = document.querySelectorAll(".face");
@@ -233,7 +210,6 @@ const backBtn = document.getElementById("backBtn");
 const form = document.getElementById("feedbackForm");
 const toast = document.getElementById("toast");
 
-/* 点表情 → 直接进入第二页 */
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
@@ -245,30 +221,28 @@ faces.forEach(btn => {
   });
 });
 
-/* 返回 */
 backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
 });
 
-/* 提交 */
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
   const res = await fetch(FORM_ENDPOINT, {
-    method: "POST",
-    body: new FormData(form),
-    headers: { "Accept": "application/json" }
+    method:"POST",
+    body:new FormData(form),
+    headers:{ "Accept":"application/json" }
   });
 
-  if (res.ok) {
+  if(res.ok){
     toast.textContent = "Submitted. Returning to guide…";
     toast.style.display = "block";
 
-    setTimeout(() => {
+    setTimeout(()=>{
       window.location.href = returnUrl || document.referrer || "/";
-    }, 900);
-  } else {
+    },900);
+  }else{
     toast.textContent = "Something went wrong. Please try again.";
     toast.style.display = "block";
   }
