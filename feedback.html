@@ -7,7 +7,7 @@
 
 <style>
   /* ================================
-     页面整体布局（移动端居中）
+     页面整体布局（视觉居中偏上）
      ================================ */
   body{
     margin:0;
@@ -16,23 +16,31 @@
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 
     display:flex;
-    align-items:center;
-    justify-content:center;
+    justify-content:flex-start;   /* 不做数学居中 */
+    padding-top:12vh;             /* 视觉黄金区（移动端更自然） */
   }
 
   /* 主卡片 */
   .wrap{
     max-width:680px;
     width:100%;
-    margin:16px;
+    margin:0 auto 24px;
     background:#fff;
     border-radius:14px;
     padding:24px 24px 20px;
     box-shadow:0 16px 40px rgba(0,0,0,.12);
   }
 
+  /* 标题 */
   h1{
     font-size:22px;
+    margin:0 0 12px;
+  }
+
+  /* 副标题 / 说明文字 */
+  .subtext{
+    font-size:14px;
+    color:#555;
     margin:0 0 16px;
   }
 
@@ -58,7 +66,7 @@
     outline:2px solid #111;
   }
 
-  /* 不再需要 Next，隐藏即可 */
+  /* Next 已隐藏 */
   .next{
     display:none;
   }
@@ -140,7 +148,7 @@
        STEP 1：表情评分
        ================================ -->
   <div class="step active" id="step1">
-    <h1>Did this guide help you?</h1>
+    <h1>Was this guide helpful?</h1>
 
     <div class="faces">
       <button type="button" class="face" data-rating="sad">☹️</button>
@@ -148,7 +156,6 @@
       <button type="button" class="face" data-rating="happy">🙂</button>
     </div>
 
-    <!-- Next 按钮已隐藏，仅保留结构 -->
     <button type="button" class="next" id="nextBtn">Next →</button>
   </div>
 
@@ -156,7 +163,8 @@
        STEP 2：补充反馈（可选）
        ================================ -->
   <div class="step" id="step2">
-    <h1>Thanks for your feedback</h1>
+    <h1>Tell us more <span class="optional">(optional)</span></h1>
+    <p class="subtext">Anything we could improve? <span class="optional">(optional)</span></p>
 
     <form id="feedbackForm">
       <!-- 隐藏字段：数据归因 -->
@@ -169,13 +177,19 @@
         Share your thoughts
         <span class="optional">(optional)</span>
       </label>
-      <textarea name="message" placeholder="Tell us what could be improved."></textarea>
+      <textarea
+        name="message"
+        placeholder="What was confusing or missing?">
+      </textarea>
 
       <label>
         Your email
         <span class="optional">(optional)</span>
       </label>
-      <input type="email" name="email" placeholder="Only used to help you if needed">
+      <input
+        type="email"
+        name="email"
+        placeholder="Only used if we need to follow up. We respect your privacy.">
 
       <div class="footer">
         <button type="button" class="back" id="backBtn">← Back</button>
