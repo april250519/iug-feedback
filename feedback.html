@@ -7,12 +7,13 @@
 
 <style>
 /* ================================
-   页面整体布局
+   页面整体布局（方案 A）
+   顶部不再出现灰色断层
 ================================ */
 body{
   margin:0;
   min-height:100vh;
-  background:#f6f6f6;
+  background:#ffffff;   /* ✅ 关键：改为纯白 */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   display:flex;
   justify-content:flex-start;
@@ -23,17 +24,19 @@ body{
   max-width:680px;
   width:100%;
   margin:16vh auto 0;
-  background:#fff;
+  background:#ffffff;
   border-radius:14px;
   padding:24px;
   box-shadow:0 16px 40px rgba(0,0,0,.12);
 }
 
+/* 标题 */
 h1{
   font-size:22px;
   margin:0 0 12px;
 }
 
+/* 副说明文字 */
 .subtext{
   font-size:15px;
   color:#666;
@@ -100,13 +103,14 @@ textarea{
   min-height:110px;
 }
 
-/* placeholder 统一样式（斜体 + 轻颜色） */
+/* placeholder：斜体 + 轻颜色 */
 textarea::placeholder,
 input::placeholder{
   font-style:italic;
   color:#999;
 }
 
+/* 底部按钮区 */
 .footer{
   display:flex;
   justify-content:space-between;
@@ -132,6 +136,7 @@ input::placeholder{
   cursor:pointer;
 }
 
+/* 提交提示 */
 .toast{
   display:none;
   margin-top:14px;
@@ -146,7 +151,9 @@ input::placeholder{
 <body>
 <div class="wrap">
 
-  <!-- STEP 1 -->
+  <!-- ================================
+       STEP 1
+  ================================= -->
   <div class="step active" id="step1">
     <h1>Was this guide helpful?</h1>
 
@@ -157,7 +164,9 @@ input::placeholder{
     </div>
   </div>
 
-  <!-- STEP 2 -->
+  <!-- ================================
+       STEP 2
+  ================================= -->
   <div class="step" id="step2">
     <h1>Tell us more <span class="optional">(optional)</span></h1>
     <div class="subtext">Help us improve this guide.</div>
@@ -224,7 +233,7 @@ const backBtn = document.getElementById("backBtn");
 const form = document.getElementById("feedbackForm");
 const toast = document.getElementById("toast");
 
-// 点表情 → 自动进入第二页
+/* 点表情 → 直接进入第二页 */
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
@@ -236,13 +245,13 @@ faces.forEach(btn => {
   });
 });
 
-// 返回
+/* 返回 */
 backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
 });
 
-// 提交
+/* 提交 */
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
