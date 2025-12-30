@@ -7,26 +7,27 @@
 
 <style>
   /* ================================
-     页面整体布局（视觉居中偏上）
+     全局背景（统一两页观感）
      ================================ */
   body{
     margin:0;
     min-height:100vh;
-    background:#f6f6f6;
+    background:#f6f6f6; /* 两个 step 共用的背景 */
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 
     display:flex;
-    justify-content:flex-start;   /* 不做数学居中 */
-    padding-top:12vh;             /* 视觉黄金区（移动端更自然） */
+    justify-content:center;
+    align-items:flex-start;
   }
 
-  /* 主卡片 */
+  /* 主卡片（浮层感） */
   .wrap{
     max-width:680px;
     width:100%;
-    margin:0 auto 24px;
+    margin-top:14vh;            /* 比之前更居中，不顶 */
+    margin-bottom:24px;
     background:#fff;
-    border-radius:14px;
+    border-radius:16px;
     padding:24px 24px 20px;
     box-shadow:0 16px 40px rgba(0,0,0,.12);
   }
@@ -37,25 +38,24 @@
     margin:0 0 12px;
   }
 
-  /* 副标题 / 说明文字 */
+  /* 次级说明文字 */
   .subtext{
     font-size:14px;
-    color:#555;
-    margin:0 0 16px;
+    color:#666;
+    margin:0 0 18px;
   }
 
   /* 表情区 */
   .faces{
     display:flex;
     gap:14px;
-    margin-bottom:8px;
   }
 
   .face{
     flex:1;
     height:56px;
     border:1px solid #ddd;
-    border-radius:10px;
+    border-radius:12px;
     font-size:26px;
     cursor:pointer;
     background:#fff;
@@ -66,35 +66,30 @@
     outline:2px solid #111;
   }
 
-  /* Next 已隐藏 */
-  .next{
-    display:none;
-  }
-
   /* Step 控制 */
   .step{display:none;}
   .step.active{display:block;}
 
-  /* 表单样式 */
+  /* 表单 */
   label{
     font-weight:700;
     display:block;
-    margin-top:14px;
+    margin-top:18px;
   }
 
   .optional{
     font-weight:400;
     font-size:12px;
-    opacity:.6;
+    opacity:.55;
     margin-left:6px;
   }
 
   textarea,input{
     width:100%;
     box-sizing:border-box;
-    margin-top:6px;
+    margin-top:8px;
     padding:12px;
-    border-radius:10px;
+    border-radius:12px;
     border:1px solid #ddd;
     font-size:14px;
   }
@@ -108,7 +103,7 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-top:18px;
+    margin-top:22px;
   }
 
   .back{
@@ -117,12 +112,13 @@
     font-weight:600;
     cursor:pointer;
     opacity:.7;
+    color:#007aff;
   }
   .back:hover{opacity:1;}
 
   .submit{
-    padding:12px 18px;
-    border-radius:10px;
+    padding:12px 20px;
+    border-radius:12px;
     border:none;
     background:#111;
     color:#fff;
@@ -155,8 +151,6 @@
       <button type="button" class="face" data-rating="neutral">😐</button>
       <button type="button" class="face" data-rating="happy">🙂</button>
     </div>
-
-    <button type="button" class="next" id="nextBtn">Next →</button>
   </div>
 
   <!-- ================================
@@ -164,10 +158,10 @@
        ================================ -->
   <div class="step" id="step2">
     <h1>Tell us more <span class="optional">(optional)</span></h1>
-    <p class="subtext">Anything we could improve? <span class="optional">(optional)</span></p>
+    <p class="subtext">Share anything that could help us improve this guide.</p>
 
     <form id="feedbackForm">
-      <!-- 隐藏字段：数据归因 -->
+      <!-- 隐藏字段 -->
       <input type="hidden" name="product_id" id="product_id">
       <input type="hidden" name="page_id" id="page_id">
       <input type="hidden" name="rating" id="ratingInput">
@@ -208,20 +202,13 @@
 ================================ */
 const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
-/* ================================
-   读取 URL 参数
-================================ */
+/* 读取 URL 参数 */
 const params = new URLSearchParams(window.location.search);
-const productId = params.get("product_id");
-const pageId = params.get("page_id");
+document.getElementById("product_id").value = params.get("product_id") || "unknown";
+document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
-document.getElementById("product_id").value = productId || "unknown";
-document.getElementById("page_id").value = pageId || "overall";
-
-/* ================================
-   UI 元素
-================================ */
+/* UI 元素 */
 const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
 const faces = document.querySelectorAll(".face");
@@ -232,9 +219,7 @@ const toast = document.getElementById("toast");
 
 let rating = "";
 
-/* ================================
-   表情点击 → 自动进入下一页
-================================ */
+/* 点击表情 → 进入下一步 */
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
@@ -248,22 +233,19 @@ faces.forEach(btn => {
   });
 });
 
-/* 返回上一步 */
+/* 返回 */
 backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
 });
 
-/* ================================
-   提交反馈（唯一记录点）
-================================ */
+/* 提交 */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = new FormData(form);
   const res = await fetch(FORM_ENDPOINT, {
     method: "POST",
-    body: data,
+    body: new FormData(form),
     headers: { "Accept": "application/json" }
   });
 
@@ -271,15 +253,10 @@ form.addEventListener("submit", async (e) => {
     toast.textContent = "Submitted. Returning to guide…";
     toast.style.display = "block";
 
-    const backUrl =
-      returnUrl ||
-      document.referrer ||
-      "/";
-
     setTimeout(() => {
-      window.location.href = backUrl;
+      window.location.href =
+        returnUrl || document.referrer || "/";
     }, 900);
-
   } else {
     toast.textContent = "Something went wrong. Please try again.";
     toast.style.display = "block";
