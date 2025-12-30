@@ -6,134 +6,159 @@
 <title>Guide Feedback</title>
 
 <style>
-  /* ================================
-     全局背景（统一两页观感）
-     ================================ */
-  body{
-    margin:0;
-    min-height:100vh;
-    background:#f6f6f6; /* 两个 step 共用的背景 */
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+/* ================================
+   页面整体背景与布局
+   使用“视觉居中偏上”的方式
+================================ */
+body{
+  margin:0;
+  min-height:100vh;
+  background:#f6f6f6;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-  }
+  display:flex;
+  justify-content:flex-start;
+}
 
-  /* 主卡片（浮层感） */
-  .wrap{
-    max-width:680px;
-    width:100%;
-    margin-top:14vh;            /* 比之前更居中，不顶 */
-    margin-bottom:24px;
-    background:#fff;
-    border-radius:16px;
-    padding:24px 24px 20px;
-    box-shadow:0 16px 40px rgba(0,0,0,.12);
-  }
+/* 主卡片容器 */
+.wrap{
+  max-width:680px;
+  width:100%;
+  margin:16vh auto 0;          /* 👈 视觉下移一点点 */
+  background:#fff;
+  border-radius:14px;
+  padding:24px 24px 20px;
+  box-shadow:0 16px 40px rgba(0,0,0,.12);
+}
 
-  /* 标题 */
-  h1{
-    font-size:22px;
-    margin:0 0 12px;
-  }
+/* 标题 */
+h1{
+  font-size:22px;
+  margin:0 0 12px;
+}
 
-  /* 次级说明文字 */
-  .subtext{
-    font-size:14px;
-    color:#666;
-    margin:0 0 18px;
-  }
+/* 副标题 / 说明文字 */
+.subtext{
+  font-size:15px;
+  color:#666;
+  margin-bottom:18px;
+}
 
-  /* 表情区 */
-  .faces{
-    display:flex;
-    gap:14px;
-  }
+/* ================================
+   Step 1：表情评分
+================================ */
+.faces{
+  display:flex;
+  gap:14px;
+  margin-bottom:16px;
+}
 
-  .face{
-    flex:1;
-    height:56px;
-    border:1px solid #ddd;
-    border-radius:12px;
-    font-size:26px;
-    cursor:pointer;
-    background:#fff;
-  }
+.face{
+  flex:1;
+  height:56px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:26px;
+  cursor:pointer;
+  background:#fff;
+}
 
-  .face.selected{
-    border-color:#111;
-    outline:2px solid #111;
-  }
+.face.selected{
+  border-color:#111;
+  outline:2px solid #111;
+}
 
-  /* Step 控制 */
-  .step{display:none;}
-  .step.active{display:block;}
+/* Next 按钮（已选中才可用） */
+.next{
+  margin-left:auto;
+  padding:12px 18px;
+  border-radius:10px;
+  border:none;
+  font-weight:700;
+  background:#d9d9d9;
+  color:#666;
+  cursor:not-allowed;
+}
 
-  /* 表单 */
-  label{
-    font-weight:700;
-    display:block;
-    margin-top:18px;
-  }
+.next.enabled{
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+}
 
-  .optional{
-    font-weight:400;
-    font-size:12px;
-    opacity:.55;
-    margin-left:6px;
-  }
+/* ================================
+   Step 切换
+================================ */
+.step{display:none;}
+.step.active{display:block;}
 
-  textarea,input{
-    width:100%;
-    box-sizing:border-box;
-    margin-top:8px;
-    padding:12px;
-    border-radius:12px;
-    border:1px solid #ddd;
-    font-size:14px;
-  }
+/* ================================
+   Step 2：文字反馈
+================================ */
+label{
+  font-weight:700;
+  display:block;
+  margin-top:14px;
+}
 
-  textarea{
-    min-height:110px;
-    resize:vertical;
-  }
+.optional{
+  font-weight:400;
+  font-size:12px;
+  opacity:.6;
+  margin-left:6px;
+}
 
-  .footer{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-top:22px;
-  }
+textarea,
+input{
+  width:100%;
+  box-sizing:border-box;
+  margin-top:6px;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:14px;
+}
 
-  .back{
-    border:none;
-    background:none;
-    font-weight:600;
-    cursor:pointer;
-    opacity:.7;
-    color:#007aff;
-  }
-  .back:hover{opacity:1;}
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
 
-  .submit{
-    padding:12px 20px;
-    border-radius:12px;
-    border:none;
-    background:#111;
-    color:#fff;
-    font-weight:800;
-    cursor:pointer;
-  }
+/* 底部按钮区 */
+.footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:18px;
+}
 
-  .toast{
-    display:none;
-    margin-top:14px;
-    padding:10px 12px;
-    background:#f0f0f0;
-    border-radius:8px;
-    font-size:13px;
-  }
+.back{
+  border:none;
+  background:none;
+  font-weight:600;
+  cursor:pointer;
+  color:#2b7cff;
+}
+
+.submit{
+  padding:12px 18px;
+  border-radius:10px;
+  border:none;
+  background:#111;        /* 中性主按钮 */
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* 提交提示 */
+.toast{
+  display:none;
+  margin-top:14px;
+  padding:10px 12px;
+  background:#f0f0f0;
+  border-radius:8px;
+  font-size:13px;
+}
 </style>
 </head>
 
@@ -141,8 +166,8 @@
 <div class="wrap">
 
   <!-- ================================
-       STEP 1：表情评分
-       ================================ -->
+       STEP 1
+  ================================= -->
   <div class="step active" id="step1">
     <h1>Was this guide helpful?</h1>
 
@@ -151,17 +176,21 @@
       <button type="button" class="face" data-rating="neutral">😐</button>
       <button type="button" class="face" data-rating="happy">🙂</button>
     </div>
+
+    <button type="button" class="next" id="nextBtn">Next →</button>
   </div>
 
   <!-- ================================
-       STEP 2：补充反馈（可选）
-       ================================ -->
+       STEP 2
+  ================================= -->
   <div class="step" id="step2">
     <h1>Tell us more <span class="optional">(optional)</span></h1>
-    <p class="subtext">Share anything that could help us improve this guide.</p>
+    <div class="subtext">
+      Share anything that could help us improve this guide.
+    </div>
 
     <form id="feedbackForm">
-      <!-- 隐藏字段 -->
+      <!-- 隐藏字段：上下文信息 -->
       <input type="hidden" name="product_id" id="product_id">
       <input type="hidden" name="page_id" id="page_id">
       <input type="hidden" name="rating" id="ratingInput">
@@ -173,8 +202,8 @@
       </label>
       <textarea
         name="message"
-        placeholder="What was confusing or missing?">
-      </textarea>
+        placeholder="What was confusing or missing?"
+      ></textarea>
 
       <label>
         Your email
@@ -183,7 +212,8 @@
       <input
         type="email"
         name="email"
-        placeholder="Only used if we need to follow up. We respect your privacy.">
+        placeholder="Only used if we need to follow up. We respect your privacy."
+      >
 
       <div class="footer">
         <button type="button" class="back" id="backBtn">← Back</button>
@@ -202,16 +232,24 @@
 ================================ */
 const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
-/* 读取 URL 参数 */
+/* ================================
+   读取 URL 参数
+================================ */
 const params = new URLSearchParams(window.location.search);
-document.getElementById("product_id").value = params.get("product_id") || "unknown";
-document.getElementById("page_id").value = params.get("page_id") || "overall";
+const productId = params.get("product_id");
+const pageId = params.get("page_id");
 const returnUrl = params.get("return_url");
 
-/* UI 元素 */
+document.getElementById("product_id").value = productId || "unknown";
+document.getElementById("page_id").value = pageId || "overall";
+
+/* ================================
+   UI 交互逻辑
+================================ */
 const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
 const faces = document.querySelectorAll(".face");
+const nextBtn = document.getElementById("nextBtn");
 const ratingInput = document.getElementById("ratingInput");
 const backBtn = document.getElementById("backBtn");
 const form = document.getElementById("feedbackForm");
@@ -219,33 +257,40 @@ const toast = document.getElementById("toast");
 
 let rating = "";
 
-/* 点击表情 → 进入下一步 */
+// 选择表情
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
-
     rating = btn.dataset.rating;
     ratingInput.value = rating;
-
-    step1.classList.remove("active");
-    step2.classList.add("active");
+    nextBtn.classList.add("enabled");
   });
 });
 
-/* 返回 */
+// 下一步
+nextBtn.addEventListener("click", () => {
+  if (!rating) return;
+  step1.classList.remove("active");
+  step2.classList.add("active");
+});
+
+// 返回
 backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
 });
 
-/* 提交 */
+/* ================================
+   提交 + 返回说明书
+================================ */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const data = new FormData(form);
   const res = await fetch(FORM_ENDPOINT, {
     method: "POST",
-    body: new FormData(form),
+    body: data,
     headers: { "Accept": "application/json" }
   });
 
@@ -253,9 +298,13 @@ form.addEventListener("submit", async (e) => {
     toast.textContent = "Submitted. Returning to guide…";
     toast.style.display = "block";
 
+    const backUrl =
+      returnUrl ||
+      document.referrer ||
+      "/";
+
     setTimeout(() => {
-      window.location.href =
-        returnUrl || document.referrer || "/";
+      window.location.href = backUrl;
     }, 900);
   } else {
     toast.textContent = "Something went wrong. Please try again.";
