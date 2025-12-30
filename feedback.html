@@ -7,42 +7,40 @@
 
 <style>
   /* ================================
-     页面整体布局
-     使用 Flex 让内容在屏幕中间
+     页面整体布局（移动端居中）
      ================================ */
   body{
     margin:0;
-    min-height:100vh;              /* 占满整个屏幕高度 */
+    min-height:100vh;
     background:#f6f6f6;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 
-    display:flex;                  /* 启用 Flex 布局 */
-    align-items:center;            /* 垂直居中 */
-    justify-content:center;        /* 水平居中 */
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
-  /* 主容器（卡片） */
+  /* 主卡片 */
   .wrap{
     max-width:680px;
     width:100%;
-    margin:16px;                   /* 防止贴边（移动端） */
+    margin:16px;
     background:#fff;
     border-radius:14px;
     padding:24px 24px 20px;
     box-shadow:0 16px 40px rgba(0,0,0,.12);
   }
 
-  /* 标题 */
   h1{
     font-size:22px;
     margin:0 0 16px;
   }
 
-  /* 表情评分区域 */
+  /* 表情区 */
   .faces{
     display:flex;
     gap:14px;
-    margin-bottom:16px;
+    margin-bottom:8px;
   }
 
   .face{
@@ -60,22 +58,9 @@
     outline:2px solid #111;
   }
 
-  /* Next 按钮 */
+  /* 不再需要 Next，隐藏即可 */
   .next{
-    margin-left:auto;
-    padding:12px 18px;
-    border-radius:10px;
-    border:none;
-    font-weight:700;
-    background:#d9d9d9;
-    color:#666;
-    cursor:not-allowed;
-  }
-
-  .next.enabled{
-    background:#111;
-    color:#fff;
-    cursor:pointer;
+    display:none;
   }
 
   /* Step 控制 */
@@ -111,7 +96,6 @@
     resize:vertical;
   }
 
-  /* 底部按钮区域 */
   .footer{
     display:flex;
     justify-content:space-between;
@@ -138,7 +122,6 @@
     cursor:pointer;
   }
 
-  /* 提交状态提示 */
   .toast{
     display:none;
     margin-top:14px;
@@ -165,17 +148,18 @@
       <button type="button" class="face" data-rating="happy">🙂</button>
     </div>
 
+    <!-- Next 按钮已隐藏，仅保留结构 -->
     <button type="button" class="next" id="nextBtn">Next →</button>
   </div>
 
   <!-- ================================
-       STEP 2：补充反馈
+       STEP 2：补充反馈（可选）
        ================================ -->
   <div class="step" id="step2">
     <h1>Thanks for your feedback</h1>
 
     <form id="feedbackForm">
-      <!-- 隐藏字段：用于数据归因 -->
+      <!-- 隐藏字段：数据归因 -->
       <input type="hidden" name="product_id" id="product_id">
       <input type="hidden" name="page_id" id="page_id">
       <input type="hidden" name="rating" id="ratingInput">
@@ -206,7 +190,7 @@
 
 <script>
 /* ================================
-   配置：Formspree 接口地址
+   Formspree 配置
 ================================ */
 const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
@@ -214,21 +198,19 @@ const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
    读取 URL 参数
 ================================ */
 const params = new URLSearchParams(window.location.search);
-const productId = params.get("product_id");   // 产品 ID
-const pageId = params.get("page_id");         // 页面 ID
-const returnUrl = params.get("return_url");   // 返回说明书地址
+const productId = params.get("product_id");
+const pageId = params.get("page_id");
+const returnUrl = params.get("return_url");
 
-// 写入隐藏字段（兜底处理）
 document.getElementById("product_id").value = productId || "unknown";
 document.getElementById("page_id").value = pageId || "overall";
 
 /* ================================
-   UI 元素引用
+   UI 元素
 ================================ */
 const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
 const faces = document.querySelectorAll(".face");
-const nextBtn = document.getElementById("nextBtn");
 const ratingInput = document.getElementById("ratingInput");
 const backBtn = document.getElementById("backBtn");
 const form = document.getElementById("feedbackForm");
@@ -236,31 +218,30 @@ const toast = document.getElementById("toast");
 
 let rating = "";
 
-/* 表情选择逻辑 */
+/* ================================
+   表情点击 → 自动进入下一页
+================================ */
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
+
     rating = btn.dataset.rating;
     ratingInput.value = rating;
-    nextBtn.classList.add("enabled");
+
+    step1.classList.remove("active");
+    step2.classList.add("active");
   });
 });
 
-/* Step 切换 */
-nextBtn.addEventListener("click", () => {
-  if (!rating) return;
-  step1.classList.remove("active");
-  step2.classList.add("active");
-});
-
+/* 返回上一步 */
 backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
 });
 
 /* ================================
-   提交反馈并返回说明书
+   提交反馈（唯一记录点）
 ================================ */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
