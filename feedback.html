@@ -209,7 +209,6 @@ textarea {
   <!-- STEP 2: Comment -->
   <div class="card step" id="step2">
     <h2>Tell Us More <span class="optional">(optional)</span></h2>
-    <div class="subtext">Anything you'd like to add.</div>
 
     <form id="feedbackForm">
       <!-- hidden context -->
@@ -227,13 +226,13 @@ textarea {
       </label>
       <input type="email" name="email" style="font-style: italic;" placeholder="If you'd like us to get back to you.">
 
-      <div class="helper-text">You can submit without leaving a comment.</div>
-
       <div class="footer">
         <button type="button" class="back" id="backBtn">← Back</button>
         <button type="submit" class="submit">Submit ✓</button>
       </div>
-
+       
+      <div class="helper-text">You can submit without leaving a comment.</div>
+       
       <div class="toast" id="toast"></div>
     </form>
   </div>
@@ -309,3 +308,4 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
+
