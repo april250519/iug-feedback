@@ -64,15 +64,14 @@ h2 {
 =============================== */
 .faces {
   display: flex;
-  gap: 10px;                   /* 设置按钮之间的间距 */
-  justify-content: space-around; /* 保证三个按钮平衡分布 */
-  width: 100%;
+  justify-content: center;        /* 居中对齐所有表情 */
+  gap: 20px;                       /* 保证表情间有一定间距 */
+  margin-top: 20px;
 }
 
 .face {
-  flex: 1;
-  min-width: 90px;             /* 确保按钮宽度足够显示每个表情 */
-  padding: 10px;               /* 为了给表情留白，避免紧凑 */
+  width: 90px;                     /* 每个按钮宽度相同 */
+  padding: 14px;                   /* 增加表情按钮的上下边距 */
   border: 1px solid #ddd;
   border-radius: 14px;
   background: #fff;
@@ -81,11 +80,12 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 .face img {
-  width: 48px;                 /* 图片最大宽度，适配手机 */
-  height: 48px;                /* 确保图片显示正常 */
+  width: 48px;                     /* 图片适应按钮大小 */
+  height: 48px;
   object-fit: contain;
   margin-bottom: 8px;
 }
@@ -312,4 +312,5 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
+
 
