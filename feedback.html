@@ -80,7 +80,7 @@ h2 {
 .face img {
   display: block;
   margin: 0 auto 8px;
-  width: auto;   /* 图片本身已优化，不再压缩 */
+  width: auto;
   height: auto;
 }
 
@@ -206,7 +206,7 @@ textarea {
   <!-- STEP 2: Comment -->
   <div class="card step" id="step2">
     <h2>Tell us more <span class="optional">(optional)</span></h2>
-    <div class="subtext">Help us improve this guide.</div>
+    <div class="subtext">Anything you'd like to add.</div>
 
     <form id="feedbackForm">
       <!-- hidden context -->
@@ -218,13 +218,15 @@ textarea {
         Share your thoughts
       </label>
       <textarea name="message" placeholder="What was confusing or missing?"></textarea>
-      <div class="helper-text">We read every message you send.</div>
+      <div class="helper-text" style="font-style: italic;">We read every message you send.</div>
 
       <label>
         Your email
       </label>
       <input type="email" name="email" placeholder="If you'd like us to get back to you.">
-      <div class="helper-text">Only used for follow-up. We respect your privacy.</div>
+      <div class="helper-text" style="font-style: italic;">Only used for follow-up. We respect your privacy.</div>
+
+      <div class="helper-text">You can submit without leaving a comment.</div>
 
       <div class="footer">
         <button type="button" class="back" id="backBtn">← Back</button>
