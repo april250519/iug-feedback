@@ -90,15 +90,15 @@ h2 {
   margin-bottom: 8px;
 }
 
+.face.selected {
+  border-color: #111;
+  outline: 2px solid #111;
+}
+
 .face-label {
   font-size: 14px;
   font-weight: 600;
   color: #111;
-}
-
-.face.selected {
-  border-color: #111;
-  outline: 2px solid #111;
 }
 
 /* ===============================
@@ -194,24 +194,21 @@ textarea {
     <div class="faces">
       <button class="face" data-rating="not_helpful" type="button">
         <img src="rate-unsatisfied.png" alt="Not helpful">
-        <div class="face-label">Not helpful</div>
       </button>
 
       <button class="face" data-rating="partly_helpful" type="button">
         <img src="rate-neutral.png" alt="Partly helpful">
-        <div class="face-label">Partly helpful</div>
       </button>
 
       <button class="face" data-rating="helpful" type="button">
         <img src="rate-satisfied.png" alt="Helpful">
-        <div class="face-label">Helpful</div>
       </button>
     </div>
   </div>
 
   <!-- STEP 2: Comment -->
   <div class="card step" id="step2">
-    <h2>Tell us more <span class="optional">(optional)</span></h2>
+    <h2>Tell Us More <span class="optional">(optional)</span></h2>
     <div class="subtext">Anything you'd like to add.</div>
 
     <form id="feedbackForm">
