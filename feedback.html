@@ -6,43 +6,39 @@
 <title>Guide Feedback</title>
 
 <style>
-/* ================================
-   Page background & layout
-================================ */
-html, body {
-  margin: 0;
-  padding: 0;
-  background: #f6f6f6;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
-
+/* ===============================
+   Page layout
+=============================== */
 body {
+  margin: 0;
   min-height: 100vh;
+  background: #ffffff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 18vh; /* 视觉居中偏上 */
 }
 
-/* ================================
-   Main card
-================================ */
 .wrap {
   width: 100%;
-  max-width: 680px;
-  margin: 0 16px;
-  background: #fff;
+  max-width: 720px;
+  padding: 20px;
+}
+
+.card {
+  background: #ffffff;
   border-radius: 16px;
-  padding: 28px 24px 22px;
+  padding: 24px;
   box-shadow: 0 16px 40px rgba(0,0,0,.12);
 }
 
-/* ================================
-   Typography
-================================ */
+/* ===============================
+   Headings
+=============================== */
 h1 {
   font-size: 22px;
-  margin: 0 0 18px;
+  margin: 0 0 16px;
 }
 
 h2 {
@@ -56,66 +52,42 @@ h2 {
   margin-bottom: 16px;
 }
 
-label {
-  font-weight: 700;
-  display: block;
-  margin-top: 18px;
-}
-
 .optional {
-  font-weight: 400;
   font-size: 12px;
-  opacity: .6;
-  margin-left: 6px;
+  color: #888;
+  font-weight: 400;
+  margin-left: 4px;
 }
 
-.helper {
-  font-size: 13px;
-  color: #666;
-  margin: 6px 0 6px;
-  font-style: italic;
-}
-
-/* ================================
-   Step control
-================================ */
-.step {
-  display: none;
-}
-.step.active {
-  display: block;
-}
-
-/* ================================
+/* ===============================
    Rating buttons
-================================ */
+=============================== */
 .faces {
   display: flex;
-  gap: 14px;
+  gap: 16px;
 }
 
 .face {
   flex: 1;
-  border: 1px solid #ddd;
-  border-radius: 12px;
   background: #fff;
-  padding: 14px 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 14px 10px 12px;
   cursor: pointer;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  text-align: center;
 }
 
 .face img {
-  width: 42px;
-  height: 42px;
+  display: block;
+  margin: 0 auto 8px;
+  width: auto;   /* 图片本身已优化，不再压缩 */
+  height: auto;
 }
 
 .face-label {
-  font-size: 13px;
-  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
 }
 
 .face.selected {
@@ -123,63 +95,85 @@ label {
   outline: 2px solid #111;
 }
 
-/* ================================
-   Form fields
-================================ */
+/* ===============================
+   Step control
+=============================== */
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+/* ===============================
+   Form
+=============================== */
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 18px;
+}
+
 textarea,
 input {
   width: 100%;
-  box-sizing: border-box;
-  margin-top: 6px;
+  margin-top: 8px;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #ddd;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 textarea {
-  min-height: 110px;
+  min-height: 120px;
   resize: vertical;
 }
 
-/* ================================
-   Footer buttons
-================================ */
+.helper-text {
+  font-size: 13px;
+  color: #777;
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* ===============================
+   Footer
+=============================== */
 .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 22px;
+  margin-top: 24px;
 }
 
 .back {
-  border: none;
   background: none;
+  border: none;
   color: #1a73e8;
-  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
 }
 
 .submit {
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: none;
   background: #111;
   color: #fff;
-  font-weight: 800;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 22px;
+  font-weight: 700;
   cursor: pointer;
 }
 
-/* ================================
+/* ===============================
    Toast
-================================ */
+=============================== */
 .toast {
   display: none;
-  margin-top: 14px;
-  padding: 10px 12px;
-  background: #f0f0f0;
-  border-radius: 8px;
+  margin-top: 16px;
   font-size: 13px;
+  color: #555;
 }
 </style>
 </head>
@@ -187,55 +181,50 @@ textarea {
 <body>
 <div class="wrap">
 
-  <!-- ================================
-       STEP 1 – Rating
-  ================================= -->
-  <div class="step active" id="step1">
+  <!-- STEP 1: Rating -->
+  <div class="card step active" id="step1">
     <h1>Was this guide helpful?</h1>
 
     <div class="faces">
-      <button type="button" class="face" data-rating="not_helpful">
-        <img src="./rate-unsatisfied.png" alt="Not helpful">
-        <span class="face-label">Not helpful</span>
+      <button class="face" data-rating="not_helpful" type="button">
+        <img src="rate-unsatisfied.png" alt="Not helpful">
+        <div class="face-label">Not helpful</div>
       </button>
 
-      <button type="button" class="face" data-rating="partly_helpful">
-        <img src="./rate-neutral.png" alt="Partly helpful">
-        <span class="face-label">Partly helpful</span>
+      <button class="face" data-rating="partly_helpful" type="button">
+        <img src="rate-neutral.png" alt="Partly helpful">
+        <div class="face-label">Partly helpful</div>
       </button>
 
-      <button type="button" class="face" data-rating="helpful">
-        <img src="./rate-satisfied.png" alt="Helpful">
-        <span class="face-label">Helpful</span>
+      <button class="face" data-rating="helpful" type="button">
+        <img src="rate-satisfied.png" alt="Helpful">
+        <div class="face-label">Helpful</div>
       </button>
     </div>
   </div>
 
-  <!-- ================================
-       STEP 2 – Details
-  ================================= -->
-  <div class="step" id="step2">
+  <!-- STEP 2: Comment -->
+  <div class="card step" id="step2">
     <h2>Tell us more <span class="optional">(optional)</span></h2>
     <div class="subtext">Help us improve this guide.</div>
 
     <form id="feedbackForm">
-      <!-- Context fields -->
+      <!-- hidden context -->
       <input type="hidden" name="product_id" id="product_id">
       <input type="hidden" name="page_id" id="page_id">
       <input type="hidden" name="rating" id="ratingInput">
-      <input type="hidden" name="source" value="iug_feedback">
 
       <label>
-        Share your thoughts <span class="optional">(optional)</span>
+        Share your thoughts
       </label>
-      <div class="helper"><em>We read every message you send.</em></div>
       <textarea name="message" placeholder="What was confusing or missing?"></textarea>
+      <div class="helper-text">We read every message you send.</div>
 
       <label>
-        Your email <span class="optional">(optional)</span>
+        Your email
       </label>
-      <div class="helper"><em>Only used for follow-up. We respect your privacy.</em></div>
-      <input type="email" name="email" placeholder="If you’d like us to get back to you.">
+      <input type="email" name="email" placeholder="If you'd like us to get back to you.">
+      <div class="helper-text">Only used for follow-up. We respect your privacy.</div>
 
       <div class="footer">
         <button type="button" class="back" id="backBtn">← Back</button>
@@ -249,41 +238,34 @@ textarea {
 </div>
 
 <script>
-/* ================================
+/* ===============================
    Config
-================================ */
+=============================== */
 const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
-/* ================================
+/* ===============================
    Read URL params
-================================ */
+=============================== */
 const params = new URLSearchParams(window.location.search);
-const productId = params.get("product_id") || "unknown";
-const pageId = params.get("page_id") || "overall";
+document.getElementById("product_id").value = params.get("product_id") || "unknown";
+document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
-document.getElementById("product_id").value = productId;
-document.getElementById("page_id").value = pageId;
-
-/* ================================
-   Elements
-================================ */
+/* ===============================
+   UI logic
+=============================== */
+const faces = document.querySelectorAll(".face");
 const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
-const faces = document.querySelectorAll(".face");
 const ratingInput = document.getElementById("ratingInput");
 const backBtn = document.getElementById("backBtn");
 const form = document.getElementById("feedbackForm");
 const toast = document.getElementById("toast");
 
-/* ================================
-   Rating selection
-================================ */
 faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
-
     ratingInput.value = btn.dataset.rating;
 
     step1.classList.remove("active");
@@ -291,17 +273,14 @@ faces.forEach(btn => {
   });
 });
 
-/* ================================
-   Back button
-================================ */
 backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
 });
 
-/* ================================
+/* ===============================
    Submit
-================================ */
+=============================== */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -327,4 +306,3 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
-
