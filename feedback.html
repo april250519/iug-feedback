@@ -64,24 +64,30 @@ h2 {
 =============================== */
 .faces {
   display: flex;
-  gap: 16px;
+  gap: 10px;                   /* 设置按钮之间的间距 */
+  justify-content: space-around; /* 保证三个按钮平衡分布 */
+  width: 100%;
 }
 
 .face {
   flex: 1;
-  background: #fff;
+  min-width: 90px;             /* 确保按钮宽度足够显示每个表情 */
+  padding: 10px;               /* 为了给表情留白，避免紧凑 */
   border: 1px solid #ddd;
   border-radius: 14px;
-  padding: 14px 10px 12px;
+  background: #fff;
   cursor: pointer;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .face img {
-  display: block;
-  margin: 0 auto 8px;
-  width: auto;
-  height: auto;
+  width: 48px;                 /* 图片最大宽度，适配手机 */
+  height: 48px;                /* 确保图片显示正常 */
+  object-fit: contain;
+  margin-bottom: 8px;
 }
 
 .face-label {
