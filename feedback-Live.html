@@ -1,1 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Guide Feedback</title>
 
+<style>
+/* ===============================
+   Page layout
+=============================== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #ffffff;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 720px;
+  padding: 20px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.12);
+}
+
+/* ===============================
+   Headings
+=============================== */
+h1 {
+  font-size: 22px;
+  margin: 0 0 16px;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+
+.subtext {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+
+/* ===============================
+   Optional Text Styling
+=============================== */
+.optional {
+  font-size: 12px;
+  color: #FFA500;  /* 黄色字体 */
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* ===============================
+   Rating buttons
+=============================== */
+.faces {
+  display: flex;
+  justify-content: center;        /* 居中对齐所有表情 */
+  gap: 20px;                       /* 保证表情间有一定间距 */
+  margin-top: 20px;
+}
+
+.face {
+  width: 90px;                     /* 每个按钮宽度相同 */
+  padding: 14px;                   /* 增加表情按钮的上下边距 */
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.face img {
+  width: 48px;                     /* 图片适应按钮大小 */
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.face.selected {
+  border-color: #111;
+  outline: 2px solid #111;
+}
+
+.face-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* ===============================
+   Step control
+=============================== */
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+/* ===============================
+   Form
+=============================== */
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 18px;
+}
+
+textarea,
+input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.helper-text {
+  font-size: 13px;
+  color: #777;
+  font-style: italic;
+  margin-top: 16px; /* 下移一些空间 */
+}
+
+/* ===============================
+   Footer
+=============================== */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.submit {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ===============================
+   Toast
+=============================== */
+.toast {
+  display: none;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #555;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- STEP 1: Rating -->
+  <div class="card step active" id="step1">
+    <h1>Was this guide helpful?</h1>
+
+    <div class="faces">
+             <button class="face" data-rating="Satisfied" type="button">
+        <img src="rate-satisfied.png" alt="Helpful">
+      </button>
+     
+      <button class="face" data-rating="Neutral" type="button">
+        <img src="rate-neutral.png" alt="Partly helpful">
+      </button>
+
+ <button class="face" data-rating="Unsatisfied" type="button">
+        <img src="rate-unsatisfied.png" alt="Not helpful">
+      </button>
+
+    </div>
+  </div>
+
+  <!-- STEP 2: Comment -->
+  <div class="card step" id="step2">
+    <h2>Tell Us More <span class="optional">(optional)</span></h2>
+
+    <form id="feedbackForm">
+      <!-- hidden context -->
+      <input type="hidden" name="product_id" id="product_id">
+      <input type="hidden" name="page_id" id="page_id">
+      <input type="hidden" name="rating" id="ratingInput">
+
+      <label>
+        Share your thoughts
+      </label>
+      <textarea name="message" style="font-style: italic;" placeholder="We read every message you send."></textarea>
+    
+      <label>
+        Your email
+      </label>
+      <input type="email" name="email" style="font-style: italic;" placeholder="If you'd like us to get back to you.">
+
+      <div class="footer">
+        <button type="button" class="back" id="backBtn">← Back</button>
+        <button type="submit" class="submit">Submit ✓</button>
+      </div>
+       
+      <div class="helper-text">You can submit without leaving a comment.</div>
+       
+      <div class="toast" id="toast"></div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+/* ===============================
+   Config
+=============================== */
+const FORM_ENDPOINT = "https://formspree.io/f/xykzqgbg";
+
+/* ===============================
+   Read URL params
+=============================== */
+const params = new URLSearchParams(window.location.search);
+document.getElementById("product_id").value = params.get("product_id") || "unknown";
+document.getElementById("page_id").value = params.get("page_id") || "overall";
+const returnUrl = params.get("return_url");
+
+/* ===============================
+   UI logic
+=============================== */
+const faces = document.querySelectorAll(".face");
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const ratingInput = document.getElementById("ratingInput");
+const backBtn = document.getElementById("backBtn");
+const form = document.getElementById("feedbackForm");
+const toast = document.getElementById("toast");
+
+faces.forEach(btn => {
+  btn.addEventListener("click", async () => {
+    faces.forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+
+    const rating = btn.dataset.rating;
+    ratingInput.value = rating;
+
+    // NEW: submit rating immediately (so you still collect data even if user doesn't submit step 2)
+    const data = new FormData();
+    data.append("product_id", document.getElementById("product_id").value);
+    data.append("page_id", document.getElementById("page_id").value);
+    data.append("rating", rating);
+
+    try {
+      await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        body: data,
+        headers: { "Accept": "application/json" }
+      });
+    } catch (e) {
+      // do not block UX
+      console.warn("Rating submit failed", e);
+    }
+
+    step1.classList.remove("active");
+    step2.classList.add("active");
+  });
+});
+
+backBtn.addEventListener("click", () => {
+  step2.classList.remove("active");
+  step1.classList.add("active");
+});
+
+/* ===============================
+   Submit
+=============================== */
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = new FormData(form);
+  const res = await fetch(FORM_ENDPOINT, {
+    method: "POST",
+    body: data,
+    headers: { "Accept": "application/json" }
+  });
+
+  if (res.ok) {
+    toast.textContent = "Thanks! Returning to the guide…";
+    toast.style.display = "block";
+
+    setTimeout(() => {
+      window.location.href = returnUrl || document.referrer || "/";
+    }, 900);
+  } else {
+    toast.textContent = "Something went wrong. Please try again.";
+    toast.style.display = "block";
+  }
+});
+</script>
+</body>
+</html>
