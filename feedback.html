@@ -263,6 +263,20 @@ faces.forEach(btn => {
     btn.classList.add("selected");
     ratingInput.value = btn.dataset.rating;
 
+    const data = new FormData();
+    data.append("type", "rating");          // 用于区分是评分
+    data.append("rating", rating);
+    data.append("product_id", productId);
+    data.append("page_id", pageId);
+
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      body: data,
+      headers: { "Accept": "application/json" }
+    }).catch(() => {
+      // 静默失败，不影响用户流程
+    });
+     
     step1.classList.remove("active");
     step2.classList.add("active");
   });
@@ -304,3 +318,4 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
+
