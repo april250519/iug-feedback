@@ -261,7 +261,9 @@ faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
-    ratingInput.value = btn.dataset.rating;
+
+    const rating = btn.dataset.rating;   // ← 关键这一行
+    ratingInput.value = rating;
 
     const data = new FormData();
     data.append("type", "rating");
@@ -274,16 +276,12 @@ faces.forEach(btn => {
       body: data,
       headers: { "Accept": "application/json" }
     }).catch(() => {});
-     
+
     step1.classList.remove("active");
     step2.classList.add("active");
   });
 });
 
-backBtn.addEventListener("click", () => {
-  step2.classList.remove("active");
-  step1.classList.add("active");
-});
 
 /* ===============================
    Submit (with duplicate protection)
@@ -316,5 +314,6 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
+
 
 
