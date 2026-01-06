@@ -282,6 +282,18 @@ faces.forEach(btn => {
   });
 });
 
+   backBtn.addEventListener("click", () => {
+  // 返回到评分页
+  step2.classList.remove("active");
+  step1.classList.add("active");
+
+  // 清除表情选中状态
+  faces.forEach(b => b.classList.remove("selected"));
+
+  // 清空评分值（防止残留）
+  ratingInput.value = "";
+});
+
 
 /* ===============================
    Submit (with duplicate protection)
@@ -314,6 +326,7 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
+
 
 
 
