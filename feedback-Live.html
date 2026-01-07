@@ -307,7 +307,7 @@ form.addEventListener("submit", async (e) => {
     toast.style.display = "block";
 
     setTimeout(() => {
-      window.location.href = returnUrl || "/";
+     window.location.href = document.referrer || returnUrl || "/";
     }, 900);
   } else {
     toast.textContent = "Something went wrong. Please try again.";
