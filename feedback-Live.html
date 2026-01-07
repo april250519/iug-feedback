@@ -245,6 +245,20 @@ document.getElementById("product_id").value = params.get("product_id") || "unkno
 document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
+   // ===============================
+// Detect language from IUG referrer
+// ===============================
+function detectLangFromReferrer() {
+  const ref = document.referrer || "";
+
+  // 支持所有 IUG 语言后缀
+  const match = ref.match(/\/(EN|ES|IT|FR|DE|JP|PL|SE|CZ|SK|NL|HE|RU)\//i);
+
+  return match ? match[1].toUpperCase() : null;
+}
+
+const detectedLang = detectLangFromReferrer()
+
 /* ===============================
    UI logic
 =============================== */
