@@ -245,16 +245,17 @@ document.getElementById("product_id").value = params.get("product_id") || "unkno
 document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
-   // ===============================
-// Detect user language (EN / DE / FR)
+  // ===============================
+// Detect language from IUG referrer
 // ===============================
-const userLang = navigator.language || navigator.userLanguage; // e.g. en-US
-const langCode = userLang.slice(0, 2).toUpperCase();           // EN / DE / FR
+function detectLangFromReferrer() {
+  const ref = document.referrer || "";
+  const match = ref.match(/\/(EN|DE|FR)\//i);
+  return match ? match[1].toUpperCase() : null;
+}
 
-const supportedLangs = ["EN", "DE", "FR"];
-const finalLang = supportedLangs.includes(langCode)
-  ? langCode
-  : "EN"; // fallback
+const finalLang = detectLangFromReferrer();
+
 
 /* ===============================
    UI logic
@@ -304,14 +305,17 @@ form.addEventListener("submit", async (e) => {
     toast.style.display = "block";
 
     setTimeout(() => {
-      // ===============================
-// Return to correct language IUG
-// ===============================
-if (returnUrl) {
-  window.location.href = `${returnUrl}${finalLang}/`;
-} else {
-  window.location.href = "/";
+    if (res.ok) {
+  setTimeout(() => {
+    if (returnUrl && finalLang) {
+      window.location.href = `${returnUrl}${finalLang}/`;
+    } else {
+      // 理论上不会走到这里，可作为兜底
+      window.location.href = "/";
+    }
+  }, 900);
 }
+
 
     }, 900);
   } else {
@@ -323,4 +327,5 @@ if (returnUrl) {
 </script>
 </body>
 </html>
+
 
