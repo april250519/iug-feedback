@@ -261,39 +261,17 @@ faces.forEach(btn => {
   btn.addEventListener("click", () => {
     faces.forEach(b => b.classList.remove("selected"));
     btn.classList.add("selected");
-
-    const rating = btn.dataset.rating;   // ← 关键这一行
-    ratingInput.value = rating;
-
-    const data = new FormData();
-    data.append("type", "rating");
-    data.append("rating", rating);
-    data.append("product_id", document.getElementById("product_id").value);
-    data.append("page_id", document.getElementById("page_id").value);
-
-    fetch(FORM_ENDPOINT, {
-      method: "POST",
-      body: data,
-      headers: { "Accept": "application/json" }
-    }).catch(() => {});
+    ratingInput.value = btn.dataset.rating;
 
     step1.classList.remove("active");
     step2.classList.add("active");
   });
 });
 
-   backBtn.addEventListener("click", () => {
-  // 返回到评分页
+backBtn.addEventListener("click", () => {
   step2.classList.remove("active");
   step1.classList.add("active");
-
-  // 清除表情选中状态
-  faces.forEach(b => b.classList.remove("selected"));
-
-  // 清空评分值（防止残留）
-  ratingInput.value = "";
 });
-
 
 /* ===============================
    Submit (with duplicate protection)
@@ -326,8 +304,3 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
-
-
-
-
-
