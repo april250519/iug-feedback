@@ -245,6 +245,17 @@ document.getElementById("product_id").value = params.get("product_id") || "unkno
 document.getElementById("page_id").value = params.get("page_id") || "overall";
 const returnUrl = params.get("return_url");
 
+   // ===============================
+// Detect user language (EN / DE / FR)
+// ===============================
+const userLang = navigator.language || navigator.userLanguage; // e.g. en-US
+const langCode = userLang.slice(0, 2).toUpperCase();           // EN / DE / FR
+
+const supportedLangs = ["EN", "DE", "FR"];
+const finalLang = supportedLangs.includes(langCode)
+  ? langCode
+  : "EN"; // fallback
+
 /* ===============================
    UI logic
 =============================== */
@@ -293,7 +304,15 @@ form.addEventListener("submit", async (e) => {
     toast.style.display = "block";
 
     setTimeout(() => {
-      window.location.href = returnUrl || "/";
+      // ===============================
+// Return to correct language IUG
+// ===============================
+if (returnUrl) {
+  window.location.href = `${returnUrl}${finalLang}/`;
+} else {
+  window.location.href = "/";
+}
+
     }, 900);
   } else {
     toast.textContent = "Something went wrong. Please try again.";
@@ -304,3 +323,4 @@ form.addEventListener("submit", async (e) => {
 </script>
 </body>
 </html>
+
