@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guide Feedback</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f7f5f7;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 16px;
+      box-sizing: border-box;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .card {
+      background: transparent;
+      border-radius: 20px;
+      padding: 20px 8px 28px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      background: #95c11f;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 16px 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: opacity 0.2s ease;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 28px 0 18px;
+      color: #222;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-top: 3px dotted #222;
+      opacity: 0.8;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: #222;
+      text-align: center;
+      margin: 0 0 18px;
+    }
+
+    textarea,
+    input[type="email"] {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #e3dfe7;
+      border-radius: 12px;
+      background: #fbfafc;
+      font-size: 15px;
+      color: #222;
+      padding: 16px 18px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      margin-bottom: 18px;
+    }
+
+    input[type="email"] {
+      height: 42px;
+      margin-bottom: 12px;
+    }
+
+    textarea::placeholder,
+    input[type="email"]::placeholder {
+      color: #8f8a93;
+    }
+
+    .helper {
+      font-size: 14px;
+      line-height: 1.45;
+      color: #8f8a93;
+      font-style: italic;
+      margin: 0;
+    }
+
+    .thank-you {
+      display: none;
+      text-align: center;
+      padding: 24px 8px;
+    }
+
+    .thank-you.active {
+      display: block;
+    }
+
+    .thank-you h2 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      line-height: 1.2;
+      color: #222;
+    }
+
+    .thank-you p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #666;
+    }
+
+    .form-view.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <!-- Form View -->
+      <div class="form-view" id="formView">
+        <form id="feedbackForm">
+          <!-- hidden context -->
+          <input type="hidden" name="rating" id="ratingInput" />
+          <input type="hidden" name="product_id" id="productIdInput" />
+          <input type="hidden" name="page_id" id="pageIdInput" />
+          <input type="hidden" name="lang" id="langInput" />
+
+          <button type="submit" class="submit-btn" id="submitBtn">Send now</button>
+
+          <div class="divider">Add a comment (Optional)</div>
+
+          <textarea
+            name="message"
+            id="messageInput"
+            placeholder="Tell us more..."
+          ></textarea>
+
+          <input
+            type="email"
+            name="email"
+            id="emailInput"
+            placeholder="Email..."
+          />
+
+          <p class="helper">Your comment will be included when you send.</p>
+        </form>
+      </div>
+
+      <!-- Thank You View -->
+      <div class="thank-you" id="thankYouView">
+        <h2>Thanks for your feedback!</h2>
+        <p>Your feedback helps us improve this guide for everyone.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
+
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get("return_url");
+
+    const ratingInput = document.getElementById("ratingInput");
+    const productIdInput = document.getElementById("productIdInput");
+    const pageIdInput = document.getElementById("pageIdInput");
+    const langInput = document.getElementById("langInput");
+
+    const form = document.getElementById("feedbackForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const formView = document.getElementById("formView");
+    const thankYouView = document.getElementById("thankYouView");
+
+    function detectLangFromReferrer() {
+      const ref = document.referrer || "";
+      const match = ref.match(/\/(EN|ES|IT|FR|DE|JP|PL|SE|CZ|SK|NL|HE|RU)\//i);
+      return match ? match[1].toUpperCase() : "";
+    }
+
+    ratingInput.value = params.get("rating") || "unknown";
+    productIdInput.value = params.get("product_id") || "unknown";
+    pageIdInput.value = params.get("page_id") || "overall";
+    langInput.value = params.get("lang") || detectLangFromReferrer() || "";
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+
+      try {
+        const data = new FormData(form);
+
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          body: data,
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Submit failed");
+        }
+
+        formView.classList.add("hidden");
+        thankYouView.classList.add("active");
+
+        setTimeout(() => {
+          window.location.href = document.referrer || returnUrl || "/";
+        }, 1200);
+
+      } catch (err) {
+        alert("Something went wrong. Please try again.");
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
