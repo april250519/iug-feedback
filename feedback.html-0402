@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guide Feedback</title>
 
+  <!-- Avantree 风格字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
       min-height: 100vh;
       background: #f7f5f7;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -23,24 +26,20 @@
       max-width: 520px;
     }
 
-    .card {
-      background: transparent;
-      border-radius: 20px;
-      padding: 20px 8px 28px;
-    }
-
+    /* 主按钮 */
     .submit-btn {
       width: 100%;
       border: none;
       border-radius: 14px;
       background: #95c11f;
       color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-      padding: 16px 20px;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 16px;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(149, 193, 31, 0.18);
-      transition: opacity 0.2s ease, transform 0.15s ease;
+      letter-spacing: 0.3px;
+      box-shadow: 0 6px 18px rgba(149,193,31,0.2);
+      transition: all 0.2s ease;
     }
 
     .submit-btn:hover {
@@ -48,66 +47,57 @@
     }
 
     .submit-btn:disabled {
-      opacity: 0.65;
+      opacity: 0.6;
       cursor: not-allowed;
-      transform: none;
     }
 
+    /* Optional 区域卡片 */
     .optional-block {
-      margin-top: 22px;
+      margin-top: 20px;
       background: #f1eef3;
-      border: 1px solid #e7e1ea;
+      border: 1px solid #e6e1e9;
       border-radius: 18px;
-      padding: 18px 14px 16px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+      padding: 18px 14px;
     }
 
+    /* 虚线标题 */
     .divider {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      margin: 0 0 16px;
-      color: #2a2a2a;
-      font-size: 17px;
+      margin-bottom: 16px;
+      font-size: 16px;
       font-weight: 500;
-      line-height: 1.2;
-      text-align: center;
+      color: #2a2a2a;
     }
 
     .divider::before,
     .divider::after {
       content: "";
       flex: 1;
-      border-top: 3px dotted #4a4a4a;
-      opacity: 0.85;
-      min-width: 40px;
+      border-top: 3px dotted #333;
+      opacity: 0.7;
     }
 
+    /* 输入框 */
     textarea,
     input[type="email"] {
       width: 100%;
-      box-sizing: border-box;
       border: 1px solid #ddd6e1;
       border-radius: 14px;
       background: #faf8fb;
-      font-size: 15px;
-      color: #222;
-      padding: 16px 18px;
+      font-size: 14px;
+      font-family: "Inter", sans-serif;
+      padding: 14px 16px;
       outline: none;
-      box-shadow: 0 1px 0 rgba(255,255,255,0.7);
-    }
-
-    textarea:focus,
-    input[type="email"]:focus {
-      border-color: #c9bed0;
-      background: #fff;
+      box-sizing: border-box;
     }
 
     textarea {
-      min-height: 180px;
+      min-height: 160px;
+      margin-bottom: 12px;
       resize: vertical;
-      margin-bottom: 14px;
     }
 
     input[type="email"] {
@@ -115,23 +105,30 @@
       margin-bottom: 10px;
     }
 
-    textarea::placeholder,
-    input[type="email"]::placeholder {
-      color: #8f8a93;
+    textarea:focus,
+    input:focus {
+      background: #fff;
+      border-color: #cfc7d6;
     }
 
+    textarea::placeholder,
+    input::placeholder {
+      color: #9a95a0;
+    }
+
+    /* helper 文案 */
     .helper {
-      font-size: 14px;
-      line-height: 1.45;
+      font-size: 13px;
       color: #8d8891;
       font-style: italic;
       margin: 0;
     }
 
+    /* Thank you */
     .thank-you {
       display: none;
       text-align: center;
-      padding: 24px 8px;
+      padding: 40px 10px;
     }
 
     .thank-you.active {
@@ -140,15 +137,13 @@
 
     .thank-you h2 {
       margin: 0 0 10px;
-      font-size: 26px;
-      line-height: 1.2;
-      color: #222;
+      font-size: 24px;
+      font-weight: 600;
     }
 
     .thank-you p {
       margin: 0;
-      font-size: 16px;
-      line-height: 1.5;
+      font-size: 15px;
       color: #666;
     }
 
@@ -157,72 +152,66 @@
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="card">
-      <div class="form-view" id="formView">
-        <form id="feedbackForm">
-          <input type="hidden" name="rating" id="ratingInput" />
-          <input type="hidden" name="product_id" id="productIdInput" />
-          <input type="hidden" name="page_id" id="pageIdInput" />
-          <input type="hidden" name="lang" id="langInput" />
 
-          <button type="submit" class="submit-btn" id="submitBtn">Send now</button>
+    <div class="form-view" id="formView">
+      <form id="feedbackForm">
 
-          <div class="optional-block">
-            <div class="divider">Add a comment (Optional)</div>
+        <!-- hidden fields -->
+        <input type="hidden" name="rating" id="ratingInput">
+        <input type="hidden" name="product_id" id="productIdInput">
+        <input type="hidden" name="page_id" id="pageIdInput">
 
-            <textarea
-              name="message"
-              id="messageInput"
-              placeholder="Tell us more..."
-            ></textarea>
+        <!-- 主按钮 -->
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Send now
+        </button>
 
-            <input
-              type="email"
-              name="email"
-              id="emailInput"
-              placeholder="Email..."
-            />
+        <!-- Optional 区域 -->
+        <div class="optional-block">
+          <div class="divider">Add a comment (Optional)</div>
 
-            <p class="helper">Your comment will be included when you send.</p>
-          </div>
-        </form>
-      </div>
+          <textarea name="message" placeholder="Tell us more..."></textarea>
 
-      <div class="thank-you" id="thankYouView">
-        <h2>Thanks for your feedback!</h2>
-        <p>Your feedback helps us improve this guide for everyone.</p>
-      </div>
+          <input type="email" name="email" placeholder="Email...">
+
+          <p class="helper">
+            Your comment will be included when you send.
+          </p>
+        </div>
+
+      </form>
     </div>
+
+    <!-- Thank you -->
+    <div class="thank-you" id="thankYouView">
+      <h2>Thanks for your feedback!</h2>
+      <p>Your feedback helps us improve this guide for everyone.</p>
+    </div>
+
   </div>
 
   <script>
     const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
     const params = new URLSearchParams(window.location.search);
-    const returnUrl = params.get("return_url");
 
     const ratingInput = document.getElementById("ratingInput");
     const productIdInput = document.getElementById("productIdInput");
     const pageIdInput = document.getElementById("pageIdInput");
-    const langInput = document.getElementById("langInput");
 
     const form = document.getElementById("feedbackForm");
     const submitBtn = document.getElementById("submitBtn");
+
     const formView = document.getElementById("formView");
     const thankYouView = document.getElementById("thankYouView");
 
-    function detectLangFromReferrer() {
-      const ref = document.referrer || "";
-      const match = ref.match(/\/(EN|ES|IT|FR|DE|JP|PL|SE|CZ|SK|NL|HE|RU)\//i);
-      return match ? match[1].toUpperCase() : "";
-    }
-
+    // URL 参数写入
     ratingInput.value = params.get("rating") || "unknown";
     productIdInput.value = params.get("product_id") || "unknown";
     pageIdInput.value = params.get("page_id") || "overall";
-    langInput.value = params.get("lang") || detectLangFromReferrer() || "";
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -234,23 +223,19 @@
         const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
           body: data,
-          headers: {
-            "Accept": "application/json"
-          }
+          headers: { "Accept": "application/json" }
         });
 
-        if (!res.ok) {
-          throw new Error("Submit failed");
-        }
+        if (!res.ok) throw new Error();
 
         formView.classList.add("hidden");
         thankYouView.classList.add("active");
 
         setTimeout(() => {
-          window.location.href = document.referrer || returnUrl || "/";
+          window.location.href = document.referrer || "/";
         }, 1200);
 
-      } catch (err) {
+      } catch {
         alert("Something went wrong. Please try again.");
         submitBtn.disabled = false;
       }
