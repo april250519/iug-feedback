@@ -124,19 +124,29 @@
       margin: 0;
     }
 
-    /* Thank you */
+    /* 表单隐藏 */
+    .form-view.hidden {
+      display: none;
+    }
+
+    /* Thank you 页面（关键：完全居中） */
     .thank-you {
       display: none;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      padding: 40px 10px;
+      padding: 40px 16px;
     }
 
     .thank-you.active {
-      display: block;
+      display: flex;
     }
 
     .thank-you h2 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       font-size: 24px;
       font-weight: 600;
     }
@@ -145,10 +155,8 @@
       margin: 0;
       font-size: 15px;
       color: #666;
-    }
-
-    .form-view.hidden {
-      display: none;
+      max-width: 320px;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -198,6 +206,7 @@
     const FORM_ENDPOINT = "https://formspree.io/f/mgvggved";
 
     const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get("return_url");
 
     const ratingInput = document.getElementById("ratingInput");
     const productIdInput = document.getElementById("productIdInput");
@@ -227,11 +236,13 @@
 
         if (!res.ok) throw new Error();
 
+        // 显示 Thank you
         formView.classList.add("hidden");
         thankYouView.classList.add("active");
 
+        // 延迟跳转
         setTimeout(() => {
-          window.location.href = document.referrer || "/";
+          window.location.href = returnUrl || document.referrer || "/";
         }, 1200);
 
       } catch {
