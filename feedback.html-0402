@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guide Feedback</title>
 
-  <!-- Avantree 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -26,7 +25,6 @@
       max-width: 520px;
     }
 
-    /* 主按钮 */
     .submit-btn {
       width: 100%;
       border: none;
@@ -51,7 +49,6 @@
       cursor: not-allowed;
     }
 
-    /* Optional 卡片 */
     .optional-block {
       margin-top: 20px;
       background: #f1eef3;
@@ -60,7 +57,6 @@
       padding: 18px 14px;
     }
 
-    /* 虚线标题 */
     .divider {
       display: flex;
       align-items: center;
@@ -80,7 +76,6 @@
       opacity: 0.7;
     }
 
-    /* 输入框 */
     textarea,
     input[type="email"] {
       width: 100%;
@@ -116,7 +111,6 @@
       color: #9a95a0;
     }
 
-    /* helper */
     .helper {
       font-size: 13px;
       color: #8d8891;
@@ -124,16 +118,13 @@
       margin: 0;
     }
 
-    /* 表单隐藏 */
     .form-view.hidden {
       display: none;
     }
 
-    /* Thank you 页面（关键：完全居中） */
     .thank-you {
       display: none;
       min-height: 60vh;
-      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -164,21 +155,16 @@
 <body>
   <div class="wrap">
 
-    <!-- 表单 -->
     <div class="form-view" id="formView">
       <form id="feedbackForm">
-
-        <!-- hidden fields -->
         <input type="hidden" name="rating" id="ratingInput">
         <input type="hidden" name="product_id" id="productIdInput">
         <input type="hidden" name="form_version" value="new">
 
-        <!-- 主按钮 -->
         <button type="submit" class="submit-btn" id="submitBtn">
           Send now
         </button>
 
-        <!-- Optional 区域 -->
         <div class="optional-block">
           <div class="divider">Add a comment (Optional)</div>
 
@@ -190,11 +176,9 @@
             Your comment will be included when you send.
           </p>
         </div>
-
       </form>
     </div>
 
-    <!-- Thank you 页面 -->
     <div class="thank-you" id="thankYouView">
       <h2>Thanks for your feedback!</h2>
       <p>Your feedback helps us improve this guide for everyone.</p>
@@ -217,7 +201,6 @@
     const formView = document.getElementById("formView");
     const thankYouView = document.getElementById("thankYouView");
 
-    // URL 参数
     ratingInput.value = params.get("rating") || "unknown";
     productIdInput.value = params.get("product_id") || "unknown";
 
@@ -236,11 +219,9 @@
 
         if (!res.ok) throw new Error();
 
-        // 显示 Thank you
         formView.classList.add("hidden");
         thankYouView.classList.add("active");
 
-        // 延迟跳转
         setTimeout(() => {
           window.location.href = returnUrl || document.referrer || "/";
         }, 1200);
