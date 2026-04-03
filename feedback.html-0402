@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Guide Feedback</title>
 
-  <!-- Avantree 风格字体 -->
+  <!-- Avantree 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -51,7 +51,7 @@
       cursor: not-allowed;
     }
 
-    /* Optional 区域卡片 */
+    /* Optional 卡片 */
     .optional-block {
       margin-top: 20px;
       background: #f1eef3;
@@ -116,7 +116,7 @@
       color: #9a95a0;
     }
 
-    /* helper 文案 */
+    /* helper */
     .helper {
       font-size: 13px;
       color: #8d8891;
@@ -156,13 +156,14 @@
 <body>
   <div class="wrap">
 
+    <!-- 表单 -->
     <div class="form-view" id="formView">
       <form id="feedbackForm">
 
         <!-- hidden fields -->
         <input type="hidden" name="rating" id="ratingInput">
         <input type="hidden" name="product_id" id="productIdInput">
-        <input type="hidden" name="page_id" id="pageIdInput">
+        <input type="hidden" name="form_version" value="new">
 
         <!-- 主按钮 -->
         <button type="submit" class="submit-btn" id="submitBtn">
@@ -185,7 +186,7 @@
       </form>
     </div>
 
-    <!-- Thank you -->
+    <!-- Thank you 页面 -->
     <div class="thank-you" id="thankYouView">
       <h2>Thanks for your feedback!</h2>
       <p>Your feedback helps us improve this guide for everyone.</p>
@@ -200,7 +201,6 @@
 
     const ratingInput = document.getElementById("ratingInput");
     const productIdInput = document.getElementById("productIdInput");
-    const pageIdInput = document.getElementById("pageIdInput");
 
     const form = document.getElementById("feedbackForm");
     const submitBtn = document.getElementById("submitBtn");
@@ -208,10 +208,9 @@
     const formView = document.getElementById("formView");
     const thankYouView = document.getElementById("thankYouView");
 
-    // URL 参数写入
+    // URL 参数
     ratingInput.value = params.get("rating") || "unknown";
     productIdInput.value = params.get("product_id") || "unknown";
-    pageIdInput.value = params.get("page_id") || "overall";
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -241,5 +240,6 @@
       }
     });
   </script>
+
 </body>
 </html>
