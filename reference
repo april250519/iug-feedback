@@ -1,0 +1,865 @@
+{% unless page.handle == 'iug-feedback' or page.handle == 'iug-feedback-new' %}
+<!-- =========================
+     SIDE FEEDBACK
+========================= -->
+<div id="vc-feedback-wrap">
+  <button id="vc-side-close" type="button" aria-label="Close">?</button>
+
+  <div id="vc-feedback-side">
+    <div class="vc-side-title">Helpful?</div>
+
+    <button class="vc-side-btn yes" type="button" aria-label="Yes, this page was helpful">
+      <span class="vc-icon">??</span>
+      <span class="vc-text">Yes</span>
+    </button>
+
+    <button class="vc-side-btn no" type="button" aria-label="No, this page was not helpful">
+      <span class="vc-icon">??</span>
+      <span class="vc-text">No</span>
+    </button>
+  </div>
+</div>
+
+<!-- =========================
+     MODAL OVERLAY
+========================= -->
+<div class="vc-modal-overlay" style="display:none;">
+  <div class="vc-modal" role="dialog" aria-modal="true" aria-labelledby="vc-modal-title">
+
+    <div class="vc-close-wrap">
+      <button id="vc-modal-close" type="button" aria-label="Close">?</button>
+    </div>
+
+    <div class="vc-card">
+
+      <div class="vc-title" id="vc-modal-title">Was this page helpful?</div>
+
+      <div class="vc-btns">
+        <button class="vc-btn vc-yes" type="button">?? Yes</button>
+        <button class="vc-btn vc-no" type="button">?? No</button>
+      </div>
+
+      <div class="vc-follow" style="display:none;">
+
+        <div class="vc-subtitle">What was missing?</div>
+
+        <div class="vc-options">
+
+          <label class="vc-opt">
+            <input type="checkbox" value="Hard to understand">
+            <span>Hard to understand</span>
+          </label>
+
+          <label class="vc-opt">
+            <input type="checkbox" value="Missing compatibility info">
+            <span>Missing compatibility info</span>
+          </label>
+
+          <label class="vc-opt">
+            <input type="checkbox" value="Too long / confusing">
+            <span>Too long / confusing</span>
+          </label>
+
+          <label class="vc-opt">
+            <input type="checkbox" value="I still have questions">
+            <span>I still have questions</span>
+          </label>
+
+          <label class="vc-opt">
+            <input class="vc-other-check" type="checkbox" value="Other">
+            <span>Other</span>
+          </label>
+
+          <div class="vc-other-box" style="display:none;">
+            <input
+              type="text"
+              class="vc-other-text"
+              maxlength="160"
+              placeholder="Optional: tell us what you were looking for (max 160 chars)"
+            >
+          </div>
+
+        </div>
+
+        <div class="vc-contact">
+          <div class="vc-contact-title">Want us to help?</div>
+          <input type="email" class="vc-email-input" placeholder="Email (optional)">
+          <div class="vc-email-hint">Please leave your email if you'd like us to follow up.</div>
+        </div>
+
+        <button class="vc-submit" type="button" disabled>Submit</button>
+
+        <div class="vc-hint">No login. No email unless you choose to leave one.</div>
+      </div>
+
+      <div class="vc-toast" style="display:none;">
+        ? Thanks! Your feedback was submitted successfully.
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================
+     SCRIPT
+========================= -->
+<script>
+(function () {
+  const ENDPOINT = "https://formspree.io/f/xqarjjkv";
+  const PAGE_KEY = "vc_feedback_submitted_" + location.pathname;
+  const CLOSE_KEY = "vc_feedback_closed_" + location.pathname;
+
+  const overlay = document.querySelector(".vc-modal-overlay");
+  const closeBtn = document.getElementById("vc-modal-close");
+  const modal = document.querySelector(".vc-modal");
+
+  if (!overlay || !closeBtn || !modal) return;
+
+  const yesBtn = modal.querySelector(".vc-yes");
+  const noBtn = modal.querySelector(".vc-no");
+  const follow = modal.querySelector(".vc-follow");
+  const submit = modal.querySelector(".vc-submit");
+  const toast = modal.querySelector(".vc-toast");
+
+  const otherCheck = modal.querySelector(".vc-other-check");
+  const otherBox = modal.querySelector(".vc-other-box");
+  const otherText = modal.querySelector(".vc-other-text");
+  const emailInput = modal.querySelector(".vc-email-input");
+
+  const sideWrap = document.getElementById("vc-feedback-wrap");
+  const sideWidget = document.getElementById("vc-feedback-side");
+  const sideClose = document.getElementById("vc-side-close");
+  const sideYes = document.querySelector(".vc-side-btn.yes");
+  const sideNo = document.querySelector(".vc-side-btn.no");
+
+  let vote = null;
+  let isSubmitting = false;
+
+  function hideSideWidget() {
+    if (sideWrap) {
+      sideWrap.style.display = "none";
+    }
+  }
+
+  function initSubmittedState() {
+    if (
+      sessionStorage.getItem(PAGE_KEY) === "1" ||
+      sessionStorage.getItem(CLOSE_KEY) === "1"
+    ) {
+      hideSideWidget();
+    }
+  }
+
+  function resetModalState() {
+    vote = null;
+    yesBtn.classList.remove("vc-selected");
+    noBtn.classList.remove("vc-selected");
+    follow.style.display = "none";
+    toast.style.display = "none";
+    submit.disabled = true;
+
+    modal.querySelectorAll(".vc-opt input").forEach((cb) => {
+      cb.checked = false;
+      syncRow(cb);
+    });
+
+    otherBox.style.display = "none";
+    otherText.value = "";
+    emailInput.value = "";
+  }
+
+  function openModal() {
+    overlay.style.display = "flex";
+    overlay.scrollTop = 0;
+    modal.scrollTop = 0;
+  }
+
+  function closeModal() {
+    overlay.style.display = "none";
+  }
+
+  function select(btn) {
+    yesBtn.classList.remove("vc-selected");
+    noBtn.classList.remove("vc-selected");
+    btn.classList.add("vc-selected");
+  }
+
+  function syncRow(cb) {
+    const row = cb.closest(".vc-opt");
+    if (row) {
+      row.classList.toggle("vc-selected", cb.checked);
+    }
+  }
+
+  function updateSubmit() {
+    if (isSubmitting) {
+      submit.disabled = true;
+      return;
+    }
+    const checked = modal.querySelectorAll(".vc-opt input:checked").length > 0;
+    submit.disabled = !(vote === "no" && checked);
+  }
+
+  async function send(data) {
+    if (isSubmitting) return false;
+    isSubmitting = true;
+
+    yesBtn.disabled = true;
+    noBtn.disabled = true;
+    submit.disabled = true;
+    if (sideYes) sideYes.disabled = true;
+    if (sideNo) sideNo.disabled = true;
+    if (sideClose) sideClose.disabled = true;
+
+    const payload = {
+      subject: "Venucast Page Feedback",
+      vote: data.vote,
+      reasons: data.reasons,
+      other_text: data.other_text,
+      email: data.email,
+      page_title: document.title,
+      page_url: location.href.split("#")[0],
+      ts: new Date().toISOString()
+    };
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("Request failed");
+
+      sessionStorage.setItem(PAGE_KEY, "1");
+      return true;
+    } catch (e) {
+      alert("Submission failed. Please try again.");
+      yesBtn.disabled = false;
+      noBtn.disabled = false;
+      if (sideYes) sideYes.disabled = false;
+      if (sideNo) sideNo.disabled = false;
+      if (sideClose) sideClose.disabled = false;
+      updateSubmit();
+      return false;
+    } finally {
+      isSubmitting = false;
+    }
+  }
+
+  initSubmittedState();
+
+  closeBtn.addEventListener("click", closeModal);
+
+  overlay.addEventListener("click", function (e) {
+    if (e.target === overlay) {
+      closeModal();
+    }
+  });
+
+  if (sideClose) {
+    sideClose.addEventListener("click", function () {
+      if (isSubmitting) return;
+      sessionStorage.setItem(CLOSE_KEY, "1");
+      hideSideWidget();
+    });
+  }
+
+  modal.querySelectorAll(".vc-opt input").forEach((cb) => {
+    syncRow(cb);
+    cb.addEventListener("change", function () {
+      syncRow(cb);
+      updateSubmit();
+    });
+  });
+
+  otherCheck.addEventListener("change", function () {
+    otherBox.style.display = otherCheck.checked ? "block" : "none";
+    if (!otherCheck.checked) {
+      otherText.value = "";
+    }
+    updateSubmit();
+  });
+
+  otherText.addEventListener("input", updateSubmit);
+
+  if (sideYes) {
+    sideYes.addEventListener("click", async function () {
+      if (
+        sessionStorage.getItem(PAGE_KEY) === "1" ||
+        sessionStorage.getItem(CLOSE_KEY) === "1" ||
+        isSubmitting
+      ) return;
+
+      vote = "yes";
+
+      sideYes.classList.add("vc-selected");
+      sideYes.innerHTML = '<span class="vc-check">?</span>';
+      if (sideNo) sideNo.style.opacity = "0.45";
+
+      const ok = await send({
+        vote: "yes",
+        reasons: [],
+        other_text: "",
+        email: ""
+      });
+
+      if (ok) {
+        setTimeout(function () {
+          hideSideWidget();
+        }, 800);
+      } else {
+        sideYes.classList.remove("vc-selected");
+        sideYes.innerHTML = '<span class="vc-icon">??</span><span class="vc-text">Yes</span>';
+        if (sideNo) sideNo.style.opacity = "";
+      }
+    });
+  }
+
+  if (sideNo) {
+    sideNo.addEventListener("click", function () {
+      if (
+        sessionStorage.getItem(PAGE_KEY) === "1" ||
+        sessionStorage.getItem(CLOSE_KEY) === "1" ||
+        isSubmitting
+      ) return;
+
+      resetModalState();
+      openModal();
+
+      vote = "no";
+      select(noBtn);
+      follow.style.display = "block";
+      updateSubmit();
+    });
+  }
+
+  yesBtn.addEventListener("click", async function () {
+    if (isSubmitting) return;
+
+    vote = "yes";
+    select(yesBtn);
+
+    const ok = await send({
+      vote: "yes",
+      reasons: [],
+      other_text: "",
+      email: (emailInput.value || "").trim()
+    });
+
+    if (ok) {
+      toast.style.display = "block";
+      follow.style.display = "none";
+      setTimeout(function () {
+        closeModal();
+        hideSideWidget();
+      }, 1200);
+    }
+  });
+
+  noBtn.addEventListener("click", function () {
+    if (isSubmitting) return;
+
+    vote = "no";
+    select(noBtn);
+    follow.style.display = "block";
+    updateSubmit();
+  });
+
+  submit.addEventListener("click", async function () {
+    if (isSubmitting) return;
+
+    const reasons = Array.from(modal.querySelectorAll(".vc-opt input:checked")).map(function (x) {
+      return x.value;
+    });
+
+    const other_text = reasons.includes("Other")
+      ? (otherText.value || "").trim()
+      : "";
+
+    const email = (emailInput.value || "").trim();
+
+    const ok = await send({
+      vote: "no",
+      reasons: reasons,
+      other_text: other_text,
+      email: email
+    });
+
+    if (ok) {
+      toast.style.display = "block";
+      follow.style.display = "none";
+      setTimeout(function () {
+        closeModal();
+        hideSideWidget();
+      }, 1200);
+    }
+  });
+})();
+</script>
+
+<!-- =========================
+     STYLE
+========================= -->
+<style>
+/* SIDE FEEDBACK WRAP */
+#vc-feedback-wrap {
+  position: fixed;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+}
+
+/* 外部关闭按钮 */
+#vc-side-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #dddd e6;
+  background: #fff;
+  font-size: 12px;
+  color: #444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+#vc-side-close:hover {
+  color: #111;
+  background: #f2f2f6;
+}
+
+#vc-side-close:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* SIDE FEEDBACK */
+#vc-feedback-side {
+  background: rgba(124, 92, 255, 0.06);
+  border: 1px solid rgba(124, 92, 255, 0.25);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.88;
+  transition: opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+#vc-feedback-side:hover {
+  opacity: 1;
+}
+
+.vc-side-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2f2f2f;
+  letter-spacing: 0.01em;
+  margin-bottom: -1px;
+}
+
+.vc-side-btn {
+  width: 38px;
+  height: 46px;
+  padding: 6px 0;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.vc-side-btn span {
+  display: block;
+}
+
+.vc-side-btn.yes {
+  background: rgba(124, 92, 255, 0.08);
+  color: #5f4fd4;
+}
+
+.vc-side-btn.no {
+  background: #f5f5f7;
+  color: #5f6368;
+}
+
+.vc-side-btn:hover {
+  opacity: 1;
+}
+
+.vc-side-btn.yes:hover {
+  background: rgba(124, 92, 255, 0.14);
+  border-color: rgba(124, 92, 255, 0.16);
+}
+
+.vc-side-btn.no:hover {
+  background: #ededf2;
+  border-color: #e3e3ea;
+}
+
+.vc-side-btn.vc-selected {
+  background: rgba(124, 92, 255, 0.18);
+  border-color: #7c5cff;
+  color: #4b3bbd;
+}
+
+.vc-side-btn .vc-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.vc-text {
+  font-size: 12px;
+}
+
+.vc-icon {
+  font-size: 14px;
+}
+
+/* MODAL */
+.vc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 10, 35, 0.32);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+.vc-modal {
+  width: 680px;
+  max-width: calc(100vw - 24px);
+  background: #f8f6ff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.vc-close-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+#vc-modal-close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ececf3;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+}
+
+#vc-modal-close:hover {
+  background: #f7f7fb;
+}
+
+.vc-title {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 14px;
+  color: #1f1f29;
+}
+
+.vc-subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #2d2d3a;
+}
+
+.vc-btns {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.vc-btn {
+  min-width: 140px;
+  padding: 13px 22px;
+  border-radius: 12px;
+  border: 1px solid #e8e8ef;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vc-btn.vc-yes {
+  background: rgba(124, 92, 255, 0.1);
+  color: #7c5cff;
+  border: 1px solid rgba(124, 92, 255, 0.18);
+}
+
+.vc-btn.vc-no {
+  background: #f5f5f7;
+  color: #555;
+  border: 1px solid #ececf3;
+}
+
+.vc-btn.vc-yes:hover {
+  background: rgba(124, 92, 255, 0.14);
+}
+
+.vc-btn.vc-no:hover {
+  background: #ededf2;
+}
+
+.vc-btn.vc-selected {
+  border-color: #7c5cff;
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.16);
+}
+
+.vc-follow {
+  margin-top: 18px;
+}
+
+.vc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vc-opt {
+  padding: 10px 12px;
+  border: 1px solid #ececf3;
+  border-radius: 10px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.vc-opt.vc-selected {
+  background: rgba(124, 92, 255, 0.04);
+  border-color: rgba(124, 92, 255, 0.18);
+}
+
+.vc-opt input {
+  margin-right: 8px;
+}
+
+.vc-other-box {
+  margin-top: 2px;
+}
+
+.vc-other-text,
+.vc-email-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid #e5e7ef;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background: #fff;
+}
+
+.vc-other-text:focus,
+.vc-email-input:focus {
+  border-color: rgba(124, 92, 255, 0.45);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.08);
+}
+
+.vc-contact {
+  margin-top: 14px;
+}
+
+.vc-contact-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #2d2d3a;
+}
+
+.vc-email-hint,
+.vc-hint {
+  font-size: 12px;
+  color: #7a7f8a;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.vc-submit {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #7c5cff;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+
+.vc-submit:hover:not(:disabled) {
+  background: #6f50f1;
+}
+
+.vc-submit:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.vc-toast {
+  display: none;
+  text-align: center;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(124, 92, 255, 0.08);
+  border: 1px solid rgba(124, 92, 255, 0.18);
+  font-weight: 700;
+  color: #5b4bcf;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  #vc-feedback-wrap {
+    right: 6px;
+    top: auto;
+    bottom: 158px;
+    transform: none;
+  }
+
+  #vc-side-close {
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+
+  #vc-feedback-side {
+    padding: 4px;
+    border-radius: 10px;
+    opacity: 0.96;
+    gap: 3px;
+  }
+
+  .vc-side-btn {
+    width: 34px;
+    height: 36px;
+    padding: 4px 0;
+    border-radius: 8px;
+  }
+
+  .vc-text {
+    font-size: 10px;
+    line-height: 1.05;
+  }
+
+  .vc-icon {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  .vc-side-title {
+    font-size: 10px;
+    line-height: 1;
+    margin-bottom: 0;
+  }
+
+  .vc-modal-overlay {
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vc-modal {
+    width: 100%;
+    max-width: 100%;
+    margin: 12px 0;
+    padding: 16px;
+    border-radius: 14px;
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vc-close-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #f8f6ff;
+    padding-bottom: 8px;
+  }
+
+  .vc-title {
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+
+  .vc-btns {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .vc-btn {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 16px;
+  }
+
+  .vc-follow {
+    margin-top: 14px;
+  }
+
+  .vc-options {
+    gap: 8px;
+  }
+
+  .vc-opt {
+    padding: 10px;
+  }
+
+  .vc-contact {
+    margin-top: 12px;
+  }
+
+  .vc-other-text,
+  .vc-email-input {
+    font-size: 16px;
+  }
+
+  .vc-submit {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin-top: 12px;
+    box-shadow: 0 -6px 12px rgba(248, 246, 255, 0.96);
+  }
+
+  .vc-hint {
+    margin-top: 8px;
+    padding-bottom: 2px;
+  }
+}
+</style>
+{% endunless %}
