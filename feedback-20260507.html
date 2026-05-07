@@ -1,15 +1,15 @@
 <!-- IUG Feedback: Entry + Modals -->
 <div class="iug-feedback-bar" aria-label="IUG feedback">
   <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
-    <img class="iug-emoji-img" src="./rate-satisfied.png?v=20260507" alt="Satisfied" />
+    <img class="iug-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
   </button>
 
   <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
-    <img class="iug-emoji-img" src="./rate-neutral.png?v=20260507" alt="Neutral" />
+    <img class="iug-emoji-img" src="./rate-neutral.png" alt="Neutral" />
   </button>
 
   <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
-    <img class="iug-emoji-img" src="./rate-unsatisfied.png?v=20260507" alt="Unsatisfied" />
+    <img class="iug-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
   </button>
 </div>
 
@@ -19,7 +19,7 @@
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="satisfiedTitle">
     <div class="iug-feedback-icon">
-      <img class="iug-modal-emoji-img" src="./rate-satisfied.png?v=20260507" alt="Satisfied" />
+      <img class="iug-modal-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
     </div>
 
     <h2 id="satisfiedTitle" class="iug-feedback-title">
@@ -52,7 +52,7 @@
       and helps us improve.
     </p>
 
-    <button class="iug-feedback-done" type="button" onclick="submitSatisfiedFeedback()">
+    <button class="iug-feedback-done" type="button" data-submit-feedback="satisfied">
       Done
     </button>
   </div>
@@ -64,7 +64,7 @@
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="neutralTitle">
     <div class="iug-feedback-icon">
-      <img class="iug-modal-emoji-img" src="./rate-neutral.png?v=20260507" alt="Neutral" />
+      <img class="iug-modal-emoji-img" src="./rate-neutral.png" alt="Neutral" />
     </div>
 
     <h2 id="neutralTitle" class="iug-feedback-title">
@@ -97,7 +97,7 @@
       and helps us improve.
     </p>
 
-    <button class="iug-feedback-done" type="button" onclick="submitNeutralFeedback()">
+    <button class="iug-feedback-done" type="button" data-submit-feedback="neutral">
       Done
     </button>
   </div>
@@ -109,7 +109,7 @@
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="unsatisfiedTitle">
     <div class="iug-feedback-icon">
-      <img class="iug-modal-emoji-img" src="./rate-unsatisfied.png?v=20260507" alt="Unsatisfied" />
+      <img class="iug-modal-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
     </div>
 
     <h2 id="unsatisfiedTitle" class="iug-feedback-title">
@@ -146,7 +146,7 @@
       and helps us improve.
     </p>
 
-    <button class="iug-feedback-done" type="button" onclick="submitUnsatisfiedFeedback()">
+    <button class="iug-feedback-done" type="button" data-submit-feedback="unsatisfied">
       Done
     </button>
   </div>
@@ -486,6 +486,24 @@
 <script>
   const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
 
+  const IUG_FEEDBACK_CONFIG = {
+    satisfied: {
+      modalId: "iugSatisfiedModal",
+      commentId: "satisfiedComment",
+      contactId: "satisfiedContact",
+    },
+    neutral: {
+      modalId: "iugNeutralModal",
+      commentId: "neutralComment",
+      contactId: "neutralContact",
+    },
+    unsatisfied: {
+      modalId: "iugUnsatisfiedModal",
+      commentId: "unsatisfiedComment",
+      contactId: "unsatisfiedContact",
+    },
+  };
+
   let selectedIugFeedback = null;
 
   document.querySelectorAll(".iug-feedback-emoji").forEach((button) => {
@@ -504,6 +522,13 @@
     });
   });
 
+  document.querySelectorAll("[data-submit-feedback]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const feedbackType = button.dataset.submitFeedback;
+      await handleIugFeedbackSubmit(feedbackType, button);
+    });
+  });
+
   document.querySelectorAll("[data-close-modal]").forEach((overlay) => {
     overlay.addEventListener("click", () => {
       closeAllIugFeedbackModals();
@@ -519,20 +544,22 @@
   function openIugFeedbackModal(type) {
     closeAllIugFeedbackModals();
 
-    if (type === "satisfied") {
-      document.getElementById("iugSatisfiedModal").classList.add("is-open");
-      document.getElementById("iugSatisfiedModal").setAttribute("aria-hidden", "false");
+    const config = IUG_FEEDBACK_CONFIG[type];
+
+    if (!config) {
+      console.error("IUG feedback type not found:", type);
+      return;
     }
 
-    if (type === "neutral") {
-      document.getElementById("iugNeutralModal").classList.add("is-open");
-      document.getElementById("iugNeutralModal").setAttribute("aria-hidden", "false");
+    const modal = document.getElementById(config.modalId);
+
+    if (!modal) {
+      console.error("IUG modal not found:", config.modalId);
+      return;
     }
 
-    if (type === "unsatisfied") {
-      document.getElementById("iugUnsatisfiedModal").classList.add("is-open");
-      document.getElementById("iugUnsatisfiedModal").setAttribute("aria-hidden", "false");
-    }
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
   }
 
   function closeAllIugFeedbackModals() {
@@ -542,64 +569,30 @@
     });
   }
 
-  async function submitSatisfiedFeedback() {
-    const button = document.querySelector('#iugSatisfiedModal .iug-feedback-done');
-    const comment = document.getElementById("satisfiedComment").value.trim();
-    const contact = document.getElementById("satisfiedContact").value.trim();
+  async function handleIugFeedbackSubmit(type, button) {
+    const config = IUG_FEEDBACK_CONFIG[type];
 
-    await submitAndCloseFeedback({
-      rating: "satisfied",
-      comment,
-      contact,
-      button,
-      commentId: "satisfiedComment",
-      contactId: "satisfiedContact",
-    });
-  }
+    if (!config) {
+      console.error("IUG submit type not found:", type);
+      return;
+    }
 
-  async function submitNeutralFeedback() {
-    const button = document.querySelector('#iugNeutralModal .iug-feedback-done');
-    const comment = document.getElementById("neutralComment").value.trim();
-    const contact = document.getElementById("neutralContact").value.trim();
+    const commentEl = document.getElementById(config.commentId);
+    const contactEl = document.getElementById(config.contactId);
 
-    await submitAndCloseFeedback({
-      rating: "neutral",
-      comment,
-      contact,
-      button,
-      commentId: "neutralComment",
-      contactId: "neutralContact",
-    });
-  }
+    if (!commentEl || !contactEl) {
+      console.error("IUG form fields not found:", config);
+      return;
+    }
 
-  async function submitUnsatisfiedFeedback() {
-    const button = document.querySelector('#iugUnsatisfiedModal .iug-feedback-done');
-    const comment = document.getElementById("unsatisfiedComment").value.trim();
-    const contact = document.getElementById("unsatisfiedContact").value.trim();
+    const comment = commentEl.value.trim();
+    const contact = contactEl.value.trim();
 
-    await submitAndCloseFeedback({
-      rating: "unsatisfied",
-      comment,
-      contact,
-      button,
-      commentId: "unsatisfiedComment",
-      contactId: "unsatisfiedContact",
-    });
-  }
-
-  async function submitAndCloseFeedback({
-    rating,
-    comment,
-    contact,
-    button,
-    commentId,
-    contactId,
-  }) {
     button.classList.add("is-loading");
     button.textContent = "Saving...";
 
     const success = await submitIugFeedback({
-      rating,
+      rating: type,
       comment,
       contact,
     });
@@ -610,8 +603,8 @@
     if (success) {
       closeAllIugFeedbackModals();
 
-      document.getElementById(commentId).value = "";
-      document.getElementById(contactId).value = "";
+      commentEl.value = "";
+      contactEl.value = "";
 
       showIugFeedbackToast("Thanks — your feedback was saved.");
     } else {
