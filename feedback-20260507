@@ -1,0 +1,632 @@
+<!-- IUG Feedback: Entry + Modals -->
+<div class="iug-feedback-bar" aria-label="IUG feedback">
+  <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
+    <span class="iug-emoji-face iug-face-satisfied">🙂</span>
+  </button>
+
+  <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
+    <span class="iug-emoji-face iug-face-neutral">😐</span>
+  </button>
+
+  <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
+    <span class="iug-emoji-face iug-face-unsatisfied">☹️</span>
+  </button>
+</div>
+
+<!-- Satisfied Modal -->
+<div class="iug-feedback-modal" id="iugSatisfiedModal" aria-hidden="true">
+  <div class="iug-feedback-overlay" data-close-modal></div>
+
+  <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="satisfiedTitle">
+    <div class="iug-feedback-icon iug-icon-satisfied">🙂</div>
+
+    <h2 id="satisfiedTitle" class="iug-feedback-title">
+      Thanks for your feedback!
+    </h2>
+
+    <p class="iug-feedback-subtitle">
+      Glad this helped!
+    </p>
+
+    <p class="iug-feedback-optional">
+      Both fields are optional.
+    </p>
+
+    <textarea
+      id="satisfiedComment"
+      class="iug-feedback-textarea"
+      placeholder="Any comments or suggestions?"
+    ></textarea>
+
+    <input
+      id="satisfiedContact"
+      class="iug-feedback-input"
+      type="text"
+      placeholder="Your Email"
+    />
+
+    <p class="iug-feedback-note">
+      Every comment is read by our team<br />
+      and helps us improve.
+    </p>
+
+    <button class="iug-feedback-done" type="button" data-submit-feedback="satisfied">
+      Done
+    </button>
+  </div>
+</div>
+
+<!-- Neutral Modal -->
+<div class="iug-feedback-modal" id="iugNeutralModal" aria-hidden="true">
+  <div class="iug-feedback-overlay" data-close-modal></div>
+
+  <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="neutralTitle">
+    <div class="iug-feedback-icon iug-icon-neutral">😐</div>
+
+    <h2 id="neutralTitle" class="iug-feedback-title">
+      Thanks for your feedback!
+    </h2>
+
+    <p class="iug-feedback-subtitle">
+      What could be better?
+    </p>
+
+    <p class="iug-feedback-optional">
+      Both fields are optional.
+    </p>
+
+    <textarea
+      id="neutralComment"
+      class="iug-feedback-textarea"
+      placeholder="Any comments or suggestions?"
+    ></textarea>
+
+    <input
+      id="neutralContact"
+      class="iug-feedback-input"
+      type="text"
+      placeholder="Your Email"
+    />
+
+    <p class="iug-feedback-note">
+      Every comment is read by our team<br />
+      and helps us improve.
+    </p>
+
+    <button class="iug-feedback-done" type="button" data-submit-feedback="neutral">
+      Done
+    </button>
+  </div>
+</div>
+
+<!-- Unsatisfied Modal -->
+<div class="iug-feedback-modal" id="iugUnsatisfiedModal" aria-hidden="true">
+  <div class="iug-feedback-overlay" data-close-modal></div>
+
+  <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="unsatisfiedTitle">
+    <div class="iug-feedback-icon iug-icon-unsatisfied">☹️</div>
+
+    <h2 id="unsatisfiedTitle" class="iug-feedback-title">
+      Sorry this wasn't helpful.
+    </h2>
+
+    <p class="iug-feedback-subtitle">
+      What went wrong?
+    </p>
+
+    <p class="iug-feedback-optional">
+      Both fields are optional.
+    </p>
+
+    <textarea
+      id="unsatisfiedComment"
+      class="iug-feedback-textarea"
+      placeholder="Tell us what happened"
+    ></textarea>
+
+    <input
+      id="unsatisfiedContact"
+      class="iug-feedback-input"
+      type="text"
+      placeholder="Your Email or Phone Number"
+    />
+
+    <p class="iug-feedback-contact-note">
+      So we can help you within 24h.
+    </p>
+
+    <p class="iug-feedback-note">
+      Every comment is read by our team<br />
+      and helps us improve.
+    </p>
+
+    <button class="iug-feedback-done" type="button" data-submit-feedback="unsatisfied">
+      Done
+    </button>
+  </div>
+</div>
+
+<style>
+  .iug-feedback-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 9998;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 42px;
+
+    width: 100%;
+    max-width: 420px;
+    padding: 8px 20px;
+
+    pointer-events: none;
+  }
+
+  .iug-feedback-emoji {
+    pointer-events: auto;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+
+    transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+  }
+
+  .iug-feedback-emoji:hover {
+    transform: scale(1.12);
+  }
+
+  .iug-feedback-emoji:active {
+    transform: scale(0.96);
+  }
+
+  .iug-feedback-emoji.is-selected {
+    transform: scale(1.16);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
+  }
+
+  .iug-emoji-face {
+    display: block;
+    line-height: 1;
+  }
+
+  .iug-feedback-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+  }
+
+  .iug-feedback-modal.is-open {
+    display: flex;
+  }
+
+  .iug-feedback-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .iug-feedback-card {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 360px;
+
+    background: #f7f7f7;
+    border: 1px solid #cfcfcf;
+    border-radius: 6px;
+
+    padding: 28px 36px 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+    font-family: inherit;
+    color: #111;
+  }
+
+  .iug-feedback-icon {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    font-size: 42px;
+    line-height: 1;
+  }
+
+  .iug-icon-satisfied {
+    background: #46ad52;
+  }
+
+  .iug-icon-neutral {
+    background: #f3c433;
+  }
+
+  .iug-icon-unsatisfied {
+    background: #df4747;
+  }
+
+  .iug-feedback-title {
+    margin: 0;
+
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 800;
+    text-align: center;
+    color: #050505;
+  }
+
+  .iug-feedback-subtitle {
+    margin: 8px 0 34px;
+
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+  }
+
+  .iug-feedback-optional {
+    width: 100%;
+    margin: 0 0 18px;
+
+    font-size: 13px;
+    line-height: 1.3;
+    font-style: italic;
+    color: #777;
+    text-align: left;
+  }
+
+  .iug-feedback-textarea {
+    width: 100%;
+    height: 126px;
+    resize: none;
+
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: transparent;
+
+    padding: 11px 8px;
+
+    font-size: 13px;
+    line-height: 1.4;
+    color: #111;
+
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .iug-feedback-input {
+    width: 100%;
+    height: 40px;
+
+    margin-top: 20px;
+
+    border: 1px solid #c9c9c9;
+    border-radius: 6px;
+    background: transparent;
+
+    padding: 0 8px;
+
+    font-size: 13px;
+    color: #111;
+
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .iug-feedback-textarea::placeholder,
+  .iug-feedback-input::placeholder {
+    color: #777;
+  }
+
+  .iug-feedback-textarea:focus,
+  .iug-feedback-input:focus {
+    border-color: #46ad52;
+  }
+
+  #iugNeutralModal .iug-feedback-textarea:focus,
+  #iugNeutralModal .iug-feedback-input:focus {
+    border-color: #f3c433;
+  }
+
+  #iugUnsatisfiedModal .iug-feedback-textarea:focus,
+  #iugUnsatisfiedModal .iug-feedback-input:focus {
+    border-color: #df4747;
+  }
+
+  .iug-feedback-contact-note {
+    width: 100%;
+    margin: 8px 0 28px;
+
+    font-size: 12px;
+    line-height: 1.35;
+    font-style: italic;
+    font-weight: 600;
+    color: #777;
+    text-align: left;
+  }
+
+  .iug-feedback-note {
+    width: 100%;
+    margin: 36px 0 24px;
+
+    font-size: 13px;
+    line-height: 1.45;
+    color: #666;
+    text-align: left;
+  }
+
+  #iugUnsatisfiedModal .iug-feedback-note {
+    margin-top: 0;
+  }
+
+  .iug-feedback-done {
+    width: 100%;
+    height: 38px;
+
+    border: none;
+    border-radius: 999px;
+    background: #000;
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+  }
+
+  .iug-feedback-done:active {
+    transform: scale(0.98);
+  }
+
+  .iug-feedback-done.is-loading {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .iug-feedback-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 74px;
+    transform: translateX(-50%) translateY(8px);
+    z-index: 10001;
+
+    background: #111;
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+
+    padding: 10px 16px;
+    border-radius: 999px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .iug-feedback-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    .iug-feedback-bar {
+      bottom: 14px;
+      gap: 42px;
+      padding: 8px 16px;
+    }
+
+    .iug-feedback-emoji {
+      width: 32px;
+      height: 32px;
+      font-size: 23px;
+    }
+
+    .iug-feedback-card {
+      max-width: 320px;
+      padding: 28px 36px 30px;
+    }
+
+    .iug-feedback-title {
+      font-size: 19px;
+    }
+  }
+</style>
+
+<script>
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+
+  const IUG_FEEDBACK_CONFIG = {
+    satisfied: {
+      modalId: "iugSatisfiedModal",
+      commentId: "satisfiedComment",
+      contactId: "satisfiedContact",
+    },
+    neutral: {
+      modalId: "iugNeutralModal",
+      commentId: "neutralComment",
+      contactId: "neutralContact",
+    },
+    unsatisfied: {
+      modalId: "iugUnsatisfiedModal",
+      commentId: "unsatisfiedComment",
+      contactId: "unsatisfiedContact",
+    },
+  };
+
+  let selectedIugFeedback = null;
+
+  document.querySelectorAll(".iug-feedback-emoji").forEach((button) => {
+    button.addEventListener("click", () => {
+      const feedbackType = button.dataset.feedback;
+
+      selectedIugFeedback = feedbackType;
+
+      document.querySelectorAll(".iug-feedback-emoji").forEach((btn) => {
+        btn.classList.remove("is-selected");
+      });
+
+      button.classList.add("is-selected");
+
+      openIugFeedbackModal(feedbackType);
+    });
+  });
+
+  document.querySelectorAll("[data-submit-feedback]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const feedbackType = button.dataset.submitFeedback;
+      await handleIugFeedbackSubmit(feedbackType, button);
+    });
+  });
+
+  document.querySelectorAll("[data-close-modal]").forEach((overlay) => {
+    overlay.addEventListener("click", () => {
+      closeAllIugFeedbackModals();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAllIugFeedbackModals();
+    }
+  });
+
+  function openIugFeedbackModal(type) {
+    closeAllIugFeedbackModals();
+
+    const config = IUG_FEEDBACK_CONFIG[type];
+    if (!config) return;
+
+    const modal = document.getElementById(config.modalId);
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeAllIugFeedbackModals() {
+    document.querySelectorAll(".iug-feedback-modal").forEach((modal) => {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  async function handleIugFeedbackSubmit(type, button) {
+    const config = IUG_FEEDBACK_CONFIG[type];
+    if (!config) return;
+
+    const comment = document.getElementById(config.commentId).value.trim();
+    const contact = document.getElementById(config.contactId).value.trim();
+
+    button.classList.add("is-loading");
+    button.textContent = "Saving...";
+
+    const success = await submitIugFeedback({
+      rating: type,
+      comment,
+      contact,
+    });
+
+    button.classList.remove("is-loading");
+    button.textContent = "Done";
+
+    if (success) {
+      closeAllIugFeedbackModals();
+      clearIugFeedbackForm(type);
+      showIugFeedbackToast("Thanks — your feedback was saved.");
+    } else {
+      showIugFeedbackToast("Feedback could not be saved. Please try again.");
+    }
+  }
+
+  async function submitIugFeedback({ rating, comment = "", contact = "" }) {
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          rating,
+          comment,
+          contact,
+          page_url: window.location.href,
+          page_title: document.title,
+          user_agent: navigator.userAgent,
+          submitted_at: new Date().toISOString(),
+        }),
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error("IUG feedback submit failed:", error);
+      return false;
+    }
+  }
+
+  function clearIugFeedbackForm(type) {
+    const config = IUG_FEEDBACK_CONFIG[type];
+    if (!config) return;
+
+    document.getElementById(config.commentId).value = "";
+    document.getElementById(config.contactId).value = "";
+  }
+
+  function showIugFeedbackToast(message) {
+    const existingToast = document.querySelector(".iug-feedback-toast");
+
+    if (existingToast) {
+      existingToast.remove();
+    }
+
+    const toast = document.createElement("div");
+    toast.className = "iug-feedback-toast";
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("is-visible");
+    }, 10);
+
+    setTimeout(() => {
+      toast.classList.remove("is-visible");
+
+      setTimeout(() => {
+        toast.remove();
+      }, 200);
+    }, 2200);
+  }
+</script>
