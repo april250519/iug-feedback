@@ -156,18 +156,18 @@
   .iug-feedback-bar {
     position: fixed;
     left: 50%;
-    bottom: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     z-index: 9998;
 
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 42px;
+    gap: 54px;
 
     width: 100%;
     max-width: 420px;
-    padding: 8px 20px;
+    padding: 6px 20px;
 
     pointer-events: none;
   }
@@ -175,8 +175,8 @@
   .iug-feedback-emoji {
     pointer-events: auto;
 
-    width: 34px;
-    height: 34px;
+    width: 54px;
+    height: 54px;
     border: none;
     border-radius: 50%;
     background: transparent;
@@ -187,6 +187,7 @@
     justify-content: center;
 
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
     transition:
       transform 0.15s ease,
@@ -195,7 +196,7 @@
   }
 
   .iug-feedback-emoji:hover {
-    transform: scale(1.12);
+    transform: scale(1.08);
   }
 
   .iug-feedback-emoji:active {
@@ -203,14 +204,14 @@
   }
 
   .iug-feedback-emoji.is-selected {
-    transform: scale(1.16);
+    transform: scale(1.1);
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
   }
 
   .iug-emoji-img {
     display: block;
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
   }
 
@@ -224,6 +225,7 @@
     justify-content: center;
 
     padding: 18px;
+    box-sizing: border-box;
   }
 
   .iug-feedback-modal.is-open {
@@ -428,7 +430,7 @@
   .iug-feedback-toast {
     position: fixed;
     left: 50%;
-    bottom: 74px;
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%) translateY(8px);
     z-index: 10001;
 
@@ -457,19 +459,19 @@
 
   @media (max-width: 480px) {
     .iug-feedback-bar {
-      bottom: 14px;
-      gap: 42px;
-      padding: 8px 16px;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      gap: 50px;
+      padding: 4px 16px;
     }
 
     .iug-feedback-emoji {
-      width: 32px;
-      height: 32px;
+      width: 52px;
+      height: 52px;
     }
 
     .iug-emoji-img {
-      width: 30px;
-      height: 30px;
+      width: 46px;
+      height: 46px;
     }
 
     .iug-feedback-card {
@@ -479,6 +481,22 @@
 
     .iug-feedback-title {
       font-size: 19px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .iug-feedback-bar {
+      gap: 42px;
+    }
+
+    .iug-feedback-emoji {
+      width: 48px;
+      height: 48px;
+    }
+
+    .iug-emoji-img {
+      width: 42px;
+      height: 42px;
     }
   }
 </style>
