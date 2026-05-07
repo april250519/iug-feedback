@@ -1,15 +1,15 @@
 <!-- IUG Feedback: Entry + Modals -->
 <div class="iug-feedback-bar" aria-label="IUG feedback">
   <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
-    <span class="iug-emoji-face iug-face-satisfied">🙂</span>
+    <img class="iug-emoji-img" src="rate-satisfied.png" alt="Satisfied" />
   </button>
 
   <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
-    <span class="iug-emoji-face iug-face-neutral">😐</span>
+    <img class="iug-emoji-img" src="rate-neutral.png" alt="Neutral" />
   </button>
 
   <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
-    <span class="iug-emoji-face iug-face-unsatisfied">☹️</span>
+    <img class="iug-emoji-img" src="rate-unsatisfied.png" alt="Unsatisfied" />
   </button>
 </div>
 
@@ -18,7 +18,9 @@
   <div class="iug-feedback-overlay" data-close-modal></div>
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="satisfiedTitle">
-    <div class="iug-feedback-icon iug-icon-satisfied">🙂</div>
+    <div class="iug-feedback-icon">
+      <img class="iug-modal-emoji-img" src="rate-satisfied.png" alt="Satisfied" />
+    </div>
 
     <h2 id="satisfiedTitle" class="iug-feedback-title">
       Thanks for your feedback!
@@ -61,7 +63,9 @@
   <div class="iug-feedback-overlay" data-close-modal></div>
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="neutralTitle">
-    <div class="iug-feedback-icon iug-icon-neutral">😐</div>
+    <div class="iug-feedback-icon">
+      <img class="iug-modal-emoji-img" src="rate-neutral.png" alt="Neutral" />
+    </div>
 
     <h2 id="neutralTitle" class="iug-feedback-title">
       Thanks for your feedback!
@@ -104,7 +108,9 @@
   <div class="iug-feedback-overlay" data-close-modal></div>
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="unsatisfiedTitle">
-    <div class="iug-feedback-icon iug-icon-unsatisfied">☹️</div>
+    <div class="iug-feedback-icon">
+      <img class="iug-modal-emoji-img" src="rate-unsatisfied.png" alt="Unsatisfied" />
+    </div>
 
     <h2 id="unsatisfiedTitle" class="iug-feedback-title">
       Sorry this wasn't helpful.
@@ -168,6 +174,7 @@
 
   .iug-feedback-emoji {
     pointer-events: auto;
+
     width: 34px;
     height: 34px;
     border: none;
@@ -179,11 +186,12 @@
     align-items: center;
     justify-content: center;
 
-    font-size: 24px;
-    line-height: 1;
     cursor: pointer;
 
-    transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+    transition:
+      transform 0.15s ease,
+      filter 0.15s ease,
+      opacity 0.15s ease;
   }
 
   .iug-feedback-emoji:hover {
@@ -199,9 +207,11 @@
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
   }
 
-  .iug-emoji-face {
+  .iug-emoji-img {
     display: block;
-    line-height: 1;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
 
   .iug-feedback-modal {
@@ -249,30 +259,21 @@
   }
 
   .iug-feedback-icon {
-    width: 66px;
-    height: 66px;
-    border-radius: 50%;
+    width: 72px;
+    height: 72px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     margin-bottom: 20px;
-
-    font-size: 42px;
-    line-height: 1;
   }
 
-  .iug-icon-satisfied {
-    background: #46ad52;
-  }
-
-  .iug-icon-neutral {
-    background: #f3c433;
-  }
-
-  .iug-icon-unsatisfied {
-    background: #df4747;
+  .iug-modal-emoji-img {
+    display: block;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
   }
 
   .iug-feedback-title {
@@ -434,7 +435,9 @@
     opacity: 0;
     pointer-events: none;
 
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease;
   }
 
   .iug-feedback-toast.is-visible {
@@ -452,7 +455,11 @@
     .iug-feedback-emoji {
       width: 32px;
       height: 32px;
-      font-size: 23px;
+    }
+
+    .iug-emoji-img {
+      width: 30px;
+      height: 30px;
     }
 
     .iug-feedback-card {
