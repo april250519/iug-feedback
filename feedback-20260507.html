@@ -22,7 +22,12 @@
     </button>
 
     <div class="iug-feedback-top">
-      <img id="iugFeedbackIcon" class="iug-modal-emoji-img" src="./rate-satisfied.png" alt="" />
+      <img
+        id="iugFeedbackIcon"
+        class="iug-modal-emoji-img"
+        src="./rate-satisfied.png"
+        alt=""
+      />
 
       <h2 id="iugFeedbackTitle" class="iug-feedback-title">
         Thanks for your feedback!
@@ -71,13 +76,22 @@
   .iug-feedback-modal,
   .iug-feedback-modal * {
     box-sizing: border-box;
-    font-family: inherit;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Arial,
+      sans-serif;
   }
+
+  /* =========================
+     Bottom Emoji Entry
+  ========================= */
 
   .iug-feedback-bar {
     position: fixed;
     left: 50%;
-    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     z-index: 9998;
 
@@ -94,8 +108,8 @@
   .iug-feedback-emoji {
     pointer-events: auto;
 
-    width: 88px;
-    height: 88px;
+    width: 82px;
+    height: 82px;
 
     border: none;
     border-radius: 50%;
@@ -119,16 +133,19 @@
   }
 
   .iug-feedback-emoji.is-selected {
-    transform: scale(1.06);
+    transform: scale(1.05);
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
   }
 
   .iug-emoji-img {
-    display: block;
-    width: 78px;
-    height: 78px;
+    width: 72px;
+    height: 72px;
     object-fit: contain;
   }
+
+  /* =========================
+     Modal
+  ========================= */
 
   .iug-feedback-modal {
     position: fixed;
@@ -138,8 +155,6 @@
     display: none;
     align-items: center;
     justify-content: center;
-
-    padding: 0;
   }
 
   .iug-feedback-modal.is-open {
@@ -149,6 +164,7 @@
   .iug-feedback-overlay {
     position: absolute;
     inset: 0;
+
     background: rgba(0, 0, 0, 0.58);
     backdrop-filter: blur(2px);
   }
@@ -157,20 +173,21 @@
     position: relative;
     z-index: 1;
 
-    width: 80vw !important;
-    height: 70dvh !important;
-    max-width: none !important;
-    min-width: 0;
+    width: 80vw;
+    height: 70dvh;
 
-    padding: 34px 28px 30px;
+    max-width: 420px;
+    min-height: 560px;
+
+    padding: 30px 28px 26px;
 
     border-radius: 26px;
     background: #fff;
+
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
     color: #111;
     overflow: hidden;
@@ -178,77 +195,86 @@
 
   .iug-feedback-close {
     position: absolute;
-    top: 16px;
-    right: 18px;
-    z-index: 2;
+    top: 14px;
+    right: 16px;
 
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
 
     border: none;
     background: transparent;
-    color: #777;
 
-    font-size: 28px;
+    color: #777;
+    font-size: 24px;
     line-height: 1;
+
     cursor: pointer;
   }
 
-  .iug-feedback-top,
-  .iug-feedback-middle,
-  .iug-feedback-bottom {
-    width: 100%;
-  }
+  /* =========================
+     Top Section
+  ========================= */
 
   .iug-feedback-top {
+    width: 100%;
     text-align: center;
   }
 
   .iug-modal-emoji-img {
     display: block;
-    width: 72px;
-    height: 72px;
+
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 18px;
     object-fit: contain;
-    margin: 0 auto 24px;
   }
 
   .iug-feedback-title {
-    margin: 0 0 22px;
+    margin: 0 0 16px;
 
-    font-size: 26px;
-    line-height: 1.2;
+    font-size: 22px;
+    line-height: 1.25;
     font-weight: 800;
+
     text-align: center;
     color: #111;
   }
 
   .iug-feedback-optional {
-    margin: 0;
+    margin: 0 0 18px;
 
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1.35;
     font-style: italic;
     font-weight: 400;
-    color: #777;
+
     text-align: left;
+    color: #777;
   }
 
+  /* =========================
+     Middle Section
+  ========================= */
+
   .iug-feedback-middle {
-    margin-top: 24px;
+    width: 100%;
   }
 
   .iug-feedback-textarea {
     width: 100%;
-    height: 180px;
+    height: 150px;
+
     resize: none;
 
+    padding: 16px;
+
     border: 1.5px solid var(--iug-feedback-color, #46ad52);
-    border-radius: 18px;
+    border-radius: 16px;
+
     background: #fff;
 
-    padding: 18px;
-
-    font-size: 19px;
+    font-size: 16px;
     line-height: 1.4;
     font-weight: 400;
     color: #111;
@@ -258,16 +284,18 @@
 
   .iug-feedback-input {
     width: 100%;
-    height: 64px;
-    margin-top: 26px;
+    height: 54px;
+
+    margin-top: 18px;
+    padding: 0 16px;
 
     border: 1px solid #d8d8d8;
-    border-radius: 18px;
+    border-radius: 16px;
+
     background: #fff;
 
-    padding: 0 18px;
-
-    font-size: 19px;
+    font-size: 16px;
+    line-height: 1;
     font-weight: 400;
     color: #111;
 
@@ -286,28 +314,35 @@
   }
 
   .iug-feedback-contact-note {
-    margin: 14px 0 0;
+    margin: 10px 0 0;
 
-    font-size: 16px;
+    font-size: 13px;
     line-height: 1.35;
     font-style: italic;
     font-weight: 400;
-    color: #777;
+
     text-align: left;
+    color: #777;
   }
 
+  /* =========================
+     Bottom Section
+  ========================= */
+
   .iug-feedback-bottom {
-    margin-top: 26px;
+    width: 100%;
+    margin-top: auto;
   }
 
   .iug-feedback-note {
-    margin: 0 0 34px;
+    margin: 0 0 22px;
 
-    font-size: 18px;
-    line-height: 1.5;
+    font-size: 14px;
+    line-height: 1.45;
     font-weight: 400;
-    color: #666;
+
     text-align: center;
+    color: #666;
   }
 
   .iug-feedback-note.is-left {
@@ -316,14 +351,15 @@
 
   .iug-feedback-done {
     width: 100%;
-    height: 68px;
+    height: 58px;
 
     border: none;
     border-radius: 999px;
+
     background: #111;
     color: #fff;
 
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 800;
 
     cursor: pointer;
@@ -338,24 +374,30 @@
     pointer-events: none;
   }
 
+  /* =========================
+     Toast
+  ========================= */
+
   .iug-feedback-toast {
     position: fixed;
     left: 50%;
-    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(140px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%) translateY(8px);
+
     z-index: 10001;
 
     max-width: 80vw;
 
+    padding: 12px 18px;
+
+    border-radius: 999px;
+
     background: #111;
     color: #fff;
 
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
     line-height: 1.4;
-
-    padding: 12px 18px;
-    border-radius: 999px;
+    font-weight: 600;
 
     opacity: 0;
     pointer-events: none;
@@ -370,94 +412,24 @@
     transform: translateX(-50%) translateY(0);
   }
 
+  /* =========================
+     Small Phones
+  ========================= */
+
   @media (max-width: 430px) {
     .iug-feedback-card {
-      width: 80vw !important;
-      height: 70dvh !important;
-      padding: 30px 24px 26px;
+      width: 80vw;
+      height: 70dvh;
+
+      min-height: 540px;
+
+      padding: 28px 22px 24px;
       border-radius: 24px;
     }
 
     .iug-modal-emoji-img {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 20px;
-    }
-
-    .iug-feedback-title {
-      margin-bottom: 18px;
-      font-size: 22px;
-    }
-
-    .iug-feedback-optional {
-      font-size: 15px;
-    }
-
-    .iug-feedback-middle {
-      margin-top: 18px;
-    }
-
-    .iug-feedback-textarea {
-      height: 150px;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 15px;
-    }
-
-    .iug-feedback-input {
-      height: 54px;
-      margin-top: 18px;
-      padding: 0 14px;
-      border-radius: 14px;
-      font-size: 15px;
-    }
-
-    .iug-feedback-contact-note {
-      margin-top: 10px;
-      font-size: 13px;
-    }
-
-    .iug-feedback-bottom {
-      margin-top: 20px;
-    }
-
-    .iug-feedback-note {
-      margin-bottom: 24px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .iug-feedback-done {
-      height: 58px;
-      font-size: 18px;
-    }
-
-    .iug-feedback-bar {
-      bottom: calc(26px + env(safe-area-inset-bottom, 0px));
-      width: 80vw;
-    }
-
-    .iug-feedback-emoji {
-      width: 82px;
-      height: 82px;
-    }
-
-    .iug-emoji-img {
-      width: 72px;
-      height: 72px;
-    }
-  }
-
-  @media (max-height: 760px) {
-    .iug-feedback-card {
-      height: 70dvh !important;
-      padding-top: 26px;
-      padding-bottom: 24px;
-    }
-
-    .iug-modal-emoji-img {
-      width: 58px;
-      height: 58px;
+      width: 56px;
+      height: 56px;
       margin-bottom: 16px;
     }
 
@@ -468,31 +440,44 @@
 
     .iug-feedback-optional {
       font-size: 14px;
-    }
-
-    .iug-feedback-middle {
-      margin-top: 14px;
+      margin-bottom: 16px;
     }
 
     .iug-feedback-textarea {
-      height: 128px;
-      font-size: 14px;
+      height: 136px;
+      padding: 14px;
+      font-size: 15px;
     }
 
     .iug-feedback-input {
-      height: 48px;
-      margin-top: 14px;
-      font-size: 14px;
+      height: 50px;
+      margin-top: 16px;
+      padding: 0 14px;
+      font-size: 15px;
+    }
+
+    .iug-feedback-contact-note {
+      font-size: 12px;
     }
 
     .iug-feedback-note {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       font-size: 13px;
     }
 
     .iug-feedback-done {
-      height: 52px;
-      font-size: 16px;
+      height: 54px;
+      font-size: 17px;
+    }
+
+    .iug-feedback-emoji {
+      width: 76px;
+      height: 76px;
+    }
+
+    .iug-emoji-img {
+      width: 66px;
+      height: 66px;
     }
   }
 </style>
@@ -511,6 +496,7 @@
       contactNote: "",
       noteLeft: false,
     },
+
     neutral: {
       icon: "./rate-neutral.png",
       alt: "Neutral",
@@ -521,6 +507,7 @@
       contactNote: "",
       noteLeft: false,
     },
+
     unsatisfied: {
       icon: "./rate-unsatisfied.png",
       alt: "Unsatisfied",
@@ -537,12 +524,16 @@
 
   const modal = document.getElementById("iugFeedbackModal");
   const card = modal.querySelector(".iug-feedback-card");
+
   const icon = document.getElementById("iugFeedbackIcon");
   const title = document.getElementById("iugFeedbackTitle");
+
   const comment = document.getElementById("iugFeedbackComment");
   const contact = document.getElementById("iugFeedbackContact");
+
   const contactNote = document.getElementById("iugFeedbackContactNote");
   const note = document.getElementById("iugFeedbackNote");
+
   const doneButton = document.getElementById("iugFeedbackDone");
 
   document.querySelectorAll(".iug-feedback-emoji").forEach((button) => {
@@ -556,6 +547,7 @@
       });
 
       button.classList.add("is-selected");
+
       openIugFeedbackModal(feedbackType);
     });
   });
@@ -575,14 +567,13 @@
   function openIugFeedbackModal(type) {
     const config = IUG_FEEDBACK_CONTENT[type];
 
-    if (!config) {
-      console.error("IUG feedback type not found:", type);
-      return;
-    }
+    if (!config) return;
 
     icon.src = config.icon;
     icon.alt = config.alt;
+
     title.textContent = config.title;
+
     comment.placeholder = config.commentPlaceholder;
     contact.placeholder = config.contactPlaceholder;
 
@@ -620,7 +611,9 @@
     if (success) {
       comment.value = "";
       contact.value = "";
+
       closeIugFeedbackModal();
+
       showIugFeedbackToast("Thanks — your feedback was saved.");
     } else {
       showIugFeedbackToast("Feedback could not be saved. Please try again.");
@@ -664,6 +657,7 @@
     }
 
     const toast = document.createElement("div");
+
     toast.className = "iug-feedback-toast";
     toast.textContent = message;
 
