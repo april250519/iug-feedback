@@ -34,385 +34,386 @@
 </div>
 
 <style>
-  .iug-feedback-bar {
-    position: fixed;
-    left: 50%;
-    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
-    transform: translateX(-50%);
-    z-index: 9998;
-    width: 80vw;
-    max-width: 380px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    pointer-events: none;
-  }
+/* General Body and Emoji Bar */
+.iug-feedback-bar {
+  position: fixed;
+  bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  width: 80vw;
+  max-width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
 
-  .iug-feedback-emoji {
-    pointer-events: auto;
-    width: 88px;
-    height: 88px;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: transform 0.15s ease, filter 0.15s ease;
-  }
+.iug-feedback-emoji {
+  pointer-events: auto;
+  width: 88px;
+  height: 88px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
 
-  .iug-feedback-emoji:active {
-    transform: scale(0.94);
-  }
+.iug-feedback-emoji:active {
+  transform: scale(0.94);
+}
 
-  .iug-feedback-emoji.is-selected {
-    transform: scale(1.06);
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
-  }
+.iug-feedback-emoji.is-selected {
+  transform: scale(1.06);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+}
 
-  .iug-emoji-img {
-    width: 78px;
-    height: 78px;
-    object-fit: contain;
-  }
+.iug-emoji-img {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+}
 
-  /* Modal */
-  .iug-feedback-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
+/* Modal Styles */
+.iug-feedback-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
 
-  .iug-feedback-modal.is-open {
-    display: flex;
-  }
+.iug-feedback-modal.is-open {
+  display: flex;
+}
 
-  .iug-feedback-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(2px);
-  }
+.iug-feedback-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(2px);
+}
 
+.iug-feedback-card {
+  position: relative;
+  z-index: 1;
+  width: 80vw;
+  height: 70vh; /* Keeps it consistent with the mobile screen size */
+  max-width: 520px;
+  min-height: 620px;
+  padding: 42px 34px 30px;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  display: grid;
+  grid-template-rows: auto auto auto;
+  row-gap: 30px;
+  color: #111;
+  overflow: hidden;
+}
+
+.iug-feedback-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  color: #777;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Top Section */
+.iug-feedback-top {
+  width: 100%;
+  text-align: center;
+}
+
+.iug-modal-emoji-img {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 26px;
+  object-fit: contain;
+}
+
+.iug-feedback-title {
+  margin: 0 0 22px;
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 800;
+  text-align: center;
+  color: #111;
+}
+
+.iug-feedback-optional {
+  margin: 0 0 24px;
+  font-size: 18px;
+  line-height: 1.4;
+  font-style: italic;
+  font-weight: 400;
+  text-align: left;
+  color: #8a8a8a;
+}
+
+/* Middle Section */
+.iug-feedback-middle {
+  width: 100%;
+}
+
+.iug-feedback-textarea {
+  width: 100%;
+  height: 220px;
+  resize: none;
+  padding: 22px;
+  border: 2px solid var(--iug-feedback-color, #46ad52);
+  border-radius: 22px;
+  background: #fff;
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 400;
+  color: #111;
+  outline: none;
+}
+
+.iug-feedback-input {
+  width: 100%;
+  height: 74px;
+  margin-top: 24px;
+  padding: 0 22px;
+  border: 1.5px solid #d8d8d8;
+  border-radius: 20px;
+  background: #fff;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 400;
+  color: #111;
+  outline: none;
+}
+
+.iug-feedback-textarea::placeholder,
+.iug-feedback-input::placeholder {
+  color: #777;
+  opacity: 1;
+}
+
+.iug-feedback-textarea:focus,
+.iug-feedback-input:focus {
+  border-color: var(--iug-feedback-color, #46ad52);
+}
+
+.iug-feedback-contact-note {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  font-style: italic;
+  font-weight: 400;
+  text-align: left;
+  color: #8a8a8a;
+}
+
+/* Bottom Section */
+.iug-feedback-bottom {
+  width: 100%;
+  margin-top: auto;
+}
+
+.iug-feedback-note {
+  margin: 0 0 22px;
+  font-size: 18px;
+  line-height: 1.55;
+  font-weight: 400;
+  text-align: center;
+  color: #666;
+}
+
+.iug-feedback-note.is-left {
+  text-align: left;
+}
+
+.iug-feedback-done {
+  width: 100%;
+  height: 74px;
+  border: none;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.iug-feedback-done:active {
+  transform: scale(0.98);
+}
+
+.iug-feedback-done.is-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.iug-feedback-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%) translateY(8px);
+  z-index: 10001;
+  max-width: 80vw;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.iug-feedback-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 430px) {
   .iug-feedback-card {
-    position: relative;
-    z-index: 1;
     width: 80vw;
     height: 70dvh;
-    max-width: 520px;
-    min-height: 620px;
-    padding: 42px 34px 30px;
-    border-radius: 28px;
-    background: #fff;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-    display: grid;
-    grid-template-rows: auto auto auto;
-    row-gap: 30px;
-    color: #111;
-    overflow: hidden;
+    min-height: 540px;
+    padding: 30px 24px 24px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .iug-feedback-close {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    z-index: 2;
-    width: 34px;
-    height: 34px;
-    border: none;
-    background: transparent;
-    color: #777;
-    font-size: 28px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  /* Top Section */
-  .iug-feedback-top {
-    width: 100%;
-    text-align: center;
+    top: 14px;
+    right: 16px;
+    font-size: 24px;
   }
 
   .iug-modal-emoji-img {
-    display: block;
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 26px;
-    object-fit: contain;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 18px;
   }
 
   .iug-feedback-title {
-    margin: 0 0 22px;
-    font-size: 34px;
-    line-height: 1.15;
-    font-weight: 800;
-    text-align: center;
-    color: #111;
+    margin-bottom: 16px;
+    font-size: 22px;
+    line-height: 1.2;
   }
 
   .iug-feedback-optional {
-    margin: 0 0 24px;
-    font-size: 18px;
-    line-height: 1.4;
-    font-style: italic;
-    font-weight: 400;
-    text-align: left;
-    color: #8a8a8a;
-  }
-
-  /* Middle Section */
-  .iug-feedback-middle {
-    width: 100%;
+    margin-bottom: 16px;
+    font-size: 14px;
   }
 
   .iug-feedback-textarea {
-    width: 100%;
-    height: 220px;
-    resize: none;
-    padding: 22px;
-    border: 2px solid var(--iug-feedback-color, #46ad52);
-    border-radius: 22px;
-    background: #fff;
-    font-size: 22px;
-    line-height: 1.45;
-    font-weight: 400;
-    color: #111;
-    outline: none;
+    height: 160px;
+    padding: 14px;
+    border-width: 1.5px;
+    border-radius: 16px;
+    font-size: 16px;
+    line-height: 1.4;
   }
 
   .iug-feedback-input {
-    width: 100%;
-    height: 74px;
-    margin-top: 24px;
-    padding: 0 22px;
-    border: 1.5px solid #d8d8d8;
-    border-radius: 20px;
-    background: #fff;
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 400;
-    color: #111;
-    outline: none;
-  }
-
-  .iug-feedback-textarea::placeholder,
-  .iug-feedback-input::placeholder {
-    color: #777;
-    opacity: 1;
-  }
-
-  .iug-feedback-textarea:focus,
-  .iug-feedback-input:focus {
-    border-color: var(--iug-feedback-color, #46ad52);
+    height: 56px;
+    margin-top: 18px;
+    padding: 0 14px;
+    border-radius: 16px;
+    font-size: 16px;
   }
 
   .iug-feedback-contact-note {
-    margin: 14px 0 0;
-    font-size: 16px;
-    line-height: 1.45;
-    font-style: italic;
-    font-weight: 400;
-    text-align: left;
-    color: #8a8a8a;
-  }
-
-  /* Bottom Section */
-  .iug-feedback-bottom {
-    width: 100%;
-    margin-top: auto;
+    margin-top: 10px;
+    font-size: 12px;
   }
 
   .iug-feedback-note {
-    margin: 0 0 22px;
-    font-size: 18px;
-    line-height: 1.55;
-    font-weight: 400;
-    text-align: center;
-    color: #666;
-  }
-
-  .iug-feedback-note.is-left {
-    text-align: left;
+    margin: 24px 0 22px;
+    font-size: 13px;
+    line-height: 1.45;
   }
 
   .iug-feedback-done {
-    width: 100%;
-    height: 74px;
-    border: none;
-    border-radius: 999px;
-    background: #111;
-    color: #fff;
-    font-size: 24px;
-    font-weight: 800;
-    cursor: pointer;
+    height: 58px;
+    font-size: 18px;
   }
 
-  .iug-feedback-done:active {
-    transform: scale(0.98);
+  .iug-feedback-emoji {
+    width: 76px;
+    height: 76px;
   }
 
-  .iug-feedback-done.is-loading {
-    opacity: 0.7;
-    pointer-events: none;
+  .iug-emoji-img {
+    width: 66px;
+    height: 66px;
+  }
+}
+
+@media (max-height: 760px) {
+  .iug-feedback-card {
+    min-height: 0;
+    padding: 28px 24px 24px;
   }
 
-  .iug-feedback-toast {
-    position: fixed;
-    left: 50%;
-    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
-    transform: translateX(-50%) translateY(8px);
-    z-index: 10001;
-    max-width: 80vw;
-    padding: 12px 18px;
-    border-radius: 999px;
-    background: #111;
-    color: #fff;
-    font-size: 15px;
-    line-height: 1.4;
-    font-weight: 600;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+  .iug-modal-emoji-img {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 16px;
   }
 
-  .iug-feedback-toast.is-visible {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+  .iug-feedback-title {
+    margin-bottom: 14px;
+    font-size: 20px;
   }
 
-  @media (max-width: 430px) {
-    .iug-feedback-card {
-      width: 80vw;
-      height: 70dvh;
-      min-height: 540px;
-      padding: 30px 24px 24px;
-      border-radius: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .iug-feedback-close {
-      top: 14px;
-      right: 16px;
-      font-size: 24px;
-    }
-
-    .iug-modal-emoji-img {
-      width: 56px;
-      height: 56px;
-      margin-bottom: 18px;
-    }
-
-    .iug-feedback-title {
-      margin-bottom: 16px;
-      font-size: 22px;
-      line-height: 1.2;
-    }
-
-    .iug-feedback-optional {
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
-    .iug-feedback-textarea {
-      height: 160px;
-      padding: 14px;
-      border-width: 1.5px;
-      border-radius: 16px;
-      font-size: 16px;
-      line-height: 1.4;
-    }
-
-    .iug-feedback-input {
-      height: 56px;
-      margin-top: 18px;
-      padding: 0 14px;
-      border-radius: 16px;
-      font-size: 16px;
-    }
-
-    .iug-feedback-contact-note {
-      margin-top: 10px;
-      font-size: 12px;
-    }
-
-    .iug-feedback-note {
-      margin: 24px 0 22px;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .iug-feedback-done {
-      height: 58px;
-      font-size: 18px;
-    }
-
-    .iug-feedback-emoji {
-      width: 76px;
-      height: 76px;
-    }
-
-    .iug-emoji-img {
-      width: 66px;
-      height: 66px;
-    }
+  .iug-feedback-optional {
+    margin-bottom: 14px;
+    font-size: 13px;
   }
 
-  @media (max-height: 760px) {
-    .iug-feedback-card {
-      min-height: 0;
-      padding: 28px 24px 24px;
-    }
-
-    .iug-modal-emoji-img {
-      width: 54px;
-      height: 54px;
-      margin-bottom: 16px;
-    }
-
-    .iug-feedback-title {
-      margin-bottom: 14px;
-      font-size: 20px;
-    }
-
-    .iug-feedback-optional {
-      margin-bottom: 14px;
-      font-size: 13px;
-    }
-
-    .iug-feedback-textarea {
-      height: 132px;
-      padding: 14px;
-      font-size: 14px;
-    }
-
-    .iug-feedback-input {
-      height: 48px;
-      margin-top: 14px;
-      font-size: 14px;
-    }
-
-    .iug-feedback-contact-note {
-      font-size: 12px;
-    }
-
-    .iug-feedback-note {
-      margin: 18px 0 18px;
-      font-size: 12px;
-    }
-
-    .iug-feedback-done {
-      height: 52px;
-      font-size: 16px;
-    }
+  .iug-feedback-textarea {
+    height: 132px;
+    padding: 14px;
+    font-size: 14px;
   }
+
+  .iug-feedback-input {
+    height: 48px;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+
+  .iug-feedback-contact-note {
+    font-size: 12px;
+  }
+
+  .iug-feedback-note {
+    margin: 18px 0 18px;
+    font-size: 12px;
+  }
+
+  .iug-feedback-done {
+    height: 52px;
+    font-size: 16px;
+  }
+}
 </style>
 
 <script>
@@ -569,19 +570,4 @@
           page_url: window.location.href,
           page_title: document.title,
           user_agent: navigator.userAgent,
-          submitted_at: new Date().toISOString(),
-        }),
-      });
-
-      return response.ok;
-    } catch (error) {
-      console.error("IUG feedback submit failed:", error);
-      return false;
-    }
-  }
-
-  function showIugFeedbackToast(message) {
-    const existingToast = document.querySelector(".iug-feedback-toast");
-
-    if (existingToast) {
-      existingToast.remove
+         
