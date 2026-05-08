@@ -11,49 +11,59 @@
   </button>
 </div>
 
-<!-- Satisfied Modal -->
+<!-- Modal Template -->
 <div class="iug-feedback-modal" id="iugSatisfiedModal" aria-hidden="true">
   <div class="iug-feedback-overlay" data-close-modal></div>
   <div class="iug-feedback-card" role="dialog" aria-modal="true">
-    <img class="iug-modal-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
-    <h2 class="iug-feedback-title">Thanks for your feedback!</h2>
-    <p class="iug-feedback-subtitle">Glad this helped!</p>
-    <p class="iug-feedback-optional">Both fields are optional.</p>
-    <textarea id="satisfiedComment" class="iug-feedback-textarea" placeholder="Any comments or suggestions?"></textarea>
-    <input id="satisfiedContact" class="iug-feedback-input" type="text" placeholder="Your Email" />
-    <p class="iug-feedback-note">Every comment is read by our team and helps us improve.</p>
-    <button class="iug-feedback-done" type="button" data-submit-feedback="satisfied">Done</button>
+    <div class="iug-feedback-top">
+      <img class="iug-modal-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
+      <h2 class="iug-feedback-title">Thanks for your feedback!</h2>
+      <p class="iug-feedback-subtitle">Glad this helped!</p>
+      <p class="iug-feedback-optional">Both fields are optional.</p>
+      <textarea id="satisfiedComment" class="iug-feedback-textarea" placeholder="Any comments or suggestions?"></textarea>
+      <input id="satisfiedContact" class="iug-feedback-input" type="text" placeholder="Your Email" />
+    </div>
+    <div class="iug-feedback-bottom">
+      <p class="iug-feedback-note">Every comment is read by our team and helps us improve.</p>
+      <button class="iug-feedback-done" type="button" data-submit-feedback="satisfied">Done</button>
+    </div>
   </div>
 </div>
 
-<!-- Neutral Modal -->
 <div class="iug-feedback-modal" id="iugNeutralModal" aria-hidden="true">
   <div class="iug-feedback-overlay" data-close-modal></div>
   <div class="iug-feedback-card" role="dialog" aria-modal="true">
-    <img class="iug-modal-emoji-img" src="./rate-neutral.png" alt="Neutral" />
-    <h2 class="iug-feedback-title">Thanks for your feedback!</h2>
-    <p class="iug-feedback-subtitle">What could be better?</p>
-    <p class="iug-feedback-optional">Both fields are optional.</p>
-    <textarea id="neutralComment" class="iug-feedback-textarea" placeholder="Any comments or suggestions?"></textarea>
-    <input id="neutralContact" class="iug-feedback-input" type="text" placeholder="Your Email" />
-    <p class="iug-feedback-note">Every comment is read by our team and helps us improve.</p>
-    <button class="iug-feedback-done" type="button" data-submit-feedback="neutral">Done</button>
+    <div class="iug-feedback-top">
+      <img class="iug-modal-emoji-img" src="./rate-neutral.png" alt="Neutral" />
+      <h2 class="iug-feedback-title">Thanks for your feedback!</h2>
+      <p class="iug-feedback-subtitle">What could be better?</p>
+      <p class="iug-feedback-optional">Both fields are optional.</p>
+      <textarea id="neutralComment" class="iug-feedback-textarea" placeholder="Any comments or suggestions?"></textarea>
+      <input id="neutralContact" class="iug-feedback-input" type="text" placeholder="Your Email" />
+    </div>
+    <div class="iug-feedback-bottom">
+      <p class="iug-feedback-note">Every comment is read by our team and helps us improve.</p>
+      <button class="iug-feedback-done" type="button" data-submit-feedback="neutral">Done</button>
+    </div>
   </div>
 </div>
 
-<!-- Unsatisfied Modal -->
 <div class="iug-feedback-modal" id="iugUnsatisfiedModal" aria-hidden="true">
   <div class="iug-feedback-overlay" data-close-modal></div>
   <div class="iug-feedback-card" role="dialog" aria-modal="true">
-    <img class="iug-modal-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
-    <h2 class="iug-feedback-title">Sorry this wasn't helpful.</h2>
-    <p class="iug-feedback-subtitle">What went wrong?</p>
-    <p class="iug-feedback-optional">Both fields are optional.</p>
-    <textarea id="unsatisfiedComment" class="iug-feedback-textarea" placeholder="Tell us what happened"></textarea>
-    <input id="unsatisfiedContact" class="iug-feedback-input" type="text" placeholder="Your Email or Phone Number" />
-    <p class="iug-feedback-contact-note">So we can help you within 24h.</p>
-    <p class="iug-feedback-note">Every comment is read by our team and helps us improve.</p>
-    <button class="iug-feedback-done" type="button" data-submit-feedback="unsatisfied">Done</button>
+    <div class="iug-feedback-top">
+      <img class="iug-modal-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
+      <h2 class="iug-feedback-title">Sorry this wasn't helpful.</h2>
+      <p class="iug-feedback-subtitle">What went wrong?</p>
+      <p class="iug-feedback-optional">Both fields are optional.</p>
+      <textarea id="unsatisfiedComment" class="iug-feedback-textarea" placeholder="Tell us what happened"></textarea>
+      <input id="unsatisfiedContact" class="iug-feedback-input" type="text" placeholder="Your Email or Phone Number" />
+      <p class="iug-feedback-contact-note">So we can help you within 24h.</p>
+    </div>
+    <div class="iug-feedback-bottom">
+      <p class="iug-feedback-note">Every comment is read by our team and helps us improve.</p>
+      <button class="iug-feedback-done" type="button" data-submit-feedback="unsatisfied">Done</button>
+    </div>
   </div>
 </div>
 
@@ -76,7 +86,6 @@
   cursor: pointer;
   border-radius: 50%;
   padding: 0;
-  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,11 +100,10 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 0;
-  display: none;
 }
 .iug-feedback-modal.is-open { display: flex; }
 .iug-feedback-overlay {
@@ -112,19 +120,20 @@
   padding: 20px 24px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between; /* 上下均匀分布 */
   align-items: center;
   overflow-y: auto;
   background: #fff;
   box-sizing: border-box;
 }
-.iug-modal-emoji-img { width: 96px; height: 96px; margin-bottom: 20px; }
+.iug-modal-emoji-img { width: 96px; height: 96px; margin-bottom: 10px; }
 .iug-feedback-title { font-size: 20px; font-weight: 800; margin:0; text-align:center; }
-.iug-feedback-subtitle { font-size:14px; font-weight:700; margin:8px 0 24px; text-align:center; }
-.iug-feedback-optional { width:100%; font-size:13px; font-style:italic; color:#777; text-align:left; margin-bottom:18px; }
-.iug-feedback-textarea { width:100%; height:126px; border:1px solid #c9c9c9; border-radius:6px; padding:11px 8px; font-size:13px; margin-bottom:20px; resize:none; }
+.iug-feedback-subtitle { font-size:14px; font-weight:700; margin:8px 0 16px; text-align:center; }
+.iug-feedback-optional { width:100%; font-size:13px; font-style:italic; color:#777; text-align:left; margin-bottom:12px; }
+.iug-feedback-textarea { width:100%; height:126px; border:1px solid #c9c9c9; border-radius:6px; padding:11px 8px; font-size:13px; margin-bottom:16px; resize:none; }
 .iug-feedback-input { width:100%; height:40px; border:1px solid #c9c9c9; border-radius:6px; padding:0 8px; font-size:13px; margin-bottom:12px; }
-.iug-feedback-contact-note { font-size:12px; color:#777; font-style:italic; width:100%; margin-bottom:28px; }
-.iug-feedback-note { width:100%; font-size:13px; color:#666; text-align:left; margin-bottom:24px; }
+.iug-feedback-contact-note { font-size:12px; color:#777; font-style:italic; width:100%; margin-bottom:12px; }
+.iug-feedback-note { width:100%; font-size:13px; color:#666; text-align:left; margin-bottom:8px; }
 .iug-feedback-done { width:100%; height:38px; border:none; border-radius:999px; background:#000; color:#fff; font-weight:800; font-size:15px; cursor:pointer; }
 </style>
 
@@ -141,8 +150,6 @@ document.querySelectorAll(".iug-feedback-emoji").forEach(button=>{
   button.addEventListener("click",()=>{
     const feedbackType=button.dataset.feedback;
     selectedIugFeedback=feedbackType;
-    document.querySelectorAll(".iug-feedback-emoji").forEach(btn=>btn.classList.remove("is-selected"));
-    button.classList.add("is-selected");
     openIugFeedbackModal(feedbackType);
   });
 });
