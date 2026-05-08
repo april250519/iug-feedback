@@ -64,7 +64,7 @@
   .iug-feedback-bar {
     position: fixed;
     left: 50%;
-    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     z-index: 9998;
 
@@ -72,24 +72,22 @@
     align-items: center;
     justify-content: space-between;
 
-    width: 78vw;
+    width: 80vw;
     max-width: 360px;
     pointer-events: none;
   }
 
   .iug-feedback-emoji {
     pointer-events: auto;
-    width: 88px;
-    height: 88px;
+    width: 86px;
+    height: 86px;
     border: none;
     border-radius: 50%;
     background: transparent;
     padding: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
@@ -100,26 +98,13 @@
     object-fit: contain;
   }
 
-  .iug-feedback-emoji:active {
-    transform: scale(0.94);
-  }
-
-  .iug-feedback-emoji.is-selected {
-    transform: scale(1.06);
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
-  }
-
   .iug-feedback-modal {
     position: fixed;
     inset: 0;
     z-index: 10000;
-
     display: none;
     align-items: center;
     justify-content: center;
-
-    padding: 0;
-    box-sizing: border-box;
   }
 
   .iug-feedback-modal.is-open {
@@ -139,54 +124,59 @@
 
     width: 80vw;
     height: 70dvh;
-    max-width: none;
+    max-width: 430px;
+    max-height: 640px;
+    min-height: 560px;
 
     background: #fff;
     border-radius: 24px;
-    padding: 36px 28px 30px;
+    padding: 34px 28px 28px;
 
     box-shadow: 0 22px 56px rgba(0, 0, 0, 0.32);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     box-sizing: border-box;
     font-family: inherit;
     color: #111;
+
+    display: grid;
+    grid-template-rows:
+      auto
+      auto
+      auto
+      auto
+      auto
+      1fr
+      auto
+      auto;
   }
 
   .iug-feedback-close {
     position: absolute;
-    top: 16px;
-    right: 18px;
-
-    width: 32px;
-    height: 32px;
-
+    top: 14px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
     border: none;
     background: transparent;
     color: #777;
-
-    font-size: 28px;
+    font-size: 26px;
     line-height: 1;
     cursor: pointer;
   }
 
   .iug-feedback-icon {
-    width: 74px;
-    height: 74px;
-    margin-bottom: 22px;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
   }
 
   .iug-modal-emoji-img {
-    width: 74px;
-    height: 74px;
+    width: 72px;
+    height: 72px;
     object-fit: contain;
   }
 
   .iug-feedback-title {
-    margin: 0;
+    margin: 0 0 18px;
     font-size: 24px;
     line-height: 1.25;
     font-weight: 800;
@@ -195,9 +185,7 @@
   }
 
   .iug-feedback-subtitle {
-    width: 100%;
-    margin: 18px 0 18px;
-
+    margin: 0 0 16px;
     font-size: 16px;
     line-height: 1.35;
     font-style: italic;
@@ -207,8 +195,7 @@
 
   .iug-feedback-textarea {
     width: 100%;
-    height: 22%;
-    min-height: 130px;
+    height: 150px;
     resize: none;
 
     border: 1.5px solid var(--iug-feedback-color, #46ad52);
@@ -216,9 +203,8 @@
     background: #fff;
 
     padding: 18px;
-
     font-family: inherit;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1.4;
     color: #111;
 
@@ -228,17 +214,16 @@
 
   .iug-feedback-input {
     width: 100%;
-    height: 64px;
-    margin-top: 24px;
+    height: 62px;
+    margin-top: 22px;
 
     border: 1px solid #d8d8d8;
     border-radius: 18px;
     background: #fff;
 
     padding: 0 18px;
-
     font-family: inherit;
-    font-size: 18px;
+    font-size: 17px;
     color: #111;
 
     outline: none;
@@ -257,9 +242,7 @@
   }
 
   .iug-feedback-contact-note {
-    width: 100%;
     margin: 10px 0 0;
-
     font-size: 14px;
     line-height: 1.35;
     font-style: italic;
@@ -268,9 +251,8 @@
   }
 
   .iug-feedback-note {
-    width: 100%;
-    margin: 34px 0 30px;
-
+    align-self: end;
+    margin: 0 0 28px;
     font-size: 16px;
     line-height: 1.45;
     color: #666;
@@ -281,8 +263,6 @@
     width: 100%;
     height: 66px;
 
-    margin-top: 0;
-
     border: none;
     border-radius: 999px;
     background: #111;
@@ -291,7 +271,6 @@
     font-family: inherit;
     font-size: 20px;
     font-weight: 800;
-
     cursor: pointer;
   }
 
@@ -312,7 +291,6 @@
     z-index: 10001;
 
     max-width: 80vw;
-
     background: #111;
     color: #fff;
 
@@ -325,7 +303,6 @@
 
     opacity: 0;
     pointer-events: none;
-
     transition: opacity 0.18s ease, transform 0.18s ease;
   }
 
@@ -338,16 +315,11 @@
     .iug-feedback-card {
       width: 80vw;
       height: 70dvh;
-      padding: 32px 24px 28px;
-      border-radius: 24px;
+      min-height: 560px;
+      padding: 32px 24px 26px;
     }
 
-    .iug-feedback-icon {
-      width: 68px;
-      height: 68px;
-      margin-bottom: 20px;
-    }
-
+    .iug-feedback-icon,
     .iug-modal-emoji-img {
       width: 68px;
       height: 68px;
@@ -362,8 +334,7 @@
     }
 
     .iug-feedback-textarea {
-      height: 24%;
-      min-height: 128px;
+      height: 140px;
       font-size: 16px;
     }
 
@@ -374,22 +345,11 @@
 
     .iug-feedback-note {
       font-size: 15px;
-      margin: 30px 0 28px;
     }
 
     .iug-feedback-done {
       height: 60px;
       font-size: 18px;
-    }
-
-    .iug-feedback-emoji {
-      width: 82px;
-      height: 82px;
-    }
-
-    .iug-emoji-img {
-      width: 72px;
-      height: 72px;
     }
   }
 </style>
