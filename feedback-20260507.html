@@ -84,64 +84,64 @@
       sans-serif;
   }
 
-  /* =========================
+ /* =========================
      Bottom Emoji Entry
   ========================= */
 
-  .iug-feedback-bar {
-    position: fixed;
-    left: 50%;
-    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
-    transform: translateX(-50%);
-    z-index: 9998;
+.iug-feedback-bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 9998;
 
-    width: 80vw;
-    max-width: 380px;
+  width: 80vw;
+  max-width: 380px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    pointer-events: none;
-  }
+  pointer-events: auto; /* 允许点击 */
+}
 
-  .iug-feedback-emoji {
-    pointer-events: auto;
+.iug-feedback-emoji {
+  pointer-events: auto; /* 允许点击 */
 
-    width: 88px;
-    height: 88px;
+  width: 88px;
+  height: 88px;
 
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  padding: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
-    transition:
-      transform 0.15s ease,
-      filter 0.15s ease;
-  }
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
 
-  .iug-feedback-emoji:active {
-    transform: scale(0.94);
-  }
+.iug-feedback-emoji:active {
+  transform: scale(0.94);
+}
 
-  .iug-feedback-emoji.is-selected {
-    transform: scale(1.06);
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
-  }
+.iug-feedback-emoji.is-selected {
+  transform: scale(1.06);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+}
 
-  .iug-emoji-img {
-    width: 78px;
-    height: 78px;
-    object-fit: contain;
-  }
+.iug-emoji-img {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+}
 
   /* =========================
      Modal
