@@ -84,10 +84,14 @@
       sans-serif;
   }
 
+  /* =========================
+     Bottom Emoji Entry
+  ========================= */
+
   .iug-feedback-bar {
     position: fixed;
     left: 50%;
-    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     z-index: 9998;
 
@@ -138,6 +142,10 @@
     height: 78px;
     object-fit: contain;
   }
+
+  /* =========================
+     Modal
+  ========================= */
 
   .iug-feedback-modal {
     position: fixed;
@@ -204,13 +212,12 @@
     cursor: pointer;
   }
 
-  .iug-feedback-top,
-  .iug-feedback-middle,
-  .iug-feedback-bottom {
-    width: 100%;
-  }
+  /* =========================
+     Top Section
+  ========================= */
 
   .iug-feedback-top {
+    width: 100%;
     text-align: center;
   }
 
@@ -246,6 +253,10 @@
     text-align: left;
     color: #8a8a8a;
   }
+
+  /* =========================
+     Middle Section
+  ========================= */
 
   .iug-feedback-middle {
     width: 100%;
@@ -315,13 +326,17 @@
     color: #8a8a8a;
   }
 
+  /* =========================
+     Bottom Section
+  ========================= */
+
   .iug-feedback-bottom {
     width: 100%;
     margin-top: auto;
   }
 
   .iug-feedback-note {
-    margin: 38px 0 28px;
+    margin: 0 0 22px;
 
     font-size: 18px;
     line-height: 1.55;
@@ -399,8 +414,12 @@
       height: 70dvh;
       min-height: 540px;
 
-      padding: 32px 24px 24px;
+      padding: 30px 24px 24px;
       border-radius: 24px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .iug-feedback-close {
@@ -464,13 +483,13 @@
     }
 
     .iug-feedback-emoji {
-      width: 82px;
-      height: 82px;
+      width: 76px;
+      height: 76px;
     }
 
     .iug-emoji-img {
-      width: 72px;
-      height: 72px;
+      width: 66px;
+      height: 66px;
     }
   }
 
@@ -687,34 +706,4 @@
       return response.ok;
     } catch (error) {
       console.error("IUG feedback submit failed:", error);
-      return false;
-    }
-  }
-
-  function showIugFeedbackToast(message) {
-    const existingToast = document.querySelector(".iug-feedback-toast");
-
-    if (existingToast) {
-      existingToast.remove();
-    }
-
-    const toast = document.createElement("div");
-
-    toast.className = "iug-feedback-toast";
-    toast.textContent = message;
-
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-      toast.classList.add("is-visible");
-    }, 10);
-
-    setTimeout(() => {
-      toast.classList.remove("is-visible");
-
-      setTimeout(() => {
-        toast.remove();
-      }, 200);
-    }, 2200);
-  }
-</script>
+     
