@@ -84,14 +84,10 @@
       sans-serif;
   }
 
-  /* =========================
-     Bottom Emoji Entry
-  ========================= */
-
   .iug-feedback-bar {
     position: fixed;
     left: 50%;
-    bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%);
     z-index: 9998;
 
@@ -108,8 +104,8 @@
   .iug-feedback-emoji {
     pointer-events: auto;
 
-    width: 82px;
-    height: 82px;
+    width: 88px;
+    height: 88px;
 
     border: none;
     border-radius: 50%;
@@ -133,19 +129,15 @@
   }
 
   .iug-feedback-emoji.is-selected {
-    transform: scale(1.05);
+    transform: scale(1.06);
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
   }
 
   .iug-emoji-img {
-    width: 72px;
-    height: 72px;
+    width: 78px;
+    height: 78px;
     object-fit: contain;
   }
-
-  /* =========================
-     Modal
-  ========================= */
 
   .iug-feedback-modal {
     position: fixed;
@@ -176,12 +168,12 @@
     width: 80vw;
     height: 70dvh;
 
-    max-width: 420px;
-    min-height: 560px;
+    max-width: 520px;
+    min-height: 620px;
 
-    padding: 30px 28px 26px;
+    padding: 42px 34px 30px;
 
-    border-radius: 26px;
+    border-radius: 28px;
     background: #fff;
 
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
@@ -195,46 +187,48 @@
 
   .iug-feedback-close {
     position: absolute;
-    top: 14px;
-    right: 16px;
+    top: 18px;
+    right: 20px;
+    z-index: 2;
 
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
 
     border: none;
     background: transparent;
 
     color: #777;
-    font-size: 24px;
+    font-size: 28px;
     line-height: 1;
 
     cursor: pointer;
   }
 
-  /* =========================
-     Top Section
-  ========================= */
+  .iug-feedback-top,
+  .iug-feedback-middle,
+  .iug-feedback-bottom {
+    width: 100%;
+  }
 
   .iug-feedback-top {
-    width: 100%;
     text-align: center;
   }
 
   .iug-modal-emoji-img {
     display: block;
 
-    width: 60px;
-    height: 60px;
+    width: 72px;
+    height: 72px;
 
-    margin: 0 auto 18px;
+    margin: 0 auto 26px;
     object-fit: contain;
   }
 
   .iug-feedback-title {
-    margin: 0 0 16px;
+    margin: 0 0 22px;
 
-    font-size: 22px;
-    line-height: 1.25;
+    font-size: 34px;
+    line-height: 1.15;
     font-weight: 800;
 
     text-align: center;
@@ -242,20 +236,16 @@
   }
 
   .iug-feedback-optional {
-    margin: 0 0 18px;
+    margin: 0 0 24px;
 
-    font-size: 15px;
-    line-height: 1.35;
+    font-size: 18px;
+    line-height: 1.4;
     font-style: italic;
     font-weight: 400;
 
     text-align: left;
-    color: #777;
+    color: #8a8a8a;
   }
-
-  /* =========================
-     Middle Section
-  ========================= */
 
   .iug-feedback-middle {
     width: 100%;
@@ -263,19 +253,19 @@
 
   .iug-feedback-textarea {
     width: 100%;
-    height: 150px;
+    height: 220px;
 
     resize: none;
 
-    padding: 16px;
+    padding: 22px;
 
-    border: 1.5px solid var(--iug-feedback-color, #46ad52);
-    border-radius: 16px;
+    border: 2px solid var(--iug-feedback-color, #46ad52);
+    border-radius: 22px;
 
     background: #fff;
 
-    font-size: 16px;
-    line-height: 1.4;
+    font-size: 22px;
+    line-height: 1.45;
     font-weight: 400;
     color: #111;
 
@@ -284,17 +274,17 @@
 
   .iug-feedback-input {
     width: 100%;
-    height: 54px;
+    height: 74px;
 
-    margin-top: 18px;
-    padding: 0 16px;
+    margin-top: 24px;
+    padding: 0 22px;
 
-    border: 1px solid #d8d8d8;
-    border-radius: 16px;
+    border: 1.5px solid #d8d8d8;
+    border-radius: 20px;
 
     background: #fff;
 
-    font-size: 16px;
+    font-size: 22px;
     line-height: 1;
     font-weight: 400;
     color: #111;
@@ -314,20 +304,16 @@
   }
 
   .iug-feedback-contact-note {
-    margin: 10px 0 0;
+    margin: 14px 0 0;
 
-    font-size: 13px;
-    line-height: 1.35;
+    font-size: 16px;
+    line-height: 1.45;
     font-style: italic;
     font-weight: 400;
 
     text-align: left;
-    color: #777;
+    color: #8a8a8a;
   }
-
-  /* =========================
-     Bottom Section
-  ========================= */
 
   .iug-feedback-bottom {
     width: 100%;
@@ -335,10 +321,10 @@
   }
 
   .iug-feedback-note {
-    margin: 0 0 22px;
+    margin: 38px 0 28px;
 
-    font-size: 14px;
-    line-height: 1.45;
+    font-size: 18px;
+    line-height: 1.55;
     font-weight: 400;
 
     text-align: center;
@@ -351,7 +337,7 @@
 
   .iug-feedback-done {
     width: 100%;
-    height: 58px;
+    height: 74px;
 
     border: none;
     border-radius: 999px;
@@ -359,7 +345,7 @@
     background: #111;
     color: #fff;
 
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 800;
 
     cursor: pointer;
@@ -374,16 +360,11 @@
     pointer-events: none;
   }
 
-  /* =========================
-     Toast
-  ========================= */
-
   .iug-feedback-toast {
     position: fixed;
     left: 50%;
-    bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
     transform: translateX(-50%) translateY(8px);
-
     z-index: 10001;
 
     max-width: 80vw;
@@ -395,7 +376,7 @@
     background: #111;
     color: #fff;
 
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.4;
     font-weight: 600;
 
@@ -412,48 +393,119 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* =========================
-     Small Phones
-  ========================= */
-
   @media (max-width: 430px) {
     .iug-feedback-card {
       width: 80vw;
       height: 70dvh;
-
       min-height: 540px;
 
-      padding: 28px 22px 24px;
+      padding: 32px 24px 24px;
       border-radius: 24px;
+    }
+
+    .iug-feedback-close {
+      top: 14px;
+      right: 16px;
+      font-size: 24px;
     }
 
     .iug-modal-emoji-img {
       width: 56px;
       height: 56px;
+      margin-bottom: 18px;
+    }
+
+    .iug-feedback-title {
+      margin-bottom: 16px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .iug-feedback-optional {
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .iug-feedback-textarea {
+      height: 160px;
+      padding: 14px;
+
+      border-width: 1.5px;
+      border-radius: 16px;
+
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .iug-feedback-input {
+      height: 56px;
+      margin-top: 18px;
+      padding: 0 14px;
+
+      border-radius: 16px;
+
+      font-size: 16px;
+    }
+
+    .iug-feedback-contact-note {
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    .iug-feedback-note {
+      margin: 24px 0 22px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .iug-feedback-done {
+      height: 58px;
+      font-size: 18px;
+    }
+
+    .iug-feedback-emoji {
+      width: 82px;
+      height: 82px;
+    }
+
+    .iug-emoji-img {
+      width: 72px;
+      height: 72px;
+    }
+  }
+
+  @media (max-height: 760px) {
+    .iug-feedback-card {
+      min-height: 0;
+      padding: 28px 24px 24px;
+    }
+
+    .iug-modal-emoji-img {
+      width: 54px;
+      height: 54px;
       margin-bottom: 16px;
     }
 
     .iug-feedback-title {
-      font-size: 20px;
       margin-bottom: 14px;
+      font-size: 20px;
     }
 
     .iug-feedback-optional {
-      font-size: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      font-size: 13px;
     }
 
     .iug-feedback-textarea {
-      height: 136px;
+      height: 132px;
       padding: 14px;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .iug-feedback-input {
-      height: 50px;
-      margin-top: 16px;
-      padding: 0 14px;
-      font-size: 15px;
+      height: 48px;
+      margin-top: 14px;
+      font-size: 14px;
     }
 
     .iug-feedback-contact-note {
@@ -461,23 +513,13 @@
     }
 
     .iug-feedback-note {
-      margin-bottom: 20px;
-      font-size: 13px;
+      margin: 18px 0 18px;
+      font-size: 12px;
     }
 
     .iug-feedback-done {
-      height: 54px;
-      font-size: 17px;
-    }
-
-    .iug-feedback-emoji {
-      width: 76px;
-      height: 76px;
-    }
-
-    .iug-emoji-img {
-      width: 66px;
-      height: 66px;
+      height: 52px;
+      font-size: 16px;
     }
   }
 </style>
