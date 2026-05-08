@@ -1,709 +1,248 @@
-<!-- IUG Feedback: Entry + Single Dynamic Modal -->
-<div class="iug-feedback-bar" aria-label="IUG feedback">
-  <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
-    <img class="iug-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
-  </button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IUG Feedback</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-  <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
-    <img class="iug-emoji-img" src="./rate-neutral.png" alt="Neutral" />
-  </button>
-
-  <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
-    <img class="iug-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
-  </button>
-</div>
-
-<div class="iug-feedback-modal" id="iugFeedbackModal" aria-hidden="true">
-  <div class="iug-feedback-overlay" data-close-modal></div>
-
-  <div class="iug-feedback-card" role="dialog" aria-modal="true">
-    <button class="iug-feedback-close" type="button" aria-label="Close" data-close-modal>
-      ×
+  <!-- Feedback Button Bar -->
+  <div class="iug-feedback-bar" aria-label="IUG feedback">
+    <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
+      <img class="iug-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
     </button>
 
-    <div class="iug-feedback-top">
-      <img
-        id="iugFeedbackIcon"
-        class="iug-modal-emoji-img"
-        src="./rate-satisfied.png"
-        alt=""
-      />
+    <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
+      <img class="iug-emoji-img" src="./rate-neutral.png" alt="Neutral" />
+    </button>
 
-      <h2 id="iugFeedbackTitle" class="iug-feedback-title">
-        Thanks for your feedback!
-      </h2>
+    <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
+      <img class="iug-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
+    </button>
+  </div>
 
-      <p class="iug-feedback-optional">
-        Both fields are optional.
-      </p>
-    </div>
+  <!-- Feedback Modal -->
+  <div class="iug-feedback-modal" id="iugFeedbackModal" aria-hidden="true">
+    <div class="iug-feedback-overlay" data-close-modal></div>
 
-    <div class="iug-feedback-middle">
-      <textarea
-        id="iugFeedbackComment"
-        class="iug-feedback-textarea"
-        placeholder="Any comments or suggestions?"
-      ></textarea>
+    <div class="iug-feedback-card" role="dialog" aria-modal="true">
+      <button class="iug-feedback-close" type="button" aria-label="Close" data-close-modal>×</button>
 
-      <input
-        id="iugFeedbackContact"
-        class="iug-feedback-input"
-        type="text"
-        placeholder="Your Email"
-      />
+      <div class="iug-feedback-top">
+        <img
+          id="iugFeedbackIcon"
+          class="iug-modal-emoji-img"
+          src="./rate-satisfied.png"
+          alt=""
+        />
 
-      <p id="iugFeedbackContactNote" class="iug-feedback-contact-note" hidden>
-        So we can help you within 24h.
-      </p>
-    </div>
+        <h2 id="iugFeedbackTitle" class="iug-feedback-title">
+          Thanks for your feedback!
+        </h2>
 
-    <div class="iug-feedback-bottom">
-      <p id="iugFeedbackNote" class="iug-feedback-note">
-        Every comment is read by our team<br />
-        and helps us improve.
-      </p>
+        <p class="iug-feedback-optional">
+          Both fields are optional.
+        </p>
+      </div>
 
-      <button id="iugFeedbackDone" class="iug-feedback-done" type="button">
-        Done
-      </button>
+      <div class="iug-feedback-middle">
+        <textarea
+          id="iugFeedbackComment"
+          class="iug-feedback-textarea"
+          placeholder="Any comments or suggestions?"
+        ></textarea>
+
+        <input
+          id="iugFeedbackContact"
+          class="iug-feedback-input"
+          type="text"
+          placeholder="Your Email"
+        />
+
+        <p id="iugFeedbackContactNote" class="iug-feedback-contact-note" hidden>
+          So we can help you within 24h.
+        </p>
+      </div>
+
+      <div class="iug-feedback-bottom">
+        <p id="iugFeedbackNote" class="iug-feedback-note">
+          Every comment is read by our team<br />
+          and helps us improve.
+        </p>
+
+        <button id="iugFeedbackDone" class="iug-feedback-done" type="button">
+          Done
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<style>
-  .iug-feedback-bar,
-  .iug-feedback-bar *,
-  .iug-feedback-modal,
-  .iug-feedback-modal * {
-    box-sizing: border-box;
-    font-family:
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Arial,
-      sans-serif;
-  }
-
- /* =========================
-     Bottom Emoji Entry
-  ========================= */
-
-.iug-feedback-bar {
-  position: fixed;
-  left: 50%;
-  bottom: calc(26px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%);
-  z-index: 9998;
-
-  width: 80vw;
-  max-width: 380px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  pointer-events: auto; /* 允许点击 */
-}
-
-.iug-feedback-emoji {
-  pointer-events: auto; /* 允许点击 */
-
-  width: 88px;
-  height: 88px;
-
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  padding: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-
-  transition:
-    transform 0.15s ease,
-    filter 0.15s ease;
-}
-
-.iug-feedback-emoji:active {
-  transform: scale(0.94);
-}
-
-.iug-feedback-emoji.is-selected {
-  transform: scale(1.06);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
-}
-
-.iug-emoji-img {
-  width: 78px;
-  height: 78px;
-  object-fit: contain;
-}
-
-  /* =========================
-     Modal
-  ========================= */
-
-  .iug-feedback-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .iug-feedback-modal.is-open {
-    display: flex;
-  }
-
-  .iug-feedback-overlay {
-    position: absolute;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.58);
-    backdrop-filter: blur(2px);
-  }
-
-  .iug-feedback-card {
-    position: relative;
-    z-index: 1;
-
-    width: 80vw;
-    height: 70dvh;
-
-    max-width: 520px;
-    min-height: 620px;
-
-    padding: 42px 34px 30px;
-
-    border-radius: 28px;
-    background: #fff;
-
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-
-    display: grid;
-    grid-template-rows: auto auto auto;
-    row-gap: 30px;
-
-    color: #111;
-    overflow: hidden;
-  }
-
-  .iug-feedback-close {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    z-index: 2;
-
-    width: 34px;
-    height: 34px;
-
-    border: none;
-    background: transparent;
-
-    color: #777;
-    font-size: 28px;
-    line-height: 1;
-
-    cursor: pointer;
-  }
-
-  /* =========================
-     Top Section
-  ========================= */
-
-  .iug-feedback-top {
-    width: 100%;
-    text-align: center;
-  }
-
-  .iug-modal-emoji-img {
-    display: block;
-
-    width: 72px;
-    height: 72px;
-
-    margin: 0 auto 26px;
-    object-fit: contain;
-  }
-
-  .iug-feedback-title {
-    margin: 0 0 22px;
-
-    font-size: 34px;
-    line-height: 1.15;
-    font-weight: 800;
-
-    text-align: center;
-    color: #111;
-  }
-
-  .iug-feedback-optional {
-    margin: 0 0 24px;
-
-    font-size: 18px;
-    line-height: 1.4;
-    font-style: italic;
-    font-weight: 400;
-
-    text-align: left;
-    color: #8a8a8a;
-  }
-
-  /* =========================
-     Middle Section
-  ========================= */
-
-  .iug-feedback-middle {
-    width: 100%;
-  }
-
-  .iug-feedback-textarea {
-    width: 100%;
-    height: 220px;
-
-    resize: none;
-
-    padding: 22px;
-
-    border: 2px solid var(--iug-feedback-color, #46ad52);
-    border-radius: 22px;
-
-    background: #fff;
-
-    font-size: 22px;
-    line-height: 1.45;
-    font-weight: 400;
-    color: #111;
-
-    outline: none;
-  }
-
-  .iug-feedback-input {
-    width: 100%;
-    height: 74px;
-
-    margin-top: 24px;
-    padding: 0 22px;
-
-    border: 1.5px solid #d8d8d8;
-    border-radius: 20px;
-
-    background: #fff;
-
-    font-size: 22px;
-    line-height: 1;
-    font-weight: 400;
-    color: #111;
-
-    outline: none;
-  }
-
-  .iug-feedback-textarea::placeholder,
-  .iug-feedback-input::placeholder {
-    color: #777;
-    opacity: 1;
-  }
-
-  .iug-feedback-textarea:focus,
-  .iug-feedback-input:focus {
-    border-color: var(--iug-feedback-color, #46ad52);
-  }
-
-  .iug-feedback-contact-note {
-    margin: 14px 0 0;
-
-    font-size: 16px;
-    line-height: 1.45;
-    font-style: italic;
-    font-weight: 400;
-
-    text-align: left;
-    color: #8a8a8a;
-  }
-
-  /* =========================
-     Bottom Section
-  ========================= */
-
-  .iug-feedback-bottom {
-    width: 100%;
-    margin-top: auto;
-  }
-
-  .iug-feedback-note {
-    margin: 0 0 22px;
-
-    font-size: 18px;
-    line-height: 1.55;
-    font-weight: 400;
-
-    text-align: center;
-    color: #666;
-  }
-
-  .iug-feedback-note.is-left {
-    text-align: left;
-  }
-
-  .iug-feedback-done {
-    width: 100%;
-    height: 74px;
-
-    border: none;
-    border-radius: 999px;
-
-    background: #111;
-    color: #fff;
-
-    font-size: 24px;
-    font-weight: 800;
-
-    cursor: pointer;
-  }
-
-  .iug-feedback-done:active {
-    transform: scale(0.98);
-  }
-
-  .iug-feedback-done.is-loading {
-    opacity: 0.7;
-    pointer-events: none;
-  }
-
-  .iug-feedback-toast {
-    position: fixed;
-    left: 50%;
-    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
-    transform: translateX(-50%) translateY(8px);
-    z-index: 10001;
-
-    max-width: 80vw;
-
-    padding: 12px 18px;
-
-    border-radius: 999px;
-
-    background: #111;
-    color: #fff;
-
-    font-size: 15px;
-    line-height: 1.4;
-    font-weight: 600;
-
-    opacity: 0;
-    pointer-events: none;
-
-    transition:
-      opacity 0.18s ease,
-      transform 0.18s ease;
-  }
-
-  .iug-feedback-toast.is-visible {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  @media (max-width: 430px) {
-    .iug-feedback-card {
-      width: 80vw;
-      height: 70dvh;
-      min-height: 540px;
-
-      padding: 30px 24px 24px;
-      border-radius: 24px;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .iug-feedback-close {
-      top: 14px;
-      right: 16px;
-      font-size: 24px;
-    }
-
-    .iug-modal-emoji-img {
-      width: 56px;
-      height: 56px;
-      margin-bottom: 18px;
-    }
-
-    .iug-feedback-title {
-      margin-bottom: 16px;
-      font-size: 22px;
-      line-height: 1.2;
-    }
-
-    .iug-feedback-optional {
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-
-    .iug-feedback-textarea {
-      height: 160px;
-      padding: 14px;
-
-      border-width: 1.5px;
-      border-radius: 16px;
-
-      font-size: 16px;
-      line-height: 1.4;
-    }
-
-    .iug-feedback-input {
-      height: 56px;
-      margin-top: 18px;
-      padding: 0 14px;
-
-      border-radius: 16px;
-
-      font-size: 16px;
-    }
-
-    .iug-feedback-contact-note {
-      margin-top: 10px;
-      font-size: 12px;
-    }
-
-    .iug-feedback-note {
-      margin: 24px 0 22px;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .iug-feedback-done {
-      height: 58px;
-      font-size: 18px;
-    }
-
-    .iug-feedback-emoji {
-      width: 76px;
-      height: 76px;
-    }
-
-    .iug-emoji-img {
-      width: 66px;
-      height: 66px;
-    }
-  }
-
-  @media (max-height: 760px) {
-    .iug-feedback-card {
-      min-height: 0;
-      padding: 28px 24px 24px;
-    }
-
-    .iug-modal-emoji-img {
-      width: 54px;
-      height: 54px;
-      margin-bottom: 16px;
-    }
-
-    .iug-feedback-title {
-      margin-bottom: 14px;
-      font-size: 20px;
-    }
-
-    .iug-feedback-optional {
-      margin-bottom: 14px;
-      font-size: 13px;
-    }
-
-    .iug-feedback-textarea {
-      height: 132px;
-      padding: 14px;
-      font-size: 14px;
-    }
-
-    .iug-feedback-input {
-      height: 48px;
-      margin-top: 14px;
-      font-size: 14px;
-    }
-
-    .iug-feedback-contact-note {
-      font-size: 12px;
-    }
-
-    .iug-feedback-note {
-      margin: 18px 0 18px;
-      font-size: 12px;
-    }
-
-    .iug-feedback-done {
-      height: 52px;
-      font-size: 16px;
-    }
-  }
-</style>
-
-<script>
-  const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
-
-  const IUG_FEEDBACK_CONTENT = {
-    satisfied: {
-      icon: "./rate-satisfied.png",
-      alt: "Satisfied",
-      title: "Thanks for your feedback!",
-      commentPlaceholder: "Any comments or suggestions?",
-      contactPlaceholder: "Your Email",
-      color: "#46ad52",
-      contactNote: "",
-      noteLeft: false,
-    },
-
-    neutral: {
-      icon: "./rate-neutral.png",
-      alt: "Neutral",
-      title: "Thanks for your feedback!",
-      commentPlaceholder: "Any comments or suggestions?",
-      contactPlaceholder: "Your Email",
-      color: "#f3c433",
-      contactNote: "",
-      noteLeft: false,
-    },
-
-    unsatisfied: {
-      icon: "./rate-unsatisfied.png",
-      alt: "Unsatisfied",
-      title: "Sorry this wasn't helpful.",
-      commentPlaceholder: "Tell us what happened",
-      contactPlaceholder: "Your Email or Phone Number",
-      color: "#df4747",
-      contactNote: "So we can help you within 24h.",
-      noteLeft: true,
-    },
-  };
-
-  let selectedIugFeedback = null;
-
-  const modal = document.getElementById("iugFeedbackModal");
-  const card = modal.querySelector(".iug-feedback-card");
-
-  const icon = document.getElementById("iugFeedbackIcon");
-  const title = document.getElementById("iugFeedbackTitle");
-
-  const comment = document.getElementById("iugFeedbackComment");
-  const contact = document.getElementById("iugFeedbackContact");
-
-  const contactNote = document.getElementById("iugFeedbackContactNote");
-  const note = document.getElementById("iugFeedbackNote");
-
-  const doneButton = document.getElementById("iugFeedbackDone");
-
-  document.querySelectorAll(".iug-feedback-emoji").forEach((button) => {
-    button.addEventListener("click", () => {
-      const feedbackType = button.dataset.feedback;
-
-      selectedIugFeedback = feedbackType;
-
-      document.querySelectorAll(".iug-feedback-emoji").forEach((btn) => {
-        btn.classList.remove("is-selected");
+  <script>
+    const IUG_FEEDBACK_CONTENT = {
+      satisfied: {
+        icon: "./rate-satisfied.png",
+        alt: "Satisfied",
+        title: "Thanks for your feedback!",
+        commentPlaceholder: "Any comments or suggestions?",
+        contactPlaceholder: "Your Email",
+        color: "#46ad52",
+        contactNote: "",
+        noteLeft: false,
+      },
+      neutral: {
+        icon: "./rate-neutral.png",
+        alt: "Neutral",
+        title: "Thanks for your feedback!",
+        commentPlaceholder: "Any comments or suggestions?",
+        contactPlaceholder: "Your Email",
+        color: "#f3c433",
+        contactNote: "",
+        noteLeft: false,
+      },
+      unsatisfied: {
+        icon: "./rate-unsatisfied.png",
+        alt: "Unsatisfied",
+        title: "Sorry this wasn't helpful.",
+        commentPlaceholder: "Tell us what happened",
+        contactPlaceholder: "Your Email or Phone Number",
+        color: "#df4747",
+        contactNote: "So we can help you within 24h.",
+        noteLeft: true,
+      }
+    };
+
+    let selectedIugFeedback = null;
+
+    const modal = document.getElementById("iugFeedbackModal");
+    const card = modal.querySelector(".iug-feedback-card");
+    const icon = document.getElementById("iugFeedbackIcon");
+    const title = document.getElementById("iugFeedbackTitle");
+    const comment = document.getElementById("iugFeedbackComment");
+    const contact = document.getElementById("iugFeedbackContact");
+    const contactNote = document.getElementById("iugFeedbackContactNote");
+    const note = document.getElementById("iugFeedbackNote");
+    const doneButton = document.getElementById("iugFeedbackDone");
+
+    document.querySelectorAll(".iug-feedback-emoji").forEach((button) => {
+      button.addEventListener("click", () => {
+        const feedbackType = button.dataset.feedback;
+        selectedIugFeedback = feedbackType;
+
+        document.querySelectorAll(".iug-feedback-emoji").forEach((btn) => {
+          btn.classList.remove("is-selected");
+        });
+
+        button.classList.add("is-selected");
+
+        openIugFeedbackModal(feedbackType);
       });
-
-      button.classList.add("is-selected");
-
-      openIugFeedbackModal(feedbackType);
-    });
-  });
-
-  document.querySelectorAll("[data-close-modal]").forEach((element) => {
-    element.addEventListener("click", closeIugFeedbackModal);
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeIugFeedbackModal();
-    }
-  });
-
-  doneButton.addEventListener("click", handleIugFeedbackSubmit);
-
-  function openIugFeedbackModal(type) {
-    const config = IUG_FEEDBACK_CONTENT[type];
-
-    if (!config) return;
-
-    icon.src = config.icon;
-    icon.alt = config.alt;
-
-    title.textContent = config.title;
-
-    comment.placeholder = config.commentPlaceholder;
-    contact.placeholder = config.contactPlaceholder;
-
-    card.style.setProperty("--iug-feedback-color", config.color);
-
-    contactNote.textContent = config.contactNote;
-    contactNote.hidden = !config.contactNote;
-
-    note.classList.toggle("is-left", config.noteLeft);
-
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeIugFeedbackModal() {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-  }
-
-  async function handleIugFeedbackSubmit() {
-    if (!selectedIugFeedback) return;
-
-    doneButton.classList.add("is-loading");
-    doneButton.textContent = "Saving...";
-
-    const success = await submitIugFeedback({
-      rating: selectedIugFeedback,
-      comment: comment.value.trim(),
-      contact: contact.value.trim(),
     });
 
-    doneButton.classList.remove("is-loading");
-    doneButton.textContent = "Done";
+    document.querySelectorAll("[data-close-modal]").forEach((element) => {
+      element.addEventListener("click", closeIugFeedbackModal);
+    });
 
-    if (success) {
-      comment.value = "";
-      contact.value = "";
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeIugFeedbackModal();
+      }
+    });
 
-      closeIugFeedbackModal();
+    doneButton.addEventListener("click", handleIugFeedbackSubmit);
 
-      showIugFeedbackToast("Thanks — your feedback was saved.");
-    } else {
-      showIugFeedbackToast("Feedback could not be saved. Please try again.");
+    function openIugFeedbackModal(type) {
+      const config = IUG_FEEDBACK_CONTENT[type];
+      if (!config) return;
+
+      icon.src = config.icon;
+      icon.alt = config.alt;
+      title.textContent = config.title;
+      comment.placeholder = config.commentPlaceholder;
+      contact.placeholder = config.contactPlaceholder;
+      card.style.setProperty("--iug-feedback-color", config.color);
+      contactNote.textContent = config.contactNote;
+      contactNote.hidden = !config.contactNote;
+      note.classList.toggle("is-left", config.noteLeft);
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
     }
-  }
 
-  async function submitIugFeedback(payload) {
-    if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
-      console.warn("Replace FORMSPREE_ENDPOINT with your real Formspree endpoint.");
-      return true;
+    function closeIugFeedbackModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
     }
 
-    try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          ...payload,
-          page_url: window.location.href,
-          page_title: document.title,
-          user_agent: navigator.userAgent,
-          submitted_at: new Date().toISOString(),
-        }),
+    async function handleIugFeedbackSubmit() {
+      if (!selectedIugFeedback) return;
+
+      doneButton.classList.add("is-loading");
+      doneButton.textContent = "Saving...";
+
+      const success = await submitIugFeedback({
+        rating: selectedIugFeedback,
+        comment: comment.value.trim(),
+        contact: contact.value.trim(),
       });
 
-      return response.ok;
-    } catch (error) {
-      console.error("
+      doneButton.classList.remove("is-loading");
+      doneButton.textContent = "Done";
+
+      if (success) {
+        comment.value = "";
+        contact.value = "";
+        closeIugFeedbackModal();
+        showIugFeedbackToast("Thanks — your feedback was saved.");
+      } else {
+        showIugFeedbackToast("Feedback could not be saved. Please try again.");
+      }
+    }
+
+    async function submitIugFeedback(payload) {
+      const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+
+      try {
+        const response = await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            ...payload,
+            page_url: window.location.href,
+            page_title: document.title,
+            user_agent: navigator.userAgent,
+            submitted_at: new Date().toISOString(),
+          }),
+        });
+
+        return response.ok;
+      } catch (error) {
+        console.error("IUG feedback submit failed:", error);
+        return false;
+      }
+    }
+
+    function showIugFeedbackToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "iug-feedback-toast";
+      toast.textContent = message;
+
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add("is-visible");
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.remove("is-visible");
+        setTimeout(() => {
+          toast.remove();
+        }, 200);
+      }, 2200);
+    }
+  </script>
+</body>
+</html>
