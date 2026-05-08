@@ -692,18 +692,4 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          ...payload,
-          page_url: window.location.href,
-          page_title: document.title,
-          user_agent: navigator.userAgent,
-          submitted_at: new Date().toISOString(),
-        }),
-      });
-
-      return response.ok;
-    } catch (error) {
-      console.error("IUG feedback submit failed:", error);
-     
+          Accept: "
