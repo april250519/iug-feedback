@@ -115,6 +115,7 @@
   display: none;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
 .iug-feedback-modal.is-open {
@@ -132,18 +133,21 @@
   position: relative;
   z-index: 1;
   width: 80vw;
-  height: 70vh;
+  height: 70dvh;
   max-width: 520px;
-  min-height: 620px;
-  padding: 42px 34px 30px;
+  max-height: 720px;
+  min-height: 500px;
+  padding: 30px 34px 26px;
   border-radius: 28px;
   background: #fff;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-  display: grid;
-  grid-template-rows: auto auto auto;
-  row-gap: 30px;
   color: #111;
-  overflow: hidden;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .iug-feedback-close {
@@ -165,28 +169,29 @@
 .iug-feedback-top {
   width: 100%;
   text-align: center;
+  flex: 0 0 auto;
 }
 
 .iug-modal-emoji-img {
   display: block;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 26px;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 18px;
   object-fit: contain;
 }
 
 .iug-feedback-title {
-  margin: 0 0 22px;
-  font-size: 34px;
-  line-height: 1.15;
+  margin: 0 0 12px;
+  font-size: 26px;
+  line-height: 1.2;
   font-weight: 800;
   text-align: center;
   color: #111;
 }
 
 .iug-feedback-optional {
-  margin: 0 0 24px;
-  font-size: 18px;
+  margin: 0;
+  font-size: 14px;
   line-height: 1.4;
   font-style: italic;
   font-weight: 400;
@@ -197,17 +202,18 @@
 /* Middle Section */
 .iug-feedback-middle {
   width: 100%;
+  flex: 0 0 auto;
 }
 
 .iug-feedback-textarea {
   width: 100%;
-  height: 220px;
+  height: 140px;
   resize: none;
-  padding: 22px;
+  padding: 16px;
   border: 2px solid var(--iug-feedback-color, #46ad52);
-  border-radius: 22px;
+  border-radius: 18px;
   background: #fff;
-  font-size: 22px;
+  font-size: 16px;
   line-height: 1.45;
   font-weight: 400;
   color: #111;
@@ -216,13 +222,13 @@
 
 .iug-feedback-input {
   width: 100%;
-  height: 74px;
-  margin-top: 24px;
-  padding: 0 22px;
+  height: 52px;
+  margin-top: 16px;
+  padding: 0 16px;
   border: 1.5px solid #d8d8d8;
-  border-radius: 20px;
+  border-radius: 16px;
   background: #fff;
-  font-size: 22px;
+  font-size: 16px;
   line-height: 1;
   font-weight: 400;
   color: #111;
@@ -241,9 +247,9 @@
 }
 
 .iug-feedback-contact-note {
-  margin: 14px 0 0;
-  font-size: 16px;
-  line-height: 1.45;
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
   font-style: italic;
   font-weight: 400;
   text-align: left;
@@ -253,13 +259,14 @@
 /* Bottom Section */
 .iug-feedback-bottom {
   width: 100%;
-  margin-top: auto;
+  flex: 0 0 auto;
+  margin-top: 0;
 }
 
 .iug-feedback-note {
-  margin: 0 0 22px;
-  font-size: 18px;
-  line-height: 1.55;
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.45;
   font-weight: 400;
   text-align: center;
   color: #666;
@@ -271,12 +278,12 @@
 
 .iug-feedback-done {
   width: 100%;
-  height: 74px;
+  height: 54px;
   border: none;
   border-radius: 999px;
   background: #111;
   color: #fff;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -314,74 +321,123 @@
   transform: translateX(-50%) translateY(0);
 }
 
-@media (max-width: 430px) {
+/* PC / wider screens */
+@media (min-width: 768px) {
   .iug-feedback-card {
-    width: 80vw;
-    height: 70dvh;
-    min-height: 540px;
-    max-height: calc(100dvh - 32px);
-    padding: 30px 24px 24px;
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow-y: auto;
-  }
-
-  .iug-feedback-close {
-    top: 14px;
-    right: 16px;
-    font-size: 24px;
+    width: min(80vw, 520px);
+    height: min(70dvh, 680px);
+    min-height: 520px;
+    padding: 34px 40px 30px;
+    gap: 22px;
   }
 
   .iug-modal-emoji-img {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 18px;
+    width: 68px;
+    height: 68px;
+    margin-bottom: 20px;
   }
 
   .iug-feedback-title {
-    margin-bottom: 16px;
-    font-size: 22px;
-    line-height: 1.2;
+    font-size: 28px;
+    margin-bottom: 14px;
   }
 
   .iug-feedback-optional {
-    margin-bottom: 16px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .iug-feedback-textarea {
-    height: 160px;
-    padding: 14px;
-    border-width: 1.5px;
-    border-radius: 16px;
+    height: 150px;
+    padding: 18px;
     font-size: 16px;
-    line-height: 1.4;
   }
 
   .iug-feedback-input {
     height: 56px;
     margin-top: 18px;
-    padding: 0 14px;
-    border-radius: 16px;
     font-size: 16px;
   }
 
-  .iug-feedback-contact-note {
-    margin-top: 10px;
-    font-size: 12px;
-  }
-
   .iug-feedback-note {
-    margin: 24px 0 22px;
-    font-size: 13px;
-    line-height: 1.45;
+    font-size: 14px;
+    margin-bottom: 18px;
   }
 
   .iug-feedback-done {
     height: 58px;
-    font-size: 18px;
+    font-size: 20px;
+  }
+}
+
+/* Mobile 9:16 optimization */
+@media (max-width: 430px) {
+  .iug-feedback-modal {
+    padding: 0;
+  }
+
+  .iug-feedback-card {
+    width: 80vw;
+    height: 70dvh;
+    min-height: 0;
+    max-height: calc(100dvh - 32px);
+    padding: 26px 18px 20px;
+    border-radius: 22px;
+    gap: 14px;
+  }
+
+  .iug-feedback-close {
+    top: 12px;
+    right: 12px;
+    font-size: 22px;
+  }
+
+  .iug-modal-emoji-img {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 14px;
+  }
+
+  .iug-feedback-title {
+    margin-bottom: 10px;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .iug-feedback-optional {
+    font-size: 12px;
+  }
+
+  .iug-feedback-textarea {
+    height: 122px;
+    padding: 12px;
+    border-width: 1.5px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .iug-feedback-input {
+    height: 46px;
+    margin-top: 12px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  .iug-feedback-contact-note {
+    margin-top: 8px;
+    font-size: 11px;
+  }
+
+  .iug-feedback-note {
+    margin: 0 0 12px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .iug-feedback-done {
+    height: 48px;
+    font-size: 17px;
   }
 
   .iug-feedback-emoji {
@@ -395,54 +451,81 @@
   }
 }
 
-@media (max-height: 760px) {
+/* Short screen protection */
+@media (max-height: 720px) {
   .iug-feedback-card {
+    height: 72dvh;
     min-height: 0;
-    max-height: calc(100dvh - 32px);
-    padding: 28px 24px 24px;
-    overflow-y: auto;
+    max-height: calc(100dvh - 28px);
+    padding-top: 22px;
+    padding-bottom: 18px;
+    gap: 10px;
   }
 
   .iug-modal-emoji-img {
-    width: 54px;
-    height: 54px;
-    margin-bottom: 16px;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 10px;
   }
 
   .iug-feedback-title {
-    margin-bottom: 14px;
     font-size: 20px;
+    margin-bottom: 8px;
   }
 
   .iug-feedback-optional {
-    margin-bottom: 14px;
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .iug-feedback-textarea {
-    height: 132px;
-    padding: 14px;
-    font-size: 14px;
+    height: 104px;
   }
 
   .iug-feedback-input {
-    height: 48px;
-    margin-top: 14px;
-    font-size: 14px;
+    height: 42px;
+    margin-top: 10px;
   }
 
   .iug-feedback-contact-note {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .iug-feedback-note {
-    margin: 18px 0 18px;
-    font-size: 12px;
+    margin-bottom: 10px;
+    font-size: 11px;
   }
 
   .iug-feedback-done {
-    height: 52px;
+    height: 44px;
     font-size: 16px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .iug-feedback-card {
+    width: 84vw;
+    height: 72dvh;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .iug-feedback-title {
+    font-size: 20px;
+  }
+
+  .iug-feedback-textarea {
+    height: 106px;
+  }
+
+  .iug-feedback-emoji {
+    width: 68px;
+    height: 68px;
+  }
+
+  .iug-emoji-img {
+    width: 58px;
+    height: 58px;
   }
 }
 </style>
