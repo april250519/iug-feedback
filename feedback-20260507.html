@@ -137,8 +137,9 @@
   z-index: 1;
 
   width: min(80vw, 520px);
-  height: min(70dvh, 720px);
+  height: min(70dvh, 680px);
   min-height: 520px;
+  max-height: 680px;
 
   padding: 30px 34px 24px;
   border-radius: 28px;
@@ -147,8 +148,8 @@
   color: #111;
   overflow: hidden;
 
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .iug-feedback-close {
@@ -170,7 +171,7 @@
 .iug-feedback-top {
   width: 100%;
   text-align: center;
-  align-self: start;
+  flex: 0 0 auto;
 }
 
 .iug-modal-emoji-img {
@@ -203,7 +204,10 @@
 /* Middle Section */
 .iug-feedback-middle {
   width: 100%;
-  align-self: center;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .iug-feedback-textarea {
@@ -260,7 +264,7 @@
 /* Bottom Section */
 .iug-feedback-bottom {
   width: 100%;
-  align-self: end;
+  flex: 0 0 auto;
   margin-top: 0;
 }
 
@@ -329,6 +333,7 @@
     width: min(80vw, 520px);
     height: min(70dvh, 680px);
     min-height: 540px;
+    max-height: 680px;
     padding: 34px 40px 30px;
   }
 
@@ -382,11 +387,11 @@
   }
 
   .iug-feedback-card {
-    width: 80vw;
-    height: 70dvh;
-    min-height: 0;
-    max-width: none;
-    max-height: none;
+    width: 80vw !important;
+    height: 70dvh !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
     padding: 24px 18px 18px;
     border-radius: 22px;
   }
@@ -457,59 +462,11 @@
   }
 }
 
-/* Short Phone Protection */
-@media (max-width: 430px) and (max-height: 720px) {
-  .iug-feedback-card {
-    width: 80vw;
-    height: 70dvh;
-    padding-top: 18px;
-    padding-bottom: 14px;
-  }
-
-  .iug-modal-emoji-img {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 7px;
-  }
-
-  .iug-feedback-title {
-    font-size: 18px;
-    margin-bottom: 5px;
-  }
-
-  .iug-feedback-optional {
-    font-size: 10px;
-  }
-
-  .iug-feedback-textarea {
-    height: 96px;
-  }
-
-  .iug-feedback-input {
-    height: 38px;
-    margin-top: 8px;
-  }
-
-  .iug-feedback-contact-note {
-    font-size: 10px;
-  }
-
-  .iug-feedback-note {
-    margin-bottom: 8px;
-    font-size: 10px;
-  }
-
-  .iug-feedback-done {
-    height: 40px;
-    font-size: 15px;
-  }
-}
-
 /* Very Small Phones */
 @media (max-width: 360px) {
   .iug-feedback-card {
-    width: 80vw;
-    height: 70dvh;
+    width: 80vw !important;
+    height: 70dvh !important;
     padding-left: 14px;
     padding-right: 14px;
   }
