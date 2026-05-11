@@ -13,11 +13,9 @@
 </div>
 
 <div class="iug-feedback-modal" id="iugFeedbackModal" aria-hidden="true">
-  <div class="iug-feedback-overlay" data-close-modal></div>
+  <div class="iug-feedback-overlay"></div>
 
   <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="iugFeedbackTitle">
-    <button class="iug-feedback-close" type="button" aria-label="Close" data-close-modal>×</button>
-
     <div class="iug-feedback-top">
       <img id="iugFeedbackIcon" class="iug-modal-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
       <h2 id="iugFeedbackTitle" class="iug-feedback-title">Thanks for your feedback!</h2>
@@ -117,7 +115,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.64);
   backdrop-filter: blur(2px);
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .iug-feedback-card {
@@ -128,7 +126,7 @@
   height: 70dvh;
   max-width: 520px;
   min-height: 0;
-  padding: 28px 38px 24px;
+  padding: 28px 24px 18px;
   border-radius: 22px;
   background: #fff;
   color: #111;
@@ -140,21 +138,6 @@
   flex-direction: column;
 }
 
-.iug-feedback-close {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #777;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-}
-
 .iug-feedback-top {
   flex: 0 0 auto;
   text-align: center;
@@ -162,16 +145,16 @@
 
 .iug-modal-emoji-img {
   display: block;
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   margin: 0 auto 18px;
   object-fit: contain;
 }
 
 .iug-feedback-title {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   color: #111;
-  font-size: 20px;
+  font-size: 19px;
   line-height: 1.2;
   font-weight: 800;
   text-align: center;
@@ -180,7 +163,7 @@
 .iug-feedback-optional {
   margin: 0;
   color: #888;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.4;
   font-style: italic;
   font-weight: 500;
@@ -190,7 +173,7 @@
 .iug-feedback-middle {
   flex: 0 0 auto;
   width: 100%;
-  margin-top: 18px;
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -209,19 +192,19 @@
 }
 
 .iug-feedback-textarea {
-  height: 142px;
+  height: 126px;
   resize: none;
-  padding: 14px;
+  padding: 13px;
   border: 1.5px solid var(--iug-feedback-color, #46ad52);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.45;
 }
 
 .iug-feedback-input {
-  height: 46px;
-  padding: 0 14px;
+  height: 40px;
+  padding: 0 13px;
   border: 1.5px solid #ddd;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .iug-feedback-textarea::placeholder,
@@ -238,7 +221,7 @@
 .iug-feedback-contact-note {
   margin: -6px 0 0;
   color: #888;
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.4;
   font-style: italic;
   font-weight: 500;
@@ -253,28 +236,30 @@
 }
 
 .iug-feedback-note {
-  margin: 0 0 16px;
+  max-width: 86%;
+  margin: 0 auto 14px;
   color: #666;
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.45;
   font-weight: 500;
   text-align: center;
 }
 
 .iug-feedback-note.is-left {
+  max-width: none;
   text-align: left;
 }
 
 .iug-feedback-done {
   width: 100%;
-  height: 52px;
+  height: 42px;
   padding: 0;
   border: 0;
   border-radius: 999px;
   background: #111;
   color: #fff;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   font-weight: 800;
   cursor: pointer;
@@ -319,27 +304,23 @@
     height: 70vh;
     height: 70dvh;
     max-width: none;
-    padding: 24px 18px 18px;
+    padding: 28px 18px 18px;
   }
 
   .iug-modal-emoji-img {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     margin-bottom: 16px;
   }
 
   .iug-feedback-title {
-    margin-bottom: 14px;
-    font-size: 16px;
-  }
-
-  .iug-feedback-optional {
-    font-size: 10px;
+    margin-bottom: 13px;
+    font-size: 17px;
   }
 
   .iug-feedback-middle {
     margin-top: 16px;
-    gap: 12px;
+    gap: 13px;
   }
 
   .iug-feedback-textarea {
@@ -356,14 +337,8 @@
     font-size: 11px;
   }
 
-  .iug-feedback-note {
-    margin-bottom: 12px;
-    font-size: 10px;
-  }
-
-  .iug-feedback-done {
-    height: 42px;
-    font-size: 14px;
+  .iug-feedback-bottom {
+    padding-top: 16px;
   }
 }
 
@@ -378,6 +353,10 @@
 
   .iug-feedback-textarea {
     height: 108px;
+  }
+
+  .iug-feedback-title {
+    font-size: 15px;
   }
 }
 </style>
@@ -449,7 +428,6 @@
   const toast = document.getElementById("iugFeedbackToast");
 
   const feedbackButtons = document.querySelectorAll(".iug-feedback-emoji");
-  const closeElements = document.querySelectorAll("[data-close-modal]");
 
   feedbackButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -463,16 +441,8 @@
     });
   });
 
-  closeElements.forEach((element) => {
-    element.addEventListener("click", closeIugFeedbackModal);
-  });
-
   document.addEventListener("keydown", (event) => {
     if (!modal.classList.contains("is-open")) return;
-
-    if (event.key === "Escape") {
-      closeIugFeedbackModal();
-    }
 
     if (event.key === "Tab") {
       trapFocusInsideModal(event);
@@ -516,7 +486,7 @@
       if (window.matchMedia("(min-width: 768px)").matches) {
         comment.focus();
       } else {
-        modal.querySelector(".iug-feedback-close").focus();
+        doneButton.focus();
       }
     }, 0);
   }
