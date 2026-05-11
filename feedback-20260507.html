@@ -1,28 +1,21 @@
-<!-- IUG Feedback Entry + Modal -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
 <div class="iug-feedback-bar" aria-label="IUG feedback">
   <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
     <img class="iug-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
   </button>
-
   <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
     <img class="iug-emoji-img" src="./rate-neutral.png" alt="Neutral" />
   </button>
-
   <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
     <img class="iug-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
   </button>
 </div>
 
-<!-- Feedback Modal -->
 <div class="iug-feedback-modal" id="iugFeedbackModal" aria-hidden="true">
   <div class="iug-feedback-overlay" data-close-modal></div>
 
-  <div
-    class="iug-feedback-card"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="iugFeedbackTitle"
-  >
+  <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="iugFeedbackTitle">
     <button class="iug-feedback-close" type="button" aria-label="Close" data-close-modal>×</button>
 
     <div class="iug-feedback-top">
@@ -32,19 +25,8 @@
     </div>
 
     <div class="iug-feedback-middle">
-      <textarea
-        id="iugFeedbackComment"
-        class="iug-feedback-textarea"
-        placeholder="Any comments or suggestions?"
-      ></textarea>
-
-      <input
-        id="iugFeedbackContact"
-        class="iug-feedback-input"
-        type="text"
-        placeholder="Your Email"
-      />
-
+      <textarea id="iugFeedbackComment" class="iug-feedback-textarea" placeholder="Any comments or suggestions?"></textarea>
+      <input id="iugFeedbackContact" class="iug-feedback-input" type="text" placeholder="Your Email" />
       <p id="iugFeedbackContactNote" class="iug-feedback-contact-note" hidden>
         So we can help you within 24h.
       </p>
@@ -54,7 +36,6 @@
       <p id="iugFeedbackNote" class="iug-feedback-note">
         Every comment is read by our team and helps us improve.
       </p>
-
       <button id="iugFeedbackDone" class="iug-feedback-done" type="button">Done</button>
     </div>
   </div>
@@ -71,13 +52,12 @@
   box-sizing: border-box;
 }
 
-/* Bottom Emoji Entry */
 .iug-feedback-bar {
   position: fixed;
   left: 50%;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   z-index: 10002;
-  width: 80vw;
+  width: 82vw;
   max-width: 360px;
   transform: translateX(-50%);
   display: flex;
@@ -88,23 +68,18 @@
 
 .iug-feedback-emoji {
   pointer-events: auto;
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: transparent;
-  appearance: none;
   cursor: pointer;
+  appearance: none;
   display: flex;
   align-items: center;
   justify-content: center;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
-}
-
-.iug-feedback-emoji:hover {
-  transform: translateY(-2px);
 }
 
 .iug-feedback-emoji:active {
@@ -118,12 +93,11 @@
 
 .iug-emoji-img {
   display: block;
-  width: 58px;
-  height: 58px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
 }
 
-/* Modal Wrapper */
 .iug-feedback-modal {
   position: fixed;
   inset: 0;
@@ -131,7 +105,6 @@
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 0;
   pointer-events: none;
 }
 
@@ -147,37 +120,32 @@
   pointer-events: auto;
 }
 
-/* Modal Card */
 .iug-feedback-card {
   position: relative;
   z-index: 1;
-  width: 80vw;
+  width: 88vw;
+  height: 70vh;
   height: 70dvh;
-  max-width: 430px;
+  max-width: 520px;
   min-height: 0;
-  max-height: none;
   padding: 28px 38px 24px;
   border-radius: 22px;
   background: #fff;
   color: #111;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-  overflow: hidden;
   pointer-events: auto;
-
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .iug-feedback-close {
   position: absolute;
-  top: 14px;
-  right: 16px;
-  z-index: 2;
-  width: 32px;
-  height: 32px;
+  top: 12px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -185,51 +153,47 @@
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
-  appearance: none;
 }
 
-/* Top */
 .iug-feedback-top {
-  width: 100%;
-  text-align: center;
   flex: 0 0 auto;
+  text-align: center;
 }
 
 .iug-modal-emoji-img {
   display: block;
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 24px;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 18px;
   object-fit: contain;
 }
 
 .iug-feedback-title {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   color: #111;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.2;
   font-weight: 800;
   text-align: center;
-  letter-spacing: 0;
 }
 
 .iug-feedback-optional {
   margin: 0;
   color: #888;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.4;
   font-style: italic;
   font-weight: 500;
   text-align: left;
 }
 
-/* Middle */
 .iug-feedback-middle {
-  width: 100%;
   flex: 0 0 auto;
+  width: 100%;
+  margin-top: 18px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .iug-feedback-textarea,
@@ -245,20 +209,19 @@
 }
 
 .iug-feedback-textarea {
-  height: 150px;
+  height: 142px;
   resize: none;
   padding: 14px;
   border: 1.5px solid var(--iug-feedback-color, #46ad52);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.45;
 }
 
 .iug-feedback-input {
-  height: 48px;
+  height: 46px;
   padding: 0 14px;
   border: 1.5px solid #ddd;
-  font-size: 14px;
-  line-height: 1;
+  font-size: 13px;
 }
 
 .iug-feedback-textarea::placeholder,
@@ -273,23 +236,24 @@
 }
 
 .iug-feedback-contact-note {
-  margin: -8px 0 0;
+  margin: -6px 0 0;
   color: #888;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.4;
   font-style: italic;
   font-weight: 500;
   text-align: left;
 }
 
-/* Bottom */
 .iug-feedback-bottom {
-  width: 100%;
   flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 18px;
 }
 
 .iug-feedback-note {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
   color: #666;
   font-size: 12px;
   line-height: 1.45;
@@ -303,7 +267,7 @@
 
 .iug-feedback-done {
   width: 100%;
-  height: 54px;
+  height: 52px;
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -314,8 +278,6 @@
   line-height: 1;
   font-weight: 800;
   cursor: pointer;
-  appearance: none;
-  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .iug-feedback-done:active {
@@ -327,20 +289,18 @@
   pointer-events: none;
 }
 
-/* Toast */
 .iug-feedback-toast {
   position: fixed;
   left: 50%;
-  bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(116px + env(safe-area-inset-bottom, 0px));
   z-index: 10003;
-  max-width: 80vw;
+  max-width: 82vw;
   padding: 12px 18px;
   border-radius: 999px;
   background: #111;
   color: #fff;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
-  line-height: 1.4;
   font-weight: 700;
   opacity: 0;
   pointer-events: none;
@@ -353,29 +313,23 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* Mobile */
 @media (max-width: 430px) {
   .iug-feedback-card {
-    width: 80vw;
+    width: 88vw;
+    height: 70vh;
     height: 70dvh;
+    max-width: none;
     padding: 24px 18px 18px;
-    border-radius: 22px;
-  }
-
-  .iug-feedback-close {
-    top: 10px;
-    right: 10px;
-    font-size: 22px;
   }
 
   .iug-modal-emoji-img {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 18px;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 16px;
   }
 
   .iug-feedback-title {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     font-size: 16px;
   }
 
@@ -384,11 +338,12 @@
   }
 
   .iug-feedback-middle {
+    margin-top: 16px;
     gap: 12px;
   }
 
   .iug-feedback-textarea {
-    height: 132px;
+    height: 126px;
     padding: 12px;
     border-radius: 12px;
     font-size: 11px;
@@ -401,11 +356,6 @@
     font-size: 11px;
   }
 
-  .iug-feedback-contact-note {
-    margin-top: -6px;
-    font-size: 10px;
-  }
-
   .iug-feedback-note {
     margin-bottom: 12px;
     font-size: 10px;
@@ -415,27 +365,12 @@
     height: 42px;
     font-size: 14px;
   }
-
-  .iug-feedback-bar {
-    width: 82vw;
-    max-width: 330px;
-  }
-
-  .iug-feedback-emoji {
-    width: 68px;
-    height: 68px;
-  }
-
-  .iug-emoji-img {
-    width: 54px;
-    height: 54px;
-  }
 }
 
-/* Very Small Phones */
 @media (max-width: 360px) {
   .iug-feedback-card {
-    width: 84vw;
+    width: 90vw;
+    height: 68vh;
     height: 68dvh;
     padding-left: 14px;
     padding-right: 14px;
@@ -444,19 +379,13 @@
   .iug-feedback-textarea {
     height: 108px;
   }
-
-  .iug-feedback-title {
-    font-size: 15px;
-  }
-
-  .iug-feedback-bar {
-    width: 84vw;
-  }
 }
 </style>
 
 <script>
 (function () {
+  ensureIugViewportMeta();
+
   const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
   const IUG_VERSION = "2.3.1";
 
@@ -470,6 +399,7 @@
       color: "#46ad52",
       contactNote: "",
       noteLeft: false,
+      contactType: "email",
       contactInputMode: "email",
       contactAutocomplete: "email"
     },
@@ -482,6 +412,7 @@
       color: "#f3c433",
       contactNote: "",
       noteLeft: false,
+      contactType: "email",
       contactInputMode: "email",
       contactAutocomplete: "email"
     },
@@ -494,6 +425,7 @@
       color: "#df4747",
       contactNote: "So we can help you within 24h.",
       noteLeft: true,
+      contactType: "text",
       contactInputMode: "text",
       contactAutocomplete: "off"
     }
@@ -524,11 +456,9 @@
       selectedIugFeedback = button.dataset.feedback;
       lastFocusedElement = button;
 
-      feedbackButtons.forEach((btn) => {
-        btn.classList.remove("is-selected");
-      });
-
+      feedbackButtons.forEach((btn) => btn.classList.remove("is-selected"));
       button.classList.add("is-selected");
+
       openIugFeedbackModal(selectedIugFeedback);
     });
   });
@@ -561,10 +491,10 @@
 
     comment.value = "";
     contact.value = "";
-
     comment.placeholder = config.commentPlaceholder;
     contact.placeholder = config.contactPlaceholder;
 
+    contact.type = config.contactType;
     contact.setAttribute("inputmode", config.contactInputMode);
     contact.setAttribute("autocomplete", config.contactAutocomplete);
 
@@ -595,9 +525,7 @@
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
 
-    feedbackButtons.forEach((btn) => {
-      btn.classList.remove("is-selected");
-    });
+    feedbackButtons.forEach((btn) => btn.classList.remove("is-selected"));
 
     doneButton.classList.remove("is-loading");
     doneButton.textContent = "Done";
@@ -704,6 +632,18 @@
       event.preventDefault();
       firstElement.focus();
     }
+  }
+
+  function ensureIugViewportMeta() {
+    let viewport = document.querySelector('meta[name="viewport"]');
+
+    if (!viewport) {
+      viewport = document.createElement("meta");
+      viewport.name = "viewport";
+      document.head.appendChild(viewport);
+    }
+
+    viewport.setAttribute("content", "width=device-width, initial-scale=1, viewport-fit=cover");
   }
 })();
 </script>
