@@ -63,15 +63,23 @@
 <div id="iugFeedbackToast" class="iug-feedback-toast" role="status" aria-live="polite"></div>
 
 <style>
-/* General Emoji Bar */
+.iug-feedback-bar,
+.iug-feedback-bar *,
+.iug-feedback-modal,
+.iug-feedback-modal *,
+.iug-feedback-toast {
+  box-sizing: border-box;
+}
+
+/* Bottom Emoji Entry */
 .iug-feedback-bar {
   position: fixed;
-  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 9998;
-  width: 78vw;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 10002;
+  width: 80vw;
   max-width: 360px;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -80,18 +88,23 @@
 
 .iug-feedback-emoji {
   pointer-events: auto;
-  width: 78px;
-  height: 78px;
-  border: none;
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: transparent;
-  padding: 0;
+  appearance: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+}
+
+.iug-feedback-emoji:hover {
+  transform: translateY(-2px);
 }
 
 .iug-feedback-emoji:active {
@@ -100,12 +113,13 @@
 
 .iug-feedback-emoji.is-selected {
   transform: scale(1.08);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.3));
 }
 
 .iug-emoji-img {
-  width: 68px;
-  height: 68px;
+  display: block;
+  width: 58px;
+  height: 58px;
   object-fit: contain;
 }
 
@@ -117,7 +131,8 @@
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 0;
+  pointer-events: none;
 }
 
 .iug-feedback-modal.is-open {
@@ -127,47 +142,53 @@
 .iug-feedback-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.58);
+  background: rgba(0, 0, 0, 0.64);
   backdrop-filter: blur(2px);
+  pointer-events: auto;
 }
 
 /* Modal Card */
 .iug-feedback-card {
   position: relative;
   z-index: 1;
-
-  width: min(82vw, 500px);
-  height: min(72dvh, 650px);
-  min-height: 480px;
-  max-height: 650px;
-
-  padding: 28px 34px 24px;
-  border-radius: 26px;
+  width: 80vw;
+  height: 70dvh;
+  max-width: 430px;
+  min-height: 0;
+  max-height: none;
+  padding: 28px 38px 24px;
+  border-radius: 22px;
   background: #fff;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
   color: #111;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
   overflow: hidden;
+  pointer-events: auto;
 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .iug-feedback-close {
   position: absolute;
-  top: 16px;
-  right: 18px;
+  top: 14px;
+  right: 16px;
   z-index: 2;
-  width: 34px;
-  height: 34px;
-  border: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
   background: transparent;
   color: #777;
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1;
   cursor: pointer;
+  appearance: none;
 }
 
-/* Top Section */
+/* Top */
 .iug-feedback-top {
   width: 100%;
   text-align: center;
@@ -178,66 +199,66 @@
   display: block;
   width: 58px;
   height: 58px;
-  margin: 0 auto 14px;
+  margin: 0 auto 24px;
   object-fit: contain;
 }
 
 .iug-feedback-title {
-  margin: 0 0 10px;
-  font-size: 25px;
+  margin: 0 0 20px;
+  color: #111;
+  font-size: 22px;
   line-height: 1.2;
   font-weight: 800;
   text-align: center;
-  color: #111;
+  letter-spacing: 0;
 }
 
 .iug-feedback-optional {
   margin: 0;
+  color: #888;
   font-size: 13px;
   line-height: 1.4;
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   text-align: left;
-  color: #8a8a8a;
 }
 
-/* Middle Section */
+/* Middle */
 .iug-feedback-middle {
   width: 100%;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 16px;
+}
+
+.iug-feedback-textarea,
+.iug-feedback-input {
+  width: 100%;
+  border-radius: 14px;
+  background: #fff;
+  color: #111;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  appearance: none;
 }
 
 .iug-feedback-textarea {
-  width: 100%;
-  height: 128px;
+  height: 150px;
   resize: none;
   padding: 14px;
-  border: 2px solid var(--iug-feedback-color, #46ad52);
-  border-radius: 16px;
-  background: #fff;
-  font-size: 15px;
+  border: 1.5px solid var(--iug-feedback-color, #46ad52);
+  font-size: 14px;
   line-height: 1.45;
-  font-weight: 400;
-  color: #111;
-  outline: none;
 }
 
 .iug-feedback-input {
-  width: 100%;
   height: 48px;
-  margin-top: 14px;
   padding: 0 14px;
-  border: 1.5px solid #d8d8d8;
-  border-radius: 14px;
-  background: #fff;
+  border: 1.5px solid #ddd;
   font-size: 14px;
   line-height: 1;
-  font-weight: 400;
-  color: #111;
-  outline: none;
 }
 
 .iug-feedback-textarea::placeholder,
@@ -252,28 +273,28 @@
 }
 
 .iug-feedback-contact-note {
-  margin: 8px 0 0;
+  margin: -8px 0 0;
+  color: #888;
   font-size: 12px;
   line-height: 1.4;
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   text-align: left;
-  color: #8a8a8a;
 }
 
-/* Bottom Section */
+/* Bottom */
 .iug-feedback-bottom {
   width: 100%;
   flex: 0 0 auto;
 }
 
 .iug-feedback-note {
-  margin: 0 0 14px;
+  margin: 0 0 18px;
+  color: #666;
   font-size: 12px;
   line-height: 1.45;
-  font-weight: 400;
+  font-weight: 500;
   text-align: center;
-  color: #666;
 }
 
 .iug-feedback-note.is-left {
@@ -282,14 +303,19 @@
 
 .iug-feedback-done {
   width: 100%;
-  height: 50px;
-  border: none;
+  height: 54px;
+  padding: 0;
+  border: 0;
   border-radius: 999px;
   background: #111;
   color: #fff;
-  font-size: 17px;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1;
   font-weight: 800;
   cursor: pointer;
+  appearance: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .iug-feedback-done:active {
@@ -305,19 +331,20 @@
 .iug-feedback-toast {
   position: fixed;
   left: 50%;
-  bottom: calc(128px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%) translateY(8px);
-  z-index: 10001;
+  bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+  z-index: 10003;
   max-width: 80vw;
   padding: 12px 18px;
   border-radius: 999px;
   background: #111;
   color: #fff;
-  font-size: 15px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
   line-height: 1.4;
-  font-weight: 600;
+  font-weight: 700;
   opacity: 0;
   pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
@@ -326,175 +353,104 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* PC / Wider Screens */
-@media (min-width: 768px) {
-  .iug-feedback-card {
-    width: min(76vw, 500px);
-    height: min(68dvh, 650px);
-    min-height: 500px;
-    max-height: 650px;
-    padding: 32px 38px 28px;
-  }
-
-  .iug-modal-emoji-img {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 16px;
-  }
-
-  .iug-feedback-title {
-    font-size: 27px;
-    margin-bottom: 12px;
-  }
-
-  .iug-feedback-optional {
-    font-size: 15px;
-  }
-
-  .iug-feedback-textarea {
-    height: 145px;
-    padding: 18px;
-    font-size: 16px;
-  }
-
-  .iug-feedback-input {
-    height: 54px;
-    margin-top: 16px;
-    font-size: 16px;
-  }
-
-  .iug-feedback-contact-note {
-    font-size: 13px;
-  }
-
-  .iug-feedback-note {
-    font-size: 14px;
-    margin-bottom: 16px;
-  }
-
-  .iug-feedback-done {
-    height: 54px;
-    font-size: 19px;
-  }
-}
-
-/* 9:16 Mobile Optimization */
+/* Mobile */
 @media (max-width: 430px) {
-  .iug-feedback-modal {
-    padding: 0;
-  }
-
   .iug-feedback-card {
-    width: 82vw !important;
-    height: 68dvh !important;
-    min-height: 0 !important;
-    max-width: none !important;
-    max-height: none !important;
-    padding: 22px 18px 18px;
+    width: 80vw;
+    height: 70dvh;
+    padding: 24px 18px 18px;
     border-radius: 22px;
   }
 
   .iug-feedback-close {
-    top: 12px;
-    right: 12px;
+    top: 10px;
+    right: 10px;
     font-size: 22px;
   }
 
   .iug-modal-emoji-img {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 18px;
   }
 
   .iug-feedback-title {
-    margin-bottom: 7px;
-    font-size: 19px;
-    line-height: 1.2;
+    margin-bottom: 16px;
+    font-size: 16px;
   }
 
   .iug-feedback-optional {
-    font-size: 11px;
+    font-size: 10px;
+  }
+
+  .iug-feedback-middle {
+    gap: 12px;
   }
 
   .iug-feedback-textarea {
-    height: 108px;
+    height: 132px;
     padding: 12px;
-    border-width: 1.5px;
-    border-radius: 14px;
-    font-size: 12px;
-    line-height: 1.4;
+    border-radius: 12px;
+    font-size: 11px;
   }
 
   .iug-feedback-input {
     height: 40px;
-    margin-top: 10px;
     padding: 0 12px;
-    border-radius: 12px;
-    font-size: 12px;
+    border-radius: 11px;
+    font-size: 11px;
   }
 
   .iug-feedback-contact-note {
-    margin-top: 6px;
+    margin-top: -6px;
     font-size: 10px;
   }
 
   .iug-feedback-note {
-    margin: 0 0 10px;
+    margin-bottom: 12px;
     font-size: 10px;
-    line-height: 1.4;
   }
 
   .iug-feedback-done {
-    height: 40px;
-    font-size: 15px;
+    height: 42px;
+    font-size: 14px;
   }
 
   .iug-feedback-bar {
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     width: 82vw;
     max-width: 330px;
   }
 
   .iug-feedback-emoji {
-    width: 84px;
-    height: 84px;
+    width: 68px;
+    height: 68px;
   }
 
   .iug-emoji-img {
-    width: 74px;
-    height: 74px;
+    width: 54px;
+    height: 54px;
   }
 }
 
 /* Very Small Phones */
 @media (max-width: 360px) {
   .iug-feedback-card {
-    width: 84vw !important;
-    height: 66dvh !important;
+    width: 84vw;
+    height: 68dvh;
     padding-left: 14px;
     padding-right: 14px;
   }
 
-  .iug-feedback-title {
-    font-size: 17px;
+  .iug-feedback-textarea {
+    height: 108px;
   }
 
-  .iug-feedback-textarea {
-    height: 86px;
+  .iug-feedback-title {
+    font-size: 15px;
   }
 
   .iug-feedback-bar {
     width: 84vw;
-  }
-
-  .iug-feedback-emoji {
-    width: 78px;
-    height: 78px;
-  }
-
-  .iug-emoji-img {
-    width: 68px;
-    height: 68px;
   }
 }
 </style>
@@ -515,9 +471,8 @@
       contactNote: "",
       noteLeft: false,
       contactInputMode: "email",
-      contactAutocomplete: "email",
+      contactAutocomplete: "email"
     },
-
     neutral: {
       icon: "./rate-neutral.png",
       alt: "Neutral",
@@ -528,9 +483,8 @@
       contactNote: "",
       noteLeft: false,
       contactInputMode: "email",
-      contactAutocomplete: "email",
+      contactAutocomplete: "email"
     },
-
     unsatisfied: {
       icon: "./rate-unsatisfied.png",
       alt: "Unsatisfied",
@@ -541,8 +495,8 @@
       contactNote: "So we can help you within 24h.",
       noteLeft: true,
       contactInputMode: "text",
-      contactAutocomplete: "off",
-    },
+      contactAutocomplete: "off"
+    }
   };
 
   let selectedIugFeedback = null;
@@ -603,7 +557,6 @@
 
     icon.src = config.icon;
     icon.alt = config.alt;
-
     title.textContent = config.title;
 
     comment.value = "";
@@ -629,11 +582,13 @@
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
 
-    if (window.matchMedia("(min-width: 768px)").matches) {
-      setTimeout(() => {
+    window.setTimeout(() => {
+      if (window.matchMedia("(min-width: 768px)").matches) {
         comment.focus();
-      }, 0);
-    }
+      } else {
+        modal.querySelector(".iug-feedback-close").focus();
+      }
+    }, 0);
   }
 
   function closeIugFeedbackModal() {
@@ -654,6 +609,7 @@
 
   async function handleIugFeedbackSubmit() {
     if (!selectedIugFeedback) return;
+    if (doneButton.classList.contains("is-loading")) return;
 
     doneButton.classList.add("is-loading");
     doneButton.textContent = "Saving...";
@@ -679,23 +635,21 @@
       rating: selectedIugFeedback,
       comment: comment.value.trim(),
       contact: contact.value.trim(),
-
       page_url: window.location.href,
       page_title: document.title,
       page_path: window.location.pathname,
-
       product: urlParams.get("product") || "",
       language: document.documentElement.lang || "",
       iug_version: IUG_VERSION,
-
       submitted_at: new Date().toISOString(),
-      user_agent: navigator.userAgent,
+      user_agent: navigator.userAgent
     };
   }
 
   async function submitIugFeedback(payload) {
     if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
       console.warn("Replace FORMSPREE_ENDPOINT with your real Formspree endpoint before publishing.");
+      console.log("IUG feedback payload:", payload);
       return true;
     }
 
@@ -704,9 +658,9 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
+          Accept: "application/json"
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       return response.ok;
