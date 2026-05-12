@@ -44,9 +44,10 @@
     </div>
 
     <div class="iug-feedback-bottom">
-      <p id="iugFeedbackNote" class="iug-feedback-note">
-        Every comment is read by our team and helps us improve.
-      </p>
+<p id="iugFeedbackNote" class="iug-feedback-note">
+  <span>Every comment is read by our team</span>
+  <span>and helps us improve.</span>
+</p>
       <button id="iugFeedbackDone" class="iug-feedback-done" type="button">Done</button>
     </div>
   </div>
@@ -290,8 +291,8 @@
 }
 
 .iug-feedback-note {
-  max-width: 86%;
-  margin: 0 auto 14px;
+  max-width: none;
+  margin: 0 0 14px;
   color: #666;
   font-size: 10px;
   line-height: 1.45;
@@ -299,10 +300,15 @@
   text-align: center;
 }
 
+.iug-feedback-note span {
+  display: block;
+}
+
 .iug-feedback-note.is-left {
   max-width: none;
-  text-align: left;
+  text-align: center;
 }
+
 
 .iug-feedback-done {
   width: 100%;
@@ -582,8 +588,9 @@
     contactNote.textContent = config.contactNote;
     contactNote.hidden = !config.contactNote;
 
-    note.textContent = "Every comment is read by our team and helps us improve.";
-    note.classList.toggle("is-left", config.noteLeft);
+    note.innerHTML = "<span>Every comment is read by our team</span><span>and helps us improve.</span>";
+note.classList.remove("is-left");
+
 
     doneButton.classList.remove("is-loading");
     doneButton.textContent = "Done";
