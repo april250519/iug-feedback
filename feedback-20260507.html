@@ -337,7 +337,9 @@
   left: 50%;
   bottom: calc(116px + env(safe-area-inset-bottom, 0px));
   z-index: 10003;
-  max-width: 82vw;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  white-space: nowrap;
   padding: 12px 18px;
   border-radius: 999px;
   background: #111;
@@ -350,6 +352,7 @@
   transform: translateX(-50%) translateY(8px);
   transition: opacity 0.18s ease, transform 0.18s ease;
 }
+
 
 .iug-feedback-toast.is-visible {
   opacity: 1;
