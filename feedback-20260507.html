@@ -44,10 +44,10 @@
     </div>
 
     <div class="iug-feedback-bottom">
-<p id="iugFeedbackNote" class="iug-feedback-note">
-  <span>Every comment is read by our team</span>
-  <span>and helps us improve.</span>
-</p>
+      <p id="iugFeedbackNote" class="iug-feedback-note">
+        <span>Every comment is read by our team</span>
+        <span>and helps us improve.</span>
+      </p>
       <button id="iugFeedbackDone" class="iug-feedback-done" type="button">Done</button>
     </div>
   </div>
@@ -113,7 +113,6 @@
   -webkit-tap-highlight-color: transparent;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
-
 
 .iug-feedback-entry-close:active {
   transform: scale(0.92);
@@ -309,7 +308,6 @@
   text-align: center;
 }
 
-
 .iug-feedback-done {
   width: 100%;
   height: 42px;
@@ -430,6 +428,96 @@
 
   .iug-feedback-entry-close {
     right: 6px;
+  }
+}
+
+/* PC / wider screens */
+@media (min-width: 768px) {
+  .iug-feedback-card {
+    width: 430px;
+    height: min(70dvh, 640px);
+    max-width: 430px;
+    padding: 34px 40px 26px;
+    border-radius: 24px;
+  }
+
+  .iug-modal-emoji-img {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 20px;
+  }
+
+  .iug-feedback-title {
+    margin-bottom: 18px;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .iug-feedback-optional {
+    font-size: 13px;
+  }
+
+  .iug-feedback-middle {
+    margin-top: 18px;
+    gap: 15px;
+  }
+
+  .iug-feedback-textarea {
+    height: 148px;
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  .iug-feedback-input {
+    height: 46px;
+    padding: 0 15px;
+    border-radius: 13px;
+    font-size: 13px;
+  }
+
+  .iug-feedback-bottom {
+    padding-top: 20px;
+  }
+
+  .iug-feedback-note {
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .iug-feedback-done {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .iug-feedback-entry {
+    width: 320px;
+    max-width: 320px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .iug-feedback-emoji {
+    width: 64px;
+    height: 64px;
+  }
+
+  .iug-emoji-img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .iug-feedback-entry-close {
+    top: -7px;
+    right: 2px;
+    width: 21px;
+    height: 21px;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .iug-feedback-toast {
+    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
   }
 }
 </style>
@@ -589,8 +677,7 @@
     contactNote.hidden = !config.contactNote;
 
     note.innerHTML = "<span>Every comment is read by our team</span><span>and helps us improve.</span>";
-note.classList.remove("is-left");
-
+    note.classList.remove("is-left");
 
     doneButton.classList.remove("is-loading");
     doneButton.textContent = "Done";
