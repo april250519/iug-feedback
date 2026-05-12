@@ -762,23 +762,39 @@
     }
   }
 
-  function buildIugFeedbackPayload() {
-    const urlParams = new URLSearchParams(window.location.search);
+ function buildIugFeedbackPayload() {
+  const urlParams = new URLSearchParams(window.location.search);
 
-    return {
-  rating: selectedIugFeedback,
-  message: comment.value.trim(),
-  email: contact.value.trim(),
-  page_url: window.location.href,
-  page_title: document.title,
-  page_path: window.location.pathname,
-  product: urlParams.get("product") || "",
-  language: document.documentElement.lang || "",
-  submitted_at: new Date().toISOString(),
-  user_agent: navigator.userAgent
-};
+  const messageValue = comment.value.trim();
+  const contactValue = contact.value.trim();
 
+  const payload = {
+    rating: selectedIugFeedback,
+    message: messageValue,
+    page_url: window.location.href,
+    page_title: document.title,
+    page_path: window.location.pathname,
+    product: urlParams.get("product") || "",
+    language: document.documentElement.lang || "",
+    submitted_at: new Date().toISOString(),
+    user_agent: navigator.userAgent
+  };
+
+  if (contactValue) {
+    if (isEmailAddress(contactValue)) {
+      payload.email = contactValue;
+    } else {
+      payload.phone = contactValue;
+    }
   }
+
+  return payload;
+}
+
+function isEmailAddress(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 
   async function submitIugFeedback(payload) {
     if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
