@@ -1,14 +1,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-<div class="iug-feedback-bar" aria-label="IUG feedback">
-  <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
-    <img class="iug-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
-  </button>
-  <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
-    <img class="iug-emoji-img" src="./rate-neutral.png" alt="Neutral" />
-  </button>
-  <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
-    <img class="iug-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
+<div class="iug-feedback-entry" id="iugFeedbackEntry" aria-label="IUG feedback">
+  <div class="iug-feedback-bar">
+    <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
+      <img class="iug-emoji-img" src="./rate-satisfied.png" alt="Satisfied" />
+    </button>
+
+    <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
+      <img class="iug-emoji-img" src="./rate-neutral.png" alt="Neutral" />
+    </button>
+
+    <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
+      <img class="iug-emoji-img" src="./rate-unsatisfied.png" alt="Unsatisfied" />
+    </button>
+  </div>
+
+  <button
+    class="iug-feedback-entry-close"
+    id="iugFeedbackEntryClose"
+    type="button"
+    aria-label="Hide feedback entry for 30 seconds"
+  >
+    ×
   </button>
 </div>
 
@@ -42,15 +55,15 @@
 <div id="iugFeedbackToast" class="iug-feedback-toast" role="status" aria-live="polite"></div>
 
 <style>
-.iug-feedback-bar,
-.iug-feedback-bar *,
+.iug-feedback-entry,
+.iug-feedback-entry *,
 .iug-feedback-modal,
 .iug-feedback-modal *,
 .iug-feedback-toast {
   box-sizing: border-box;
 }
 
-.iug-feedback-bar {
+.iug-feedback-entry {
   position: fixed;
   left: 50%;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -58,10 +71,50 @@
   width: 82vw;
   max-width: 360px;
   transform: translateX(-50%);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.iug-feedback-entry.is-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+  pointer-events: none;
+}
+
+.iug-feedback-bar {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  pointer-events: none;
+}
+
+.iug-feedback-entry-close {
+  position: absolute;
+  top: -4px;
+  right: 10px;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid rgba(120, 120, 120, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #777;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: auto;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.iug-feedback-entry-close:active {
+  transform: scale(0.92);
 }
 
 .iug-feedback-emoji {
@@ -340,6 +393,15 @@
   .iug-feedback-bottom {
     padding-top: 16px;
   }
+
+  .iug-feedback-entry-close {
+    top: -2px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    line-height: 17px;
+  }
 }
 
 @media (max-width: 360px) {
@@ -358,6 +420,10 @@
   .iug-feedback-title {
     font-size: 15px;
   }
+
+  .iug-feedback-entry-close {
+    right: 6px;
+  }
 }
 </style>
 
@@ -367,6 +433,7 @@
 
   const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
   const IUG_VERSION = "2.3.1";
+  const ENTRY_RESHOW_DELAY = 30000;
 
   const IUG_FEEDBACK_CONTENT = {
     satisfied: {
@@ -413,7 +480,10 @@
   let selectedIugFeedback = null;
   let lastFocusedElement = null;
   let toastTimer = null;
+  let entryTimer = null;
 
+  const entry = document.getElementById("iugFeedbackEntry");
+  const entryClose = document.getElementById("iugFeedbackEntryClose");
   const modal = document.getElementById("iugFeedbackModal");
   if (!modal) return;
 
@@ -431,6 +501,8 @@
 
   feedbackButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      showFeedbackEntry();
+
       selectedIugFeedback = button.dataset.feedback;
       lastFocusedElement = button;
 
@@ -441,6 +513,13 @@
     });
   });
 
+  if (entryClose) {
+    entryClose.addEventListener("click", (event) => {
+      event.stopPropagation();
+      hideFeedbackEntryTemporarily();
+    });
+  }
+
   document.addEventListener("keydown", (event) => {
     if (!modal.classList.contains("is-open")) return;
 
@@ -450,6 +529,35 @@
   });
 
   doneButton.addEventListener("click", handleIugFeedbackSubmit);
+
+  function hideFeedbackEntryTemporarily() {
+    if (!entry || modal.classList.contains("is-open")) return;
+
+    entry.classList.add("is-hidden");
+    entry.setAttribute("aria-hidden", "true");
+
+    feedbackButtons.forEach((btn) => btn.classList.remove("is-selected"));
+
+    if (entryTimer) {
+      clearTimeout(entryTimer);
+    }
+
+    entryTimer = setTimeout(() => {
+      showFeedbackEntry();
+    }, ENTRY_RESHOW_DELAY);
+  }
+
+  function showFeedbackEntry() {
+    if (!entry) return;
+
+    if (entryTimer) {
+      clearTimeout(entryTimer);
+      entryTimer = null;
+    }
+
+    entry.classList.remove("is-hidden");
+    entry.setAttribute("aria-hidden", "false");
+  }
 
   function openIugFeedbackModal(type) {
     const config = IUG_FEEDBACK_CONTENT[type];
