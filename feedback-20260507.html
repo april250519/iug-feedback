@@ -766,17 +766,18 @@
     const urlParams = new URLSearchParams(window.location.search);
 
     return {
-      rating: selectedIugFeedback,
-      comment: comment.value.trim(),
-      contact: contact.value.trim(),
-      page_url: window.location.href,
-      page_title: document.title,
-      page_path: window.location.pathname,
-      product: urlParams.get("product") || "",
-      language: document.documentElement.lang || "",
-      submitted_at: new Date().toISOString(),
-      user_agent: navigator.userAgent
-    };
+  rating: selectedIugFeedback,
+  message: comment.value.trim(),
+  email: contact.value.trim(),
+  page_url: window.location.href,
+  page_title: document.title,
+  page_path: window.location.pathname,
+  product: urlParams.get("product") || "",
+  language: document.documentElement.lang || "",
+  submitted_at: new Date().toISOString(),
+  user_agent: navigator.userAgent
+};
+
   }
 
   async function submitIugFeedback(payload) {
