@@ -5,51 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Firmware Update Alerts</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  min-height: 100vh;
+* { box-sizing:border-box; margin:0; padding:0; }
+body{
+  min-height:100vh;
   font-family: Arial, Helvetica, sans-serif;
   background:
     radial-gradient(circle at top right, rgba(125,180,45,.10), transparent 35%),
     linear-gradient(180deg, #ffffff 0%, #ffffff 70%, #f4faed 100%);
-  display:flex; align-items:center; justify-content:center;
+  display:flex; justify-content:center; align-items:center;
   padding:40px 20px;
 }
-.container{
-  width:100%; max-width:600px; text-align:center;
-  position:relative;
-}
-.icon{
-  width:82px; height:82px; margin:0 auto 28px;
-  border-radius:50%; background:rgba(118,185,31,.08);
-  display:flex; align-items:center; justify-content:center; color:#5ca20f;
-}
+.container{width:100%; max-width:600px; text-align:center; position:relative;}
+.icon{width:82px; height:82px; margin:0 auto 28px; border-radius:50%; background:rgba(118,185,31,.08); display:flex; align-items:center; justify-content:center; color:#5ca20f;}
 .icon svg{width:48px; height:48px;}
-h1{font-size:64px;font-weight:800;line-height:1.05; letter-spacing:-1.5px; color:#09101d;}
+h1{font-size:64px; font-weight:800; line-height:1.05; letter-spacing:-1.5px; color:#09101d;}
 h1 span{display:block; color:#76B91F;}
 .subtitle{margin-top:24px;font-size:18px;line-height:1.7;color:#6b7280;margin-bottom:40px;}
 .form-group{margin-bottom:18px;}
-.input-wrap{height:64px; border:1.5px solid #d9dee7; border-radius:12px; background:#fff; display:flex; align-items:center; padding:0 20px;}
-.input-wrap svg{width:24px; height:24px; color:#98A2B3; flex-shrink:0;}
+.input-wrap{height:64px;border:1.5px solid #d9dee7;border-radius:12px;background:#fff;display:flex;align-items:center;padding:0 20px;}
+.input-wrap svg{width:24px;height:24px;color:#98A2B3;flex-shrink:0;}
 .input-wrap input, .input-wrap select{width:100%; border:none; outline:none; background:transparent; padding-left:14px; font-size:18px; color:#111827;}
 select{appearance:none; cursor:pointer;}
-button{width:220px; height:64px; border:none; border-radius:12px; background:linear-gradient(180deg,#83C328,#66A90E); color:#fff; font-size:20px; font-weight:700; cursor:pointer; transition:.2s; box-shadow:0 8px 20px rgba(118,185,31,.25);}
+button{width:220px;height:64px;border:none;border-radius:12px;background:linear-gradient(180deg,#83C328,#66A90E);color:#fff;font-size:20px;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(118,185,31,.25);}
 button:hover{transform:translateY(-2px);}
+button:disabled{opacity:.6; cursor:not-allowed;}
 .privacy{margin-top:48px; color:#6b7280; font-size:16px;}
 .privacy strong{display:flex; align-items:center; justify-content:center; gap:8px; font-size:18px; color:#111827; margin-bottom:6px;}
 .privacy svg{width:20px; height:20px; color:#76B91F;}
-.modal {
-  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background: rgba(0,0,0,0.3); justify-content:center; align-items:center;
-  z-index:9999;
-}
-.modal-content {
-  background:#fff; padding:40px 30px; border-radius:16px; max-width:400px; width:90%;
-  text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.2);
-}
+.modal {display:flex; justify-content:center; align-items:center; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); opacity:0; pointer-events:none; transition:opacity .3s ease;}
+.modal.show{opacity:1; pointer-events:auto;}
+.modal-content {background:#fff; padding:30px 25px; border-radius:16px; max-width:400px; width:90%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.2); transform: translateY(-20px); transition: transform .3s ease;}
+.modal.show .modal-content{transform: translateY(0);}
 .modal-content h2{font-size:28px; margin-bottom:16px;}
 .modal-content p{font-size:18px; margin-bottom:24px;}
 .modal-content button{width:120px; height:48px; font-size:16px; border-radius:8px; background:#76B91F; box-shadow:0 5px 15px rgba(0,0,0,.2);}
+@media(max-width:768px){
+  h1{font-size:48px;}
+  .subtitle{font-size:16px;}
+  button{width:100%;}
+  .modal-content{padding:25px 20px;}
+}
 </style>
 </head>
 <body>
@@ -65,7 +60,6 @@ button:hover{transform:translateY(-2px);}
   </div>
 
   <h1>Get Firmware <span>Update Alerts</span></h1>
-
   <div class="subtitle">Subscribe to receive the latest firmware updates and important notifications.</div>
 
   <form id="subscribe-form">
@@ -79,6 +73,7 @@ button:hover{transform:translateY(-2px);}
         <input type="text" name="product" placeholder="Enter your product" required>
       </div>
     </div>
+
     <div class="form-group">
       <div class="input-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -88,6 +83,10 @@ button:hover{transform:translateY(-2px);}
         <input type="email" name="email" placeholder="Enter your email address" required>
       </div>
     </div>
+
+    <!-- 隐藏字段记录 URL 查询参数 -->
+    <input type="hidden" name="product_id" id="product_id">
+
     <button type="submit">Notify Me</button>
   </form>
 
@@ -104,7 +103,7 @@ button:hover{transform:translateY(-2px);}
 
 </div>
 
-<!-- Modal -->
+<!-- 弹窗 -->
 <div id="successModal" class="modal">
   <div class="modal-content">
     <h2>Thank you!</h2>
@@ -114,35 +113,53 @@ button:hover{transform:translateY(-2px);}
 </div>
 
 <script>
+// URL 参数
+const params = new URLSearchParams(window.location.search);
+const productId = params.get('product_id');
+if(productId){
+  document.getElementById('product_id').value = encodeURIComponent(productId);
+}
+
+// 表单提交 + 弹窗
 const form = document.getElementById('subscribe-form');
 const modal = document.getElementById('successModal');
+const submitBtn = form.querySelector('button');
 
 form.addEventListener('submit', function(e){
   e.preventDefault();
-  
-  // 收集表单数据
+  submitBtn.disabled = true;
   const data = new FormData(form);
-  
-  fetch('https://formspree.io/f/YOUR_FORMSPREE_ID', {
-    method: 'POST',
-    body: data,
-    headers: { 'Accept': 'application/json' }
-  }).then(response => {
-    if(response.ok){
-      // 显示弹窗
-      modal.style.display = 'flex';
+
+  fetch('https://formspree.io/f/xqejrdbg', {
+    method:'POST',
+    body:data,
+    headers:{'Accept':'application/json'}
+  }).then(resp=>{
+    if(resp.ok){
+      modal.classList.add('show');
       form.reset();
     } else {
       alert('There was a problem submitting your form.');
     }
-  }).catch(error => {
+  }).catch(err=>{
     alert('Network error.');
+  }).finally(()=>{
+    submitBtn.disabled = false;
   });
 });
 
+// 关闭弹窗
 function closeModal(){
-  modal.style.display = 'none';
+  modal.classList.remove('show');
 }
+
+// 点击背景或 ESC 关闭
+modal.addEventListener('click', e=>{
+  if(e.target === modal) closeModal();
+});
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape') closeModal();
+});
 </script>
 
 </body>
