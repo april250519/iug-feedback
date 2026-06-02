@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Firmware Update Alerts</title>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
+* { box-sizing:border-box; margin:0; padding:0;}
 body{
   min-height:100vh;
   font-family: Arial, Helvetica, sans-serif;
@@ -24,8 +24,7 @@ h1 span{display:block; color:#76B91F;}
 .form-group{margin-bottom:18px;}
 .input-wrap{height:64px;border:1.5px solid #d9dee7;border-radius:12px;background:#fff;display:flex;align-items:center;padding:0 20px;}
 .input-wrap svg{width:24px;height:24px;color:#98A2B3;flex-shrink:0;}
-.input-wrap input, .input-wrap select{width:100%; border:none; outline:none; background:transparent; padding-left:14px; font-size:18px; color:#111827;}
-select{appearance:none; cursor:pointer;}
+.input-wrap input{width:100%; border:none; outline:none; background:transparent; padding-left:14px; font-size:18px; color:#111827;}
 button{width:220px;height:64px;border:none;border-radius:12px;background:linear-gradient(180deg,#83C328,#66A90E);color:#fff;font-size:20px;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(118,185,31,.25);}
 button:hover{transform:translateY(-2px);}
 button:disabled{opacity:.6; cursor:not-allowed;}
@@ -66,26 +65,12 @@ button:disabled{opacity:.6; cursor:not-allowed;}
     <div class="form-group">
       <div class="input-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z"/>
-          <path d="M12 22V11"/>
-          <path d="M20 6.5L12 11 4 6.5"/>
-        </svg>
-        <input type="text" name="product" placeholder="Enter your product" required>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <rect x="3" y="5" width="18" height="14" rx="2"/>
           <path d="M3 7l9 6 9-6"/>
         </svg>
         <input type="email" name="email" placeholder="Enter your email address" required>
       </div>
     </div>
-
-    <!-- 隐藏字段记录 URL 查询参数 -->
-    <input type="hidden" name="product_id" id="product_id">
 
     <button type="submit">Notify Me</button>
   </form>
@@ -113,14 +98,6 @@ button:disabled{opacity:.6; cursor:not-allowed;}
 </div>
 
 <script>
-// URL 参数
-const params = new URLSearchParams(window.location.search);
-const productId = params.get('product_id');
-if(productId){
-  document.getElementById('product_id').value = encodeURIComponent(productId);
-}
-
-// 表单提交 + 弹窗
 const form = document.getElementById('subscribe-form');
 const modal = document.getElementById('successModal');
 const submitBtn = form.querySelector('button');
@@ -148,12 +125,10 @@ form.addEventListener('submit', function(e){
   });
 });
 
-// 关闭弹窗
 function closeModal(){
   modal.classList.remove('show');
 }
 
-// 点击背景或 ESC 关闭
 modal.addEventListener('click', e=>{
   if(e.target === modal) closeModal();
 });
