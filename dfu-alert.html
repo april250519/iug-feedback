@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <title>Firmware Update Alerts</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Poppins', Arial, Helvetica, sans-serif;
+}
 
 body{
   min-height:100vh;
-  font-family:'Poppins', Arial, Helvetica, sans-serif;
   background:
     radial-gradient(circle at top right,rgba(125,180,45,.10),transparent 35%),
     linear-gradient(180deg,#fff 0%,#fff 70%,#f4faed 100%);
@@ -60,23 +67,29 @@ h1 span{
 
 .subtitle{
   margin-top:24px;
-  font-size:18px;
-  line-height:1.7;
-  color:#6b7280;
   margin-bottom:40px;
+  font-family:'Poppins', Arial, Helvetica, sans-serif;
+  font-size:18px;
+  font-weight:400;
+  line-height:1.55;
+  color:#6b7280;
 }
 
 form{
   display:flex;
-  flex-direction:column;
-  align-items:center;
+  justify-content:center;
+  align-items:flex-start;
   gap:14px;
   margin:0 auto;
 }
 
-.input-wrap{
+.field-area{
   width:100%;
   max-width:520px;
+}
+
+.input-wrap{
+  width:100%;
   height:64px;
   border:1.5px solid #d9dee7;
   border-radius:12px;
@@ -101,11 +114,13 @@ form{
   background:transparent;
   padding-left:14px;
   font-size:18px;
+  font-weight:400;
   color:#111827;
 }
 
 .input-wrap input::placeholder{
   color:#7b8494;
+  font-weight:400;
 }
 
 .input-wrap.error{
@@ -118,19 +133,20 @@ form{
   text-align:left;
   color:#dc2626;
   font-size:14px;
+  font-weight:400;
   margin-top:8px;
   padding-left:6px;
 }
 
 button{
-  width:220px;
+  width:160px;
   height:64px;
   border:none;
   border-radius:12px;
   background:linear-gradient(180deg,#83C328,#66A90E);
   color:#fff;
   font-size:20px;
-  font-weight:700;
+  font-weight:600;
   cursor:pointer;
   transition:.2s;
   box-shadow:0 8px 20px rgba(118,185,31,.25);
@@ -147,9 +163,10 @@ button:disabled{
 }
 
 .privacy{
-  margin-top:80px;
+  margin-top:120px;
   color:#6b7280;
   font-size:16px;
+  font-weight:400;
 }
 
 .privacy strong{
@@ -158,6 +175,7 @@ button:disabled{
   justify-content:center;
   gap:8px;
   font-size:18px;
+  font-weight:600;
   color:#111827;
   margin-bottom:8px;
 }
@@ -204,12 +222,14 @@ button:disabled{
 
 .modal-content h2{
   font-size:30px;
+  font-weight:700;
   margin-bottom:16px;
   color:#09101d;
 }
 
 .modal-content p{
   font-size:17px;
+  font-weight:400;
   line-height:1.6;
   color:#4b5563;
   margin-bottom:24px;
@@ -223,10 +243,32 @@ button:disabled{
 }
 
 @media(max-width:768px){
-  h1{font-size:46px;}
-  .subtitle{font-size:16px;}
-  button{width:100%;}
-  .modal-content{padding:25px 20px;}
+  h1{
+    font-size:46px;
+  }
+
+  .subtitle{
+    font-size:16px;
+  }
+
+  form{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .field-area,
+  button{
+    width:100%;
+    max-width:520px;
+  }
+
+  .privacy{
+    margin-top:80px;
+  }
+
+  .modal-content{
+    padding:25px 20px;
+  }
 }
 </style>
 </head>
@@ -251,21 +293,25 @@ button:disabled{
     Subscribe to receive the latest firmware updates and important notifications.
   </div>
 
-  <form id="subscribe-form">
-    <div class="input-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <rect x="3" y="5" width="18" height="14" rx="2"/>
-        <path d="M3 7l9 6 9-6"/>
-      </svg>
+  <form id="subscribe-form" novalidate>
+    <div class="field-area">
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="5" width="18" height="14" rx="2"/>
+          <path d="M3 7l9 6 9-6"/>
+        </svg>
 
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter your email address"
-        required>
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email address"
+          required>
+      </div>
+
+      <div id="email-error" class="error-message">
+        Please enter a valid email address.
+      </div>
     </div>
-
-    <div id="email-error" class="error-message">Please enter a valid email address.</div>
 
     <input type="hidden" name="product_id" id="product_id">
 
@@ -294,7 +340,18 @@ button:disabled{
 </div>
 
 <script>
-const emailInput = document.querySelector('input[name="email"]');
+document.addEventListener('DOMContentLoaded', function(){
+  const productId = new URLSearchParams(window.location.search).get('product_id');
+
+  if(productId){
+    document.getElementById('product_id').value = productId;
+  }
+});
+
+const form = document.getElementById('subscribe-form');
+const modal = document.getElementById('successModal');
+const submitBtn = form.querySelector('button[type="submit"]');
+const emailInput = form.querySelector('input[name="email"]');
 const emailError = document.getElementById('email-error');
 const emailWrapper = emailInput.closest('.input-wrap');
 
@@ -309,17 +366,6 @@ function hideEmailError(){
 }
 
 emailInput.addEventListener('input', hideEmailError);
-
-document.addEventListener('DOMContentLoaded', function () {
-  const productId = new URLSearchParams(window.location.search).get('product_id');
-  if(productId){
-    document.getElementById('product_id').value = productId;
-  }
-});
-
-const form = document.getElementById('subscribe-form');
-const modal = document.getElementById('successModal');
-const submitBtn = form.querySelector('button[type="submit"]');
 
 form.addEventListener('submit', function(e){
   e.preventDefault();
@@ -340,17 +386,17 @@ form.addEventListener('submit', function(e){
   const data = new FormData(form);
 
   fetch('https://formspree.io/f/xqejrdbg', {
-    method: 'POST',
-    body: data,
-    headers: {
-      'Accept': 'application/json'
+    method:'POST',
+    body:data,
+    headers:{
+      'Accept':'application/json'
     }
   })
   .then(function(response){
     if(response.ok){
       modal.classList.add('show');
       form.reset();
-    } else {
+    }else{
       alert('There was a problem submitting your form. Please try again.');
     }
   })
