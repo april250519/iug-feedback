@@ -1,0 +1,869 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<div class="iug-feedback-entry is-hidden" id="iugFeedbackEntry" aria-label="IUG feedback" aria-hidden="true">
+  <div class="iug-feedback-bar">
+    <button class="iug-feedback-emoji" type="button" aria-label="Satisfied" data-feedback="satisfied">
+      <img class="iug-emoji-img" src="./thumbup.png" alt="Satisfied" />
+    </button>
+
+    <button class="iug-feedback-emoji" type="button" aria-label="Neutral" data-feedback="neutral">
+      <img class="iug-emoji-img" src="./neutralface.png" alt="Neutral" />
+    </button>
+
+    <button class="iug-feedback-emoji" type="button" aria-label="Unsatisfied" data-feedback="unsatisfied">
+      <img class="iug-emoji-img" src="./thumbdown.png" alt="Unsatisfied" />
+    </button>
+  </div>
+
+  <button
+    class="iug-feedback-entry-close"
+    id="iugFeedbackEntryClose"
+    type="button"
+    aria-label="Hide feedback entry"
+  >
+    ×
+  </button>
+</div>
+
+<div class="iug-feedback-modal" id="iugFeedbackModal" aria-hidden="true">
+  <div class="iug-feedback-overlay"></div>
+
+  <div class="iug-feedback-card" role="dialog" aria-modal="true" aria-labelledby="iugFeedbackTitle">
+    <div class="iug-feedback-top">
+      <img id="iugFeedbackIcon" class="iug-modal-emoji-img" src="./thumbup.png" alt="Satisfied" />
+      <h2 id="iugFeedbackTitle" class="iug-feedback-title">Thanks for your feedback!</h2>
+      <p class="iug-feedback-optional">Both fields are optional.</p>
+    </div>
+
+    <div class="iug-feedback-middle">
+      <textarea id="iugFeedbackComment" class="iug-feedback-textarea" placeholder="Any comments or suggestions?"></textarea>
+      <input id="iugFeedbackContact" class="iug-feedback-input" type="text" placeholder="Your Email" />
+      <p id="iugFeedbackContactNote" class="iug-feedback-contact-note" hidden>
+        So we can help you within 24h.
+      </p>
+    </div>
+
+    <div class="iug-feedback-bottom">
+      <p id="iugFeedbackNote" class="iug-feedback-note">
+        <span>Every comment is read by our team</span>
+        <span>and helps us improve.</span>
+      </p>
+      <button id="iugFeedbackDone" class="iug-feedback-done" type="button">Done</button>
+    </div>
+  </div>
+</div>
+
+<div id="iugFeedbackToast" class="iug-feedback-toast" role="status" aria-live="polite"></div>
+
+<style>
+.iug-feedback-entry,
+.iug-feedback-entry *,
+.iug-feedback-modal,
+.iug-feedback-modal *,
+.iug-feedback-toast {
+  box-sizing: border-box;
+}
+
+.iug-feedback-entry {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 10002;
+  width: 82vw;
+  max-width: 360px;
+  transform: translateX(-50%);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.iug-feedback-entry.is-hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+  pointer-events: none;
+}
+
+.iug-feedback-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iug-feedback-entry-close {
+  position: absolute;
+  top: -6px;
+  right: 4px;
+  z-index: 2;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid rgba(120, 120, 120, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #777;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: auto;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.iug-feedback-entry-close:active {
+  transform: scale(0.92);
+}
+
+.iug-feedback-emoji {
+  pointer-events: auto;
+  width: 68px;
+  height: 68px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.iug-feedback-emoji:active {
+  transform: scale(0.94);
+}
+
+.iug-feedback-emoji.is-selected {
+  transform: scale(1.08);
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.3));
+}
+
+.iug-emoji-img {
+  display: block;
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.iug-feedback-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.iug-feedback-modal.is-open {
+  display: flex;
+}
+
+.iug-feedback-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.64);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.iug-feedback-card {
+  position: relative;
+  z-index: 1;
+  width: 88vw;
+  height: 70vh;
+  height: 70dvh;
+  max-width: 520px;
+  min-height: 0;
+  padding: 28px 24px 18px;
+  border-radius: 22px;
+  background: #fff;
+  color: #111;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+  pointer-events: auto;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.iug-feedback-top {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+.iug-modal-emoji-img {
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 0 auto 18px;
+  object-fit: contain;
+}
+
+.iug-feedback-title {
+  margin: 0 0 14px;
+  color: #111;
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 800;
+  text-align: center;
+}
+
+.iug-feedback-optional {
+  margin: 0;
+  color: #888;
+  font-size: 11px;
+  line-height: 1.4;
+  font-style: italic;
+  font-weight: 500;
+  text-align: left;
+}
+
+.iug-feedback-middle {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.iug-feedback-textarea,
+.iug-feedback-input {
+  width: 100%;
+  border-radius: 14px;
+  background: #fff;
+  color: #111;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  appearance: none;
+}
+
+.iug-feedback-textarea {
+  height: 126px;
+  resize: none;
+  padding: 13px;
+  border: 1.5px solid var(--iug-feedback-color, #46ad52);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.iug-feedback-input {
+  height: 40px;
+  padding: 0 13px;
+  border: 1.5px solid #ddd;
+  font-size: 12px;
+}
+
+.iug-feedback-textarea::placeholder,
+.iug-feedback-input::placeholder {
+  color: #777;
+  opacity: 1;
+}
+
+.iug-feedback-textarea:focus,
+.iug-feedback-input:focus {
+  border-color: var(--iug-feedback-color, #46ad52);
+}
+
+.iug-feedback-contact-note {
+  margin: -6px 0 0;
+  color: #888;
+  font-size: 10px;
+  line-height: 1.4;
+  font-style: italic;
+  font-weight: 500;
+  text-align: left;
+}
+
+.iug-feedback-bottom {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.iug-feedback-note {
+  max-width: none;
+  margin: 0 0 14px;
+  color: #666;
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 500;
+  text-align: center;
+}
+
+.iug-feedback-note span {
+  display: block;
+}
+
+.iug-feedback-note.is-left {
+  max-width: none;
+  text-align: center;
+}
+
+.iug-feedback-done {
+  width: 100%;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.iug-feedback-done:active {
+  transform: scale(0.98);
+}
+
+.iug-feedback-done.is-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.iug-feedback-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(116px + env(safe-area-inset-bottom, 0px));
+  z-index: 10003;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  white-space: nowrap;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.iug-feedback-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 430px) {
+  .iug-feedback-card {
+    width: 88vw;
+    height: 70vh;
+    height: 70dvh;
+    max-width: none;
+    padding: 28px 18px 18px;
+  }
+
+  .iug-modal-emoji-img {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 16px;
+  }
+
+  .iug-feedback-title {
+    margin-bottom: 14px;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 800;
+  }
+
+  .iug-feedback-optional {
+    font-size: 12px;
+    line-height: 1.4;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .iug-feedback-middle {
+    margin-top: 16px;
+    gap: 13px;
+  }
+
+  .iug-feedback-textarea {
+    height: 130px;
+    padding: 12px 13px;
+    border-radius: 12px;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .iug-feedback-input {
+    height: 44px;
+    padding: 0 13px;
+    border-radius: 11px;
+    font-size: 16px;
+  }
+
+  .iug-feedback-contact-note {
+    margin-top: -5px;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .iug-feedback-bottom {
+    padding-top: 16px;
+  }
+
+  .iug-feedback-note {
+    margin-bottom: 13px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .iug-feedback-done {
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .iug-feedback-entry-close {
+    top: -5px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    line-height: 17px;
+  }
+}
+
+@media (max-width: 360px) {
+  .iug-feedback-card {
+    width: 90vw;
+    height: 68vh;
+    height: 68dvh;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .iug-feedback-textarea {
+    height: 108px;
+  }
+
+  .iug-feedback-title {
+    font-size: 15px;
+  }
+
+  .iug-feedback-entry-close {
+    right: 6px;
+  }
+}
+
+@media (min-width: 768px) {
+  .iug-feedback-card {
+    width: 430px;
+    height: min(70dvh, 640px);
+    max-width: 430px;
+    padding: 34px 40px 26px;
+    border-radius: 24px;
+  }
+
+  .iug-modal-emoji-img {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 20px;
+  }
+
+  .iug-feedback-title {
+    margin-bottom: 18px;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .iug-feedback-optional {
+    font-size: 13px;
+  }
+
+  .iug-feedback-middle {
+    margin-top: 18px;
+    gap: 15px;
+  }
+
+  .iug-feedback-textarea {
+    height: 148px;
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 16px;
+  }
+
+  .iug-feedback-input {
+    height: 46px;
+    padding: 0 15px;
+    border-radius: 13px;
+    font-size: 16px;
+  }
+
+  .iug-feedback-bottom {
+    padding-top: 20px;
+  }
+
+  .iug-feedback-note {
+    margin-bottom: 16px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .iug-feedback-done {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .iug-feedback-entry {
+    width: 320px;
+    max-width: 320px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .iug-feedback-emoji {
+    width: 64px;
+    height: 64px;
+  }
+
+  .iug-emoji-img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .iug-feedback-entry-close {
+    top: -7px;
+    right: 2px;
+    width: 21px;
+    height: 21px;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .iug-feedback-toast {
+    bottom: calc(118px + env(safe-area-inset-bottom, 0px));
+  }
+}
+</style>
+
+<script>
+(function () {
+  ensureIugViewportMeta();
+
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgvggved";
+  const ENTRY_SHOW_DELAY = 30000;
+
+  const IUG_FEEDBACK_CONTENT = {
+    satisfied: {
+      icon: "./thumbup.png",
+      alt: "Satisfied",
+      title: "Thanks for your feedback!",
+      commentPlaceholder: "Any comments or suggestions?",
+      contactPlaceholder: "Your Email",
+      color: "#46ad52",
+      contactNote: "",
+      noteLeft: false,
+      contactType: "email",
+      contactInputMode: "email",
+      contactAutocomplete: "email"
+    },
+    neutral: {
+      icon: "./neutralface.png",
+      alt: "Neutral",
+      title: "Thanks for your feedback!",
+      commentPlaceholder: "Any comments or suggestions?",
+      contactPlaceholder: "Your Email",
+      color: "#f3c433",
+      contactNote: "",
+      noteLeft: false,
+      contactType: "email",
+      contactInputMode: "email",
+      contactAutocomplete: "email"
+    },
+    unsatisfied: {
+      icon: "./thumbdown.png",
+      alt: "Unsatisfied",
+      title: "Sorry this wasn't helpful.",
+      commentPlaceholder: "Tell us what happened",
+      contactPlaceholder: "Your Email or Phone Number",
+      color: "#df4747",
+      contactNote: "So we can help you within 24h.",
+      noteLeft: true,
+      contactType: "text",
+      contactInputMode: "text",
+      contactAutocomplete: "off"
+    }
+  };
+
+  let selectedIugFeedback = null;
+  let lastFocusedElement = null;
+  let toastTimer = null;
+  let entryTimer = null;
+  let feedbackEntryClosed = false;
+
+  const entry = document.getElementById("iugFeedbackEntry");
+  const entryClose = document.getElementById("iugFeedbackEntryClose");
+  const modal = document.getElementById("iugFeedbackModal");
+  if (!modal) return;
+
+  const card = modal.querySelector(".iug-feedback-card");
+  const icon = document.getElementById("iugFeedbackIcon");
+  const title = document.getElementById("iugFeedbackTitle");
+  const comment = document.getElementById("iugFeedbackComment");
+  const contact = document.getElementById("iugFeedbackContact");
+  const contactNote = document.getElementById("iugFeedbackContactNote");
+  const note = document.getElementById("iugFeedbackNote");
+  const doneButton = document.getElementById("iugFeedbackDone");
+  const toast = document.getElementById("iugFeedbackToast");
+
+  const feedbackButtons = document.querySelectorAll(".iug-feedback-emoji");
+
+  hideFeedbackEntry();
+
+  entryTimer = setTimeout(() => {
+    if (!feedbackEntryClosed) {
+      showFeedbackEntry();
+    }
+  }, ENTRY_SHOW_DELAY);
+
+  feedbackButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedIugFeedback = button.dataset.feedback;
+      lastFocusedElement = button;
+
+      feedbackButtons.forEach((btn) => btn.classList.remove("is-selected"));
+      button.classList.add("is-selected");
+
+      openIugFeedbackModal(selectedIugFeedback);
+    });
+  });
+
+  if (entryClose) {
+    entryClose.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeFeedbackEntryPermanently();
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (!modal.classList.contains("is-open")) return;
+
+    if (event.key === "Tab") {
+      trapFocusInsideModal(event);
+    }
+  });
+
+  doneButton.addEventListener("click", handleIugFeedbackSubmit);
+
+  function closeFeedbackEntryPermanently() {
+    feedbackEntryClosed = true;
+
+    if (entryTimer) {
+      clearTimeout(entryTimer);
+      entryTimer = null;
+    }
+
+    hideFeedbackEntry();
+    feedbackButtons.forEach((btn) => btn.classList.remove("is-selected"));
+  }
+
+  function hideFeedbackEntry() {
+    if (!entry) return;
+
+    entry.classList.add("is-hidden");
+    entry.setAttribute("aria-hidden", "true");
+  }
+
+  function showFeedbackEntry() {
+    if (!entry || feedbackEntryClosed) return;
+
+    entry.classList.remove("is-hidden");
+    entry.setAttribute("aria-hidden", "false");
+  }
+
+  function openIugFeedbackModal(type) {
+    const config = IUG_FEEDBACK_CONTENT[type];
+    if (!config) return;
+
+    icon.src = config.icon;
+    icon.alt = config.alt;
+    title.textContent = config.title;
+
+    comment.value = "";
+    contact.value = "";
+    comment.placeholder = config.commentPlaceholder;
+    contact.placeholder = config.contactPlaceholder;
+
+    contact.type = config.contactType;
+    contact.setAttribute("inputmode", config.contactInputMode);
+    contact.setAttribute("autocomplete", config.contactAutocomplete);
+
+    card.style.setProperty("--iug-feedback-color", config.color);
+
+    contactNote.textContent = config.contactNote;
+    contactNote.hidden = !config.contactNote;
+
+    note.innerHTML = "<span>Every comment is read by our team</span><span>and helps us improve.</span>";
+    note.classList.remove("is-left");
+
+    doneButton.classList.remove("is-loading");
+    doneButton.textContent = "Done";
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+
+    window.setTimeout(() => {
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        comment.focus();
+      } else {
+        doneButton.focus();
+      }
+    }, 0);
+  }
+
+  function closeIugFeedbackModal() {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+
+    feedbackButtons.forEach((btn) => btn.classList.remove("is-selected"));
+
+    doneButton.classList.remove("is-loading");
+    doneButton.textContent = "Done";
+
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  async function handleIugFeedbackSubmit() {
+    if (!selectedIugFeedback) return;
+    if (doneButton.classList.contains("is-loading")) return;
+
+    doneButton.classList.add("is-loading");
+    doneButton.textContent = "Saving...";
+
+    const payload = buildIugFeedbackPayload();
+    const success = await submitIugFeedback(payload);
+
+    doneButton.classList.remove("is-loading");
+    doneButton.textContent = "Done";
+
+    if (success) {
+      closeIugFeedbackModal();
+      hideFeedbackEntry();
+      showIugFeedbackToast("Thanks, your feedback was saved.");
+    } else {
+      showIugFeedbackToast("Feedback could not be saved. Please try again.");
+    }
+  }
+
+  function buildIugFeedbackPayload() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const messageValue = comment.value.trim();
+    const contactValue = contact.value.trim();
+
+    const payload = {
+      rating: selectedIugFeedback,
+      message: messageValue,
+      page_url: window.location.href,
+      page_title: document.title,
+      page_path: window.location.pathname,
+      product: urlParams.get("product") || "",
+      language: document.documentElement.lang || "",
+      submitted_at: new Date().toISOString(),
+      user_agent: navigator.userAgent
+    };
+
+    if (contactValue) {
+      if (isEmailAddress(contactValue)) {
+        payload.email = contactValue;
+      } else {
+        payload.phone = contactValue;
+      }
+    }
+
+    return payload;
+  }
+
+  function isEmailAddress(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  async function submitIugFeedback(payload) {
+    if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
+      console.warn("Replace FORMSPREE_ENDPOINT with your real Formspree endpoint before publishing.");
+      console.log("IUG feedback payload:", payload);
+      return true;
+    }
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error("IUG feedback submission failed:", error);
+      return false;
+    }
+  }
+
+  function showIugFeedbackToast(message) {
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.classList.add("is-visible");
+
+    if (toastTimer) {
+      clearTimeout(toastTimer);
+    }
+
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("is-visible");
+    }, 2600);
+  }
+
+  function trapFocusInsideModal(event) {
+    const focusableElements = card.querySelectorAll(
+      'button, textarea, input, select, a[href], [tabindex]:not([tabindex="-1"])'
+    );
+
+    if (!focusableElements.length) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+    }
+
+    if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  }
+
+  function ensureIugViewportMeta() {
+    let viewport = document.querySelector('meta[name="viewport"]');
+
+    if (!viewport) {
+      viewport = document.createElement("meta");
+      viewport.name = "viewport";
+      document.head.appendChild(viewport);
+    }
+
+    viewport.setAttribute("content", "width=device-width, initial-scale=1, viewport-fit=cover");
+  }
+})();
+</script>
